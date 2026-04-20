@@ -16,6 +16,7 @@ export default function StarsBackground() {
   const [shadows, setShadows] = useState({ small: "", medium: "", big: "" });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShadows({
       small:  generateBoxShadows(700),
       medium: generateBoxShadows(200),
