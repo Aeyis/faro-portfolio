@@ -1,168 +1,134 @@
 "use client";
 
 import Image from "next/image";
-import { SECTION_HEIGHTS } from "@/lib/constants";
+import { SECTION_HEIGHTS, HERO_LAYERS } from "@/lib/constants";
+import { figmaToCSS } from "@/lib/utils";
+import StarsBackground from "./StarsBackground";
 
 export default function HeroSection() {
-    return (
-        <section
-            id="hero"
-            className="sky-gradient"
-            style={{ height: SECTION_HEIGHTS.hero }}
-        >
-            {/* Conteneur des couches — position relative pour ancrer les absolus */}
-            <div className="sticky top-0 w-full h-screen overflow-hidden">
+  return (
+    <section
+      id="hero"
+      style={{ height: SECTION_HEIGHTS.hero }}
+    >
+      <div className="sky-gradient sticky top-0 w-full h-screen overflow-hidden">
 
-                {/* COUCHE 1 — Fond étoilé / ciel arrière */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/background_stars.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                        priority
-                    />
-                </div>
+        {/* COUCHE 1 — Étoiles CSS animées */}
+        <StarsBackground />
 
-                {/* COUCHE 2 — Nuages de fond */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/background_cloud_1.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/background_cloud_2.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/background_cloud_3.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 3 — Nuages avant */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/cloud_1.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/cloud_2.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/cloud_3.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/cloud_4.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 4 — Mer */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/sea.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 5 — Sol */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/sol_1.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 6 — Phare */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/faro.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 7 — Végétation gauche */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/trees_left.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 8 — Ombres arbres */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/tree_shadow_1.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/tree_shadow_2.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/tree_shadow_3.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 9 — Lumières arbres */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/tree_light_1.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                {/* COUCHE 10 — Premier plan */}
-                <div className="absolute inset-0">
-                    <Image
-                        src="/assets/hero/tree_front.svg"
-                        alt=""
-                        fill
-                        className="object-cover"
-                    />
-                </div>
+        {/* COUCHE 2 — Nuages de fond */}
+        <div style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud1), zIndex: -2 }}>
+          <Image src="/assets/hero/background_cloud_1.svg" alt="" fill />
+        </div>
+        <div style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud2), zIndex: -3 }}>
+          <Image src="/assets/hero/background_cloud_2.svg" alt="" fill />
+        </div>
 
-            </div>
-        </section>
-    );
+        {/* COUCHE 3 — Nuages avant */}
+        <div style={{ ...figmaToCSS(HERO_LAYERS.cloud1), zIndex: 3 }}>
+          <Image src="/assets/hero/cloud_1.svg" alt="" fill />
+        </div>
+        <div style={{ ...figmaToCSS(HERO_LAYERS.cloud2), zIndex: 2 }}>
+          <Image src="/assets/hero/cloud_2.svg" alt="" fill />
+        </div>
+        <div style={{ ...figmaToCSS(HERO_LAYERS.cloud3), zIndex: 1 }}>
+          <Image src="/assets/hero/cloud_3.svg" alt="" fill />
+        </div>
+        <div style={{ ...figmaToCSS(HERO_LAYERS.cloud4), zIndex: 0 }}>
+          <Image src="/assets/hero/cloud_4.svg" alt="" fill />
+        </div>
+
+        {/* COUCHE 4 — Mer */}
+        <div style={{ ...figmaToCSS(HERO_LAYERS.sea), zIndex: 4 }}>
+          <Image src="/assets/hero/sea.svg" alt="" fill />
+        </div>
+
+        {/* COUCHE 5 — Sol */}
+        <div style={{
+          position: "absolute",
+          bottom: "0.5vw",
+          left: "-2vw",
+          width: "100vw",
+          height: "55vw",
+          zIndex: 5,
+        }}>
+          <Image src="/assets/hero/ground_1.svg" alt="" fill />
+        </div>
+
+
+        {/* COUCHE 6 — Phare */}
+        <div style={{ ...figmaToCSS(HERO_LAYERS.faro), zIndex: 6, top: "15%" }}>
+          <Image src="/assets/hero/faro.svg" alt="" fill />
+        </div>
+
+        {/* COUCHE 7 — Végétation gauche */}
+        <div style={{
+          position: "absolute",
+          bottom: "-10vw",
+          left: "-0.5vw",
+          width: "83.44vw",
+          height: "71.46vw",
+          zIndex: 7,
+        }}>
+          <Image src="/assets/hero/trees_left.svg" alt="" fill />
+        </div>
+
+        {/* COUCHE 8 — Ombres arbres */}
+        <div style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: "70vw",
+          height: "40vw",
+          zIndex: 8,
+        }}>
+          <Image src="/assets/hero/tree_shadow_1.svg" alt="" fill />
+        </div>
+        <div style={{
+          position: "absolute",
+          bottom: 25,
+          right: "-10vw",
+          width: "70.1vw",
+          height: "33.85vw",
+          zIndex: 8,
+        }}>
+          <Image src="/assets/hero/tree_shadow_2.svg" alt="" fill />
+        </div>
+        <div style={{
+          position: "absolute",
+          bottom: 3,
+          right: 0,
+          width: "95vw",
+          height: "52vw",
+          zIndex: 9,
+        }}>
+          <Image src="/assets/hero/tree_shadow_3.svg" alt="" fill />
+        </div>
+
+        {/* COUCHE 9 — Lumières arbres */}
+        <div style={{
+          position: "absolute",
+          top: "-1vw",
+          right: "4vw",
+          width: "70vw",
+          height: "40vw",
+          zIndex: 7,
+        }}>
+          <Image src="/assets/hero/tree_light_1.svg" alt="" fill />
+        </div>
+
+        {/* COUCHE 10 — Premier plan */}
+        <div style={{
+          position: "absolute",
+          bottom: "-4vw",
+          left: 0,
+          width: "100%",
+          height: "22.3vw",
+          zIndex: 10,
+        }}>
+          <Image src="/assets/hero/tree_front.svg" alt="" fill />
+        </div>
+      </div>
+    </section>
+  );
 }

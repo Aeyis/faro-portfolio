@@ -37,11 +37,29 @@ body {
 CIEL _ dégradé vertical global
 ---------------------------------------------------------*/
 .sky-gradient {
-  background: linear-gradient(
-          to bottom,
-          var(--sky-top) 0%,
-          var(--sky-mid) 40%,
-          var(--sky-horizon) 70%,
-          var(--sea) 100%
-  );
+  background:
+    /* Halo discret gauche — bleu nuit d'origine */
+    radial-gradient(ellipse 40% 80% at 0% 40%, rgba(10, 15, 30, 0.6) 0%, transparent 100%),
+    /* Halo phare — lueur dorée bas gauche */
+    radial-gradient(ellipse 40% 20% at 18% 88%, rgba(220, 140, 40, 0.5) 0%, transparent 70%),
+    /* Couche ambre — horizon chaud */
+    radial-gradient(ellipse 90% 35% at 50% 92%, rgba(196, 92, 26, 0.6) 0%, transparent 65%),
+    /* Touche peinture — rosé corail droite */
+    radial-gradient(ellipse 50% 40% at 88% 70%, rgba(190, 80, 50, 0.3) 0%, transparent 65%),
+    /* Touche peinture — teal profond bas */
+    radial-gradient(ellipse 60% 25% at 35% 98%, rgba(22, 78, 80, 0.7) 0%, transparent 60%),
+    /* Bande voie lactée — diagonale bleu-gris */
+    radial-gradient(ellipse 35% 70% at 70% 30%, rgba(22, 54, 67, 0.4) 0%, transparent 75%),
+    /* Gradient de base */
+    linear-gradient(
+      to bottom,
+      #04060f 0%,
+      #070d1e 12%,
+      #0a1228 22%,
+      #0f1a35 32%,
+      #163643 50%,
+      #7a3a10 72%,
+      #c45c1a 86%,
+      #0d4a4a 100%
+    );
 }
