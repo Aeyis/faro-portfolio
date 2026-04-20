@@ -42,11 +42,15 @@ export default function HeroSection() {
         </div>
 
         {/* COUCHE 2 — Nuages de fond */}
-        <div ref={bgCloud1Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud1), zIndex: -2 }}>
-          <Image src="/assets/hero/background_cloud_1.svg" alt="" fill />
+        <div ref={bgCloud1Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud1), left: 0, zIndex: -2 }}>
+          <div className="cloud-drift-1" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/background_cloud_1.svg" alt="" fill />
+          </div>
         </div>
-        <div ref={bgCloud2Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud2), zIndex: -3 }}>
-          <Image src="/assets/hero/background_cloud_2.svg" alt="" fill />
+        <div ref={bgCloud2Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud2), left: 0, zIndex: -3 }}>
+          <div className="cloud-drift-2" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/background_cloud_2.svg" alt="" fill />
+          </div>
         </div>
 
         {/* COUCHE 3 — Nuages avant */}
@@ -73,7 +77,7 @@ export default function HeroSection() {
         {/* COUCHE 5 — Sol */}
         <div ref={groundRef} style={{
           position: "absolute",
-          bottom: "0.5vw",
+          bottom: "0.7vw",
           left: "-2vw",
           width: "100vw",
           height: "55vw",
@@ -90,13 +94,15 @@ export default function HeroSection() {
         {/* COUCHE 7 — Végétation gauche */}
         <div ref={treesLeftRef} style={{
           position: "absolute",
-          bottom: "-10vw",
+          bottom: "-11vw",
           left: "-0.5vw",
           width: "83.44vw",
           height: "71.46vw",
           zIndex: 7,
         }}>
-          <Image src="/assets/hero/trees_left.svg" alt="" fill />
+          <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/trees_left.svg" alt="" fill />
+          </div>
         </div>
 
         {/* COUCHE 8 — Ombres arbres */}
@@ -112,7 +118,7 @@ export default function HeroSection() {
         </div>
         <div ref={treeShadow2Ref} style={{
           position: "absolute",
-          bottom: 25,
+          bottom: "0vw",
           right: "-10vw",
           width: "70.1vw",
           height: "33.85vw",
@@ -122,7 +128,7 @@ export default function HeroSection() {
         </div>
         <div ref={treeShadow3Ref} style={{
           position: "absolute",
-          bottom: 3,
+          bottom: "-2vw",
           right: 0,
           width: "95vw",
           height: "52vw",
@@ -146,7 +152,7 @@ export default function HeroSection() {
         {/* COUCHE 10 — Premier plan */}
         <div ref={treeFrontRef} style={{
           position: "absolute",
-          bottom: "-4vw",
+          bottom: "-6.5vw",
           left: 0,
           width: "100%",
           height: "22.3vw",

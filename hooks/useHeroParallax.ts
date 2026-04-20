@@ -49,10 +49,10 @@ export function useHeroParallax() {
     move(starsRef,       PARALLAX_SPEEDS.stars);
     move(bgCloud1Ref,    PARALLAX_SPEEDS.backgroundClouds);
     move(bgCloud2Ref,    PARALLAX_SPEEDS.backgroundClouds);
-    move(cloud1Ref,      PARALLAX_SPEEDS.clouds);
-    move(cloud2Ref,      PARALLAX_SPEEDS.clouds);
-    move(cloud3Ref,      PARALLAX_SPEEDS.clouds);
-    move(cloud4Ref,      PARALLAX_SPEEDS.clouds);
+    move(cloud1Ref,      PARALLAX_SPEEDS.cloud1);
+    move(cloud2Ref,      PARALLAX_SPEEDS.cloud2);
+    move(cloud3Ref,      PARALLAX_SPEEDS.cloud3);
+    move(cloud4Ref,      PARALLAX_SPEEDS.cloud4);
     move(seaRef,         PARALLAX_SPEEDS.sea);
     move(groundRef,      PARALLAX_SPEEDS.ground);
     move(faroRef,        PARALLAX_SPEEDS.faro);

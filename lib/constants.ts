@@ -24,8 +24,11 @@ export const SECTION_HEIGHTS = {
 // --------------------------------------------------------- //
 export const PARALLAX_SPEEDS = {
     stars: 0.05,
-    backgroundClouds: 0.1,
-    clouds: 0.2,
+    backgroundClouds: 0.08,
+    cloud4: 0.13,
+    cloud3: 0.17,
+    cloud2: 0.22,
+    cloud1: 0.28,
     sea: 0.4,
     ground: 0.5,
     faro: 0.5,

@@ -2,6 +2,28 @@
 ANIMATIONS — effets de mouvement
 ---------------------------------------------------------*/
 
+/* Nuages fond — dérive droite vers gauche en boucle */
+/* Ajuste ces 3 variables pour contrôler le comportement */
+:root {
+  --cloud-start:  110vw;   /* ligne de départ  (droite, hors écran) */
+  --cloud-end:   -110vw;   /* ligne d'arrivée  (gauche, hors écran) */
+}
+
+@keyframes cloud-drift {
+  from { transform: translateX(var(--cloud-start)); }
+  to   { transform: translateX(var(--cloud-end)); }
+}
+
+.cloud-drift-1 {
+  animation: cloud-drift 60s linear infinite;
+  animation-delay: 0s;
+}
+
+.cloud-drift-2 {
+  animation: cloud-drift 80s linear infinite;
+  animation-delay: -40s;
+}
+
 /* Vague mer - gauche/droite */
 @keyframes sea-sway {
   0%   { transform: translateX(0px)   translateY(0px);  animation-timing-function: ease-in-out; }
@@ -11,4 +33,15 @@ ANIMATIONS — effets de mouvement
 
 .sea-sway {
   animation: sea-sway 22s linear infinite;
+}
+/* vent - anim */
+@keyframes tree-sway {
+  0%   { transform: skewX(0deg)    rotate(0deg);    animation-timing-function: ease-in-out; }
+  40%  { transform: skewX(0.3deg)   rotate(0.2deg);  animation-timing-function: ease-in-out; }
+  60%  { transform: skewX(-0.15deg) rotate(-0.1deg); animation-timing-function: ease-in-out; }
+  100% { transform: skewX(0deg)    rotate(0deg); }
+}
+.tree-sway {
+  transform-origin: bottom center;
+  animation: tree-sway 8s ease-in-out infinite;
 }
