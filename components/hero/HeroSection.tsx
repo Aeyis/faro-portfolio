@@ -161,7 +161,7 @@ export default function HeroSection() {
                         className="object-cover"
                     />
                 </div>
-                
+
             </div>
         </section>
     );
