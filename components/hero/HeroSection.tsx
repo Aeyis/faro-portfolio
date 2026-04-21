@@ -55,16 +55,24 @@ export default function HeroSection() {
 
         {/* COUCHE 3 — Nuages avant */}
         <div ref={cloud1Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud1), zIndex: 3 }}>
-          <Image src="/assets/hero/cloud_1.svg" alt="" fill />
+          <div className="cloud-morph-1" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/cloud_1.svg" alt="" fill />
+          </div>
         </div>
         <div ref={cloud2Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud2), zIndex: 2 }}>
-          <Image src="/assets/hero/cloud_2.svg" alt="" fill />
+          <div className="cloud-morph-2" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/cloud_2.svg" alt="" fill />
+          </div>
         </div>
         <div ref={cloud3Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud3), zIndex: 1 }}>
-          <Image src="/assets/hero/cloud_3.svg" alt="" fill />
+          <div className="cloud-morph-3" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/cloud_3.svg" alt="" fill />
+          </div>
         </div>
         <div ref={cloud4Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud4), zIndex: 0 }}>
-          <Image src="/assets/hero/cloud_4.svg" alt="" fill />
+          <div className="cloud-morph-4" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/cloud_4.svg" alt="" fill />
+          </div>
         </div>
 
         {/* COUCHE 4 — Mer */}
@@ -114,17 +122,21 @@ export default function HeroSection() {
           height: "40vw",
           zIndex: 8,
         }}>
-          <Image src="/assets/hero/tree_shadow_1.svg" alt="" fill />
+          <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/tree_shadow_1.svg" alt="" fill />
+          </div>
         </div>
         <div ref={treeShadow2Ref} style={{
           position: "absolute",
-          bottom: "0vw",
+          bottom: "0.8vw",
           right: "-10vw",
           width: "70.1vw",
           height: "33.85vw",
           zIndex: 8,
         }}>
-          <Image src="/assets/hero/tree_shadow_2.svg" alt="" fill />
+          <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/tree_shadow_2.svg" alt="" fill />
+          </div>
         </div>
         <div ref={treeShadow3Ref} style={{
           position: "absolute",
@@ -134,7 +146,9 @@ export default function HeroSection() {
           height: "52vw",
           zIndex: 9,
         }}>
-          <Image src="/assets/hero/tree_shadow_3.svg" alt="" fill />
+          <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/tree_shadow_3.svg" alt="" fill />
+          </div>
         </div>
 
         {/* COUCHE 9 — Lumières arbres */}
@@ -146,13 +160,15 @@ export default function HeroSection() {
           height: "40vw",
           zIndex: 7,
         }}>
-          <Image src="/assets/hero/tree_light_1.svg" alt="" fill />
+          <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/tree_light_1.svg" alt="" fill />
+          </div>
         </div>
 
         {/* COUCHE 10 — Premier plan */}
         <div ref={treeFrontRef} style={{
           position: "absolute",
-          bottom: "-6.5vw",
+          bottom: "-9vw",
           left: 0,
           width: "100%",
           height: "22.3vw",

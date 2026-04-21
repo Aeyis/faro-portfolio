@@ -37,10 +37,11 @@ export function useHeroParallax() {
       scrub: 1,
     };
 
-    const move = (ref: React.RefObject<HTMLDivElement | null>, speed: number) => {
+    const move = (ref: React.RefObject<HTMLDivElement | null>, speed: number, scale?: number) => {
       if (!ref.current) return;
       gsap.to(ref.current, {
         y: -(SECTION_HEIGHTS.hero * speed * MULTIPLIER),
+        ...(scale !== undefined ? { scale } : {}),
         ease: "none",
         scrollTrigger: trigger,
       });
@@ -53,9 +54,12 @@ export function useHeroParallax() {
     move(cloud2Ref,      PARALLAX_SPEEDS.cloud2);
     move(cloud3Ref,      PARALLAX_SPEEDS.cloud3);
     move(cloud4Ref,      PARALLAX_SPEEDS.cloud4);
-    move(seaRef,         PARALLAX_SPEEDS.sea);
+    move(seaRef,         PARALLAX_SPEEDS.sea,    1.35);
+
     move(groundRef,      PARALLAX_SPEEDS.ground);
-    move(faroRef,        PARALLAX_SPEEDS.faro);
+
+    gsap.set(faroRef.current, { transformOrigin: "bottom center" });
+    move(faroRef,        PARALLAX_SPEEDS.faro,   1.12);
     move(treeShadow1Ref, PARALLAX_SPEEDS.treesBack);
     move(treeShadow2Ref, PARALLAX_SPEEDS.treesBack);
     move(treeShadow3Ref, PARALLAX_SPEEDS.treesBack);

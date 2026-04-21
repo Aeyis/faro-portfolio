@@ -34,7 +34,7 @@ export const PARALLAX_SPEEDS = {
     faro: 0.5,
     treesBack: 0.6,
     treesMid: 0.7,
-    treesFront: 0.9,
+    treesFront: 0.75,
 } as const;
 
 // --------------------------------------------------------- //
@@ -50,11 +50,11 @@ export const HERO_LAYERS = {
     backgroundCloud1: { x: 190,    y: 150,  w: 1794,    h: 1070    },
     backgroundCloud2: { x: 180,    y: 30,  w: 1694,    h: 1107.74 },
     backgroundCloud3: { x: -2885,  y: -550.96,w: 3851,    h: 2518.33 },
-    cloud1:           { x: -1950,   y: -1250,   w: 6000,    h: 2800 },
-    cloud2:           { x: -2150,  y: -740,   w: 6000,    h: 2200    },
-    cloud3:           { x: -2200,  y: -940,   w: 5800,    h: 2500    },
+    cloud1:           { x: -1995,   y: -1205,   w: 6000,    h: 2800 },
+    cloud2:           { x: -2100,  y: -740,   w: 6000,    h: 2200    },
+    cloud3:           { x: -2200,  y: -970,   w: 5800,    h: 2500    },
     cloud4:           { x: -1500,   y: -750,   w: 5500,    h: 2500    },
-    sea:              { x: -1382,  y: -948,   w: 4532,    h: 2396    },
+    sea:              { x: -1430,  y: -900,   w: 4532,    h: 2396    },
     ground:           { x: 0,      y: 763,    w: 790,     h: 359.73  },
     faro:             { x: 228,    y: 167,    w: 255,     h: 802     },
     treesLeft:        { x: -1,     y: 187,    w: 1602,    h: 899     },

@@ -1,12 +1,11 @@
 /*---------------------------------------------------------
-ANIMATIONS — effets de mouvement
+ANIMATIONS
 ---------------------------------------------------------*/
 
-/* Nuages fond — dérive droite vers gauche en boucle */
-/* Ajuste ces 3 variables pour contrôler le comportement */
+/* Nuages fond - drift droite vers gauche */
 :root {
-  --cloud-start:  110vw;   /* ligne de départ  (droite, hors écran) */
-  --cloud-end:   -110vw;   /* ligne d'arrivée  (gauche, hors écran) */
+  --cloud-start: 110vw;
+  --cloud-end: -110vw;
 }
 
 @keyframes cloud-drift {
@@ -26,22 +25,45 @@ ANIMATIONS — effets de mouvement
 
 /* Vague mer - gauche/droite */
 @keyframes sea-sway {
-  0%   { transform: translateX(0px)   translateY(0px);  animation-timing-function: ease-in-out; }
-  50%  { transform: translateX(70px)  translateY(-1px); animation-timing-function: ease-in-out; }
-  100% { transform: translateX(0px)   translateY(0px); }
+  0%   { transform: translateX(0px) translateY(0px); animation-timing-function: ease-in-out; }
+  50%  { transform: translateX(70px) translateY(-1px); animation-timing-function: ease-in-out; }
+  100% { transform: translateX(0px) translateY(0px); }
 }
 
 .sea-sway {
   animation: sea-sway 22s linear infinite;
 }
-/* vent - anim */
+
+/* Vent arbres */
 @keyframes tree-sway {
-  0%   { transform: skewX(0deg)    rotate(0deg);    animation-timing-function: ease-in-out; }
-  40%  { transform: skewX(0.3deg)   rotate(0.2deg);  animation-timing-function: ease-in-out; }
+  0%   { transform: skewX(0deg) rotate(0deg); animation-timing-function: ease-in-out; }
+  40%  { transform: skewX(0.3deg) rotate(0.2deg); animation-timing-function: ease-in-out; }
   60%  { transform: skewX(-0.15deg) rotate(-0.1deg); animation-timing-function: ease-in-out; }
-  100% { transform: skewX(0deg)    rotate(0deg); }
+  100% { transform: skewX(0deg) rotate(0deg); }
 }
+
 .tree-sway {
   transform-origin: bottom center;
   animation: tree-sway 8s ease-in-out infinite;
 }
+
+/* Deformation nuages */
+@keyframes cloud-morph {
+  0%   { transform: scaleX(1) scaleY(1) skewX(0deg); }
+  30%  { transform: scaleX(1.01) scaleY(0.97) skewX(0.4deg); }
+  65%  { transform: scaleX(0.97) scaleY(1.02) skewX(-0.3deg); }
+  100% { transform: scaleX(1) scaleY(1) skewX(0deg); }
+}
+
+@keyframes cloud-breathe {
+  0%   { opacity: 1; filter: brightness(1); }
+  50%  { opacity: 0.88; filter: brightness(1.05); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+.cloud-morph-1 {
+  animation: cloud-breathe 8s ease-in-out infinite;
+}
+.cloud-morph-2 { animation: cloud-morph 11s ease-in-out infinite; animation-delay: -3s; }
+.cloud-morph-3 { animation: cloud-morph 9s ease-in-out infinite; animation-delay: -5s; }
+.cloud-morph-4 { animation: cloud-morph 13s ease-in-out infinite; animation-delay: -7s; }
