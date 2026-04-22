@@ -10,11 +10,11 @@ export const COLORS = {
 } as const;
 
 // --------------------------------------------------------- //
-// ---------------- HAUTEUR DES SECTIONS (px) -------------- //
+// ---------------- HAUTEUR DES SECTIONS -------------- //
 // --------------------------------------------------------- //
 export const SECTION_HEIGHTS = {
-    hero: 4000,
-    transition: 1500,
+    hero: 2500,
+    transition: 800,
     about: 1000,
     stack: 1000,
     contact: 800,
@@ -49,7 +49,7 @@ export const HERO_LAYERS = {
     backgroundStars:  { x: -1050, y:75, w: 3800,  h: 1150 },
     backgroundCloud1: { x: 190,    y: 150,  w: 1794,    h: 1070    },
     backgroundCloud2: { x: 180,    y: 30,  w: 1694,    h: 1107.74 },
-    backgroundCloud3: { x: -2885,  y: -550.96,w: 3851,    h: 2518.33 },
+    backgroundCloud3: { x: -2885,  y: -550.96, w: 3851,    h: 2518.33 },
     cloud1:           { x: -1995,   y: -1205,   w: 6000,    h: 2800 },
     cloud2:           { x: -2100,  y: -740,   w: 6000,    h: 2200    },
     cloud3:           { x: -2200,  y: -970,   w: 5800,    h: 2500    },
@@ -62,5 +62,5 @@ export const HERO_LAYERS = {
     treeShadow2:      { x: 582,    y: 573,    w: 1346,    h: 650     },
     treeShadow3:      { x: 684,    y: 569,    w: 1247.76, h: 689.43  },
     treeLight1:       { x: 357,    y: 10,     w: 1564,    h: 880     },
-    treeFront:        { x: -9,     y: 853,    w: 1920,    h: 428.01  },
+    treeFront:        { x: -5100,   y: -210,    w: 12000,   h: 2500     },
 } as const;

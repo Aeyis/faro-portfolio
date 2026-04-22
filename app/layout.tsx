@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import LenisProvider from "@/components/ui/LenisProvider";
 
 export const metadata: Metadata = {
     title: "Faro — Rafael Solis Ramos",
@@ -11,7 +12,7 @@ export default function RootLayout(
 }>) {
     return (
         <html lang="fr">
-        <body>{children}</body>
+        <body><LenisProvider>{children}</LenisProvider></body>
         </html>
     );
 }

@@ -166,17 +166,53 @@ export default function HeroSection() {
         </div>
 
         {/* COUCHE 10 — Premier plan */}
-        <div ref={treeFrontRef} style={{
-          position: "absolute",
-          bottom: "-9vw",
-          left: 0,
-          width: "100%",
-          height: "22.3vw",
-          zIndex: 10,
-        }}>
+        <div ref={treeFrontRef} style={{ ...figmaToCSS(HERO_LAYERS.treeFront), zIndex: 10 }}>
           <Image src="/assets/hero/tree_front.svg" alt="" fill />
         </div>
+
       </div>
+
+      {/* Bouton scroll vers section suivante */}
+      <button
+        onClick={() => {
+          const target = document.getElementById("about");
+          if (!target) return;
+          const startY = window.scrollY;
+          const endY = target.getBoundingClientRect().top + startY;
+          const duration = 3500;
+          let startTime: number;
+          function step(timestamp: number) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            const ease = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+            window.scrollTo(0, startY + (endY - startY) * ease);
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        }}
+        style={{
+          position: "fixed",
+          bottom: "2rem",
+          right: "2rem",
+          zIndex: 100,
+          background: "rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.25)",
+          borderRadius: "50%",
+          width: "48px",
+          height: "48px",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backdropFilter: "blur(6px)",
+          color: "#fff",
+          fontSize: "1.2rem",
+          transition: "background 0.2s",
+        }}
+        aria-label="Scroll vers la section suivante"
+      >
+        ↓
+      </button>
     </section>
   );
 }

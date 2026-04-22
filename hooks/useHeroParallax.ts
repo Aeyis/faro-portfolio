@@ -30,11 +30,23 @@ export function useHeroParallax() {
   const treeFrontRef   = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    let bubbleFired = false;
     const trigger = {
       trigger: sectionRef.current,
       start: "top top",
       end: "bottom bottom",
       scrub: 1,
+      markers: true,
+      onUpdate: (self: ScrollTrigger) => {
+        if (self.progress > 0.70 && !bubbleFired) {
+          bubbleFired = true;
+          window.dispatchEvent(new Event('hero-bubble-start'));
+        }
+        if (self.progress < 0.85) {
+          bubbleFired = false;
+          window.dispatchEvent(new Event('hero-bubble-stop'));
+        }
+      },
     };
 
     const move = (ref: React.RefObject<HTMLDivElement | null>, speed: number, scale?: number) => {
@@ -54,7 +66,7 @@ export function useHeroParallax() {
     move(cloud2Ref,      PARALLAX_SPEEDS.cloud2);
     move(cloud3Ref,      PARALLAX_SPEEDS.cloud3);
     move(cloud4Ref,      PARALLAX_SPEEDS.cloud4);
-    move(seaRef,         PARALLAX_SPEEDS.sea,    1.35);
+    move(seaRef,         PARALLAX_SPEEDS.sea);
 
     move(groundRef,      PARALLAX_SPEEDS.ground);
 

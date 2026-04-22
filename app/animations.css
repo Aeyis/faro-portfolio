@@ -2,7 +2,7 @@
 ANIMATIONS
 ---------------------------------------------------------*/
 
-/* Nuages fond - drift droite vers gauche */
+/* Nuages fond - drift droite -> gauche */
 :root {
   --cloud-start: 110vw;
   --cloud-end: -110vw;
@@ -39,7 +39,7 @@ ANIMATIONS
   0%   { transform: skewX(0deg) rotate(0deg); animation-timing-function: ease-in-out; }
   40%  { transform: skewX(0.3deg) rotate(0.2deg); animation-timing-function: ease-in-out; }
   60%  { transform: skewX(-0.15deg) rotate(-0.1deg); animation-timing-function: ease-in-out; }
-  100% { transform: skewX(0deg) rotate(0deg); }
+  100% { transform: skewX(0deg) rotate(0.2deg); }
 }
 
 .tree-sway {
@@ -51,18 +51,18 @@ ANIMATIONS
 @keyframes cloud-morph {
   0%   { transform: scaleX(1) scaleY(1) skewX(0deg); }
   30%  { transform: scaleX(1.01) scaleY(0.97) skewX(0.4deg); }
-  65%  { transform: scaleX(0.97) scaleY(1.02) skewX(-0.3deg); }
-  100% { transform: scaleX(1) scaleY(1) skewX(0deg); }
+  65%  { transform: scaleX(0.97) scaleY(1.02) skewX(-0.6deg); }
+  100% { transform: scaleX(1) scaleY(1) skewX(0.2deg); }
 }
 
 @keyframes cloud-breathe {
   0%   { opacity: 1; filter: brightness(1); }
-  50%  { opacity: 0.88; filter: brightness(1.05); }
+  50%  { opacity: 0.88; filter: brightness(1.08); }
   100% { opacity: 1; filter: brightness(1); }
 }
 
 .cloud-morph-1 {
-  animation: cloud-breathe 8s ease-in-out infinite;
+  animation: cloud-breathe 8.4s ease-in-out infinite;
 }
 .cloud-morph-2 { animation: cloud-morph 11s ease-in-out infinite; animation-delay: -3s; }
 .cloud-morph-3 { animation: cloud-morph 9s ease-in-out infinite; animation-delay: -5s; }
