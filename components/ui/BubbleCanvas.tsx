@@ -112,15 +112,16 @@ export default function BubbleCanvas({
 
       /* Corps gradient teal */
       const grd = ctx!.createRadialGradient(x - r * 0.15, y - r * 0.15, r * 0.05, x, y, r)
-      grd.addColorStop(0,   'rgba(69,180,146,0.9)')
-      grd.addColorStop(0.5, 'rgba(10,80,80,0.85)')
-      grd.addColorStop(1,   'rgba(4,40,48,0.9)')
+      grd.addColorStop(0,   'rgba(255,255,255,0.06)')
+      grd.addColorStop(0.5, 'rgba(180,220,255,0.03)')
+      grd.addColorStop(1,   'rgba(100,180,200,0.05)')
       ctx!.fillStyle = grd
       ctx!.fill()
 
       /* Bordure blanche */
-      ctx!.strokeStyle = `rgba(255,255,255,${alpha * 0.55})`
-      ctx!.lineWidth   = Math.max(0.8, r * 0.04)
+      const hue = (wobblePhase * 40 + 180) % 360
+      ctx!.strokeStyle = `hsla(${hue},80%,85%,${alpha * 0.7})`
+      ctx!.lineWidth   = Math.max(1, r * 0.03)
       ctx!.stroke()
 
       /* Reflet principal (haut) */
@@ -158,6 +159,8 @@ export default function BubbleCanvas({
       vy: number; vx: number
       originX: number
       swayAmp: number; swayFreq: number; swayPhase: number
+      swayAmp2: number; swayFreq2: number
+      swayAmp3: number; swayFreq3: number
       wobble: number; wobbleSpeed: number; wobblePhase: number
       t: number; maxT: number
       alpha: number; maxAlpha: number; alive: boolean; isLarge: boolean
@@ -184,6 +187,10 @@ export default function BubbleCanvas({
         this.swayAmp   = P.spread * 0.06 + Math.random() * 6
         this.swayFreq  = 0.025 + Math.random() * 0.035
         this.swayPhase = Math.random() * Math.PI * 2
+        this.swayAmp2  = Math.random() * 8 + 3
+        this.swayFreq2 = 0.013 + Math.random() * 0.02
+        this.swayAmp3  = Math.random() * 4 + 1
+        this.swayFreq3 = 0.05 + Math.random() * 0.04
 
         /* Ondulation forme (40% des bulles) */
         this.wobble      = Math.random() < 0.4 ? Math.random() * 0.07 + 0.03 : 0
@@ -202,7 +209,10 @@ export default function BubbleCanvas({
         this.t++
         this.y       += this.vy
         this.originX += this.vx * 0.03
-        this.x        = this.originX + Math.sin(this.t * this.swayFreq + this.swayPhase) * this.swayAmp
+        this.x = this.originX
+            + Math.sin(this.t * this.swayFreq  + this.swayPhase) * this.swayAmp
+            + Math.sin(this.t * this.swayFreq2 + this.swayPhase) * this.swayAmp2
+            + Math.sin(this.t * this.swayFreq3 + this.swayPhase) * this.swayAmp3
         this.wobblePhase += this.wobbleSpeed
 
         const p = this.t / this.maxT

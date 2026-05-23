@@ -36,6 +36,7 @@ export function useHeroParallax() {
 
   useGSAP(() => {
     let bubbleFired = false;
+    let autoScrolling = false;
     const trigger = {
       trigger: sectionRef.current,
       start: "top top",
@@ -51,11 +52,37 @@ export function useHeroParallax() {
           bubbleFired = false;
           window.dispatchEvent(new Event('hero-bubble-stop'));
         }
-      },
-      onLeave: () => {
-        const target = document.getElementById("about");
-        if (!target) return;
-        window.lenisInstance?.scrollTo(target);
+        if (self.progress >= 1 && !autoScrolling) {
+          autoScrolling = true;
+          const target = document.getElementById("about");
+          if (!target) { autoScrolling = false; return; }
+          const block = (e: Event) => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          };
+          const blockKey = (e: KeyboardEvent) => {
+            if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", " "].includes(e.key))
+              e.preventDefault();
+          };
+          window.addEventListener("wheel", block, { passive: false, capture: true });
+          window.addEventListener("touchmove", block, { passive: false, capture: true });
+          window.addEventListener("keydown", blockKey, { capture: true });
+          let cleaned = false;
+          const cleanup = () => {
+            if (cleaned) return;
+            cleaned = true;
+            autoScrolling = false;
+            window.removeEventListener("wheel", block, { capture: true });
+            window.removeEventListener("touchmove", block, { capture: true });
+            window.removeEventListener("keydown", blockKey, { capture: true });
+          };
+          window.lenisInstance?.scrollTo(target, {
+            duration: 2.2,
+                easing: (t) => Math.sin((t * Math.PI) / 2),
+            onComplete: cleanup,
+          });
+          setTimeout(cleanup, 3000);
+        }
       },
     };
 
