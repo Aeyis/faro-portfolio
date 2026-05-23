@@ -143,3 +143,13 @@ ANIMATIONS
 .cloud-morph-2 { animation: cloud-morph 18s ease-in-out infinite; animation-delay: -3s; }
 .cloud-morph-3 { animation: cloud-morph 15s ease-in-out infinite; animation-delay: -5s; }
 .cloud-morph-4 { animation: cloud-morph 22s ease-in-out infinite; animation-delay: -7s; }
+
+@keyframes beam-rotate {
+  from { transform: rotate(-30deg); }
+  to   { transform: rotate(30deg); }
+}
+
+@keyframes animStar {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-2000px); }
+}

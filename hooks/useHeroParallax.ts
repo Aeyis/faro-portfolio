@@ -3,6 +3,11 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SECTION_HEIGHTS, PARALLAX_SPEEDS } from "@/lib/constants";
+import type Lenis from "lenis";
+
+declare global {
+  interface Window { lenisInstance?: Lenis; }
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,14 +43,19 @@ export function useHeroParallax() {
       scrub: 1,
       markers: true,
       onUpdate: (self: ScrollTrigger) => {
-        if (self.progress > 0.70 && !bubbleFired) {
+        if (self.progress > 0.95 && !bubbleFired) {
           bubbleFired = true;
           window.dispatchEvent(new Event('hero-bubble-start'));
         }
-        if (self.progress < 0.85) {
+        if (self.progress < 0.90) {
           bubbleFired = false;
           window.dispatchEvent(new Event('hero-bubble-stop'));
         }
+      },
+      onLeave: () => {
+        const target = document.getElementById("about");
+        if (!target) return;
+        window.lenisInstance?.scrollTo(target);
       },
     };
 
@@ -71,7 +81,7 @@ export function useHeroParallax() {
     move(groundRef,      PARALLAX_SPEEDS.ground);
 
     gsap.set(faroRef.current, { transformOrigin: "bottom center" });
-    move(faroRef,        PARALLAX_SPEEDS.faro,   1.12);
+    move(faroRef,        PARALLAX_SPEEDS.faro,   1.05);
     move(treeShadow1Ref, PARALLAX_SPEEDS.treesBack);
     move(treeShadow2Ref, PARALLAX_SPEEDS.treesBack);
     move(treeShadow3Ref, PARALLAX_SPEEDS.treesBack);

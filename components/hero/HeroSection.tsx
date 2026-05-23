@@ -1,10 +1,15 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
 import { SECTION_HEIGHTS, HERO_LAYERS } from "@/lib/constants";
 import { figmaToCSS } from "@/lib/utils";
 import { useHeroParallax } from "@/hooks/useHeroParallax";
 import StarsBackground from "./StarsBackground";
+
+const LERP  = 0.06;
+const AMP_X = 20;
 
 export default function HeroSection() {
   const {
@@ -28,16 +33,66 @@ export default function HeroSection() {
     treeFrontRef,
   } = useHeroParallax();
 
+  const stickyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) return;
+
+    const container = stickyRef.current;
+    if (!container) return;
+
+    let tX = 0, cX = 0;
+
+    const onMouseMove = (e: MouseEvent) => {
+      tX = (e.clientX / window.innerWidth - 0.5) * 2;
+    };
+
+    container.addEventListener("mousemove", onMouseMove);
+
+    const layers: { ref: React.RefObject<HTMLDivElement | null>; i: number }[] = [
+      { ref: treesLeftRef,   i: 0.65 },
+      { ref: treeShadow1Ref, i: 0.65 },
+      { ref: treeShadow2Ref, i: 0.65 },
+      { ref: treeShadow3Ref, i: 0.65 },
+      { ref: treeLight1Ref,  i: 0.65 },
+      { ref: treeFrontRef,   i: 0.80 },
+      { ref: faroRef,   i: 0.10 },
+      { ref: groundRef, i: 0.15 },
+    ];
+
+    const tick = () => {
+      cX += (tX - cX) * LERP;
+
+      layers.forEach(({ ref, i }) => {
+        if (!ref.current) return;
+        gsap.set(ref.current, { x: Math.max(-5, Math.min(5, cX * AMP_X * i)) });
+      });
+    };
+
+    gsap.ticker.add(tick);
+
+    return () => {
+      container.removeEventListener("mousemove", onMouseMove);
+      gsap.ticker.remove(tick);
+      layers.forEach(({ ref }) => {
+        if (ref.current) gsap.set(ref.current, { x: 0 });
+      });
+    };
+  }, [
+    treesLeftRef, treeShadow1Ref, treeShadow2Ref, treeShadow3Ref,
+    treeLight1Ref, treeFrontRef,
+  ]);
+
   return (
     <section
       id="hero"
       ref={sectionRef}
       style={{ height: SECTION_HEIGHTS.hero }}
     >
-      <div className="sky-gradient sticky top-0 w-full h-screen overflow-hidden">
+      <div ref={stickyRef} className="sky-gradient sticky top-0 w-full h-screen overflow-hidden">
 
         {/* COUCHE 1 — Étoiles CSS animées */}
-        <div ref={starsRef} style={{ position: "absolute", inset: 0, zIndex: -1 }}>
+        <div ref={starsRef} style={{ position: "absolute", inset: 0, zIndex: 0 }}>
           <StarsBackground />
         </div>
 
