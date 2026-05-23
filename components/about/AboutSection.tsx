@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useAboutParallax } from "@/hooks/useAboutParallax";
 import { SECTION_HEIGHTS } from "@/lib/constants";
+import UnderwaterBackground from "@/components/about/UnderwaterBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,8 +45,9 @@ export default function AboutSection() {
         <section
             id="about"
             ref={sectionRef}
-            style={{ height: SECTION_HEIGHTS.about, padding: "80px 40px" }}
+            style={{ height: SECTION_HEIGHTS.about, padding: "80px 40px", position: "relative" }}
         >
+            <UnderwaterBackground />
             <h2
                 ref={titleRef}
                 className="font-inter-tight about-title"
