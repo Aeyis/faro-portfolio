@@ -5,7 +5,7 @@
 VARIABLES
 ---------------------------------------------------------*/
 :root {
-  --sky-top: #0a0f1e;
+  --sky-top: #0a072d;
   --sky-horizon: #c45c1a;
   --sky-mid: #1a2a4a;
   --sea: #0d4a4a;
@@ -27,8 +27,33 @@ html {
   scroll-behavior: auto;
 }
 
+.font-syne {
+  font-family: var(--font-syne), sans-serif;
+}
+
+.font-inter-tight {
+  font-family: var(--font-inter-tight), sans-serif;
+}
+
+/*---------------------------------------------------------
+ABOUT — responsive mobile
+---------------------------------------------------------*/
+.about-title {
+  font-size: clamp(72px, 16vw, 260px);
+}
+
+@media (max-width: 768px) {
+  #about {
+    padding-top: 160px !important;
+  }
+  .about-title {
+    font-size: clamp(90px, 26vw, 160px) !important;
+  }
+}
+
 body {
-  background: var(--sky-top);
+  background: linear-gradient(to bottom, #0a072d 0%, #0a072d 44%, #020818 52%, #010510 100%);
+  min-height: 100vh;
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: clip;
