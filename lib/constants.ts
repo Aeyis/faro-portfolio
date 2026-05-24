@@ -15,7 +15,7 @@ export const COLORS = {
 export const SECTION_HEIGHTS = {
     hero: 2500,
     transition: 800,
-    about: 1000,
+    about: 2500,
     stack: 1000,
     contact: 800,
 } as const;

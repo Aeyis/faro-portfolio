@@ -43,7 +43,7 @@ ABOUT — responsive mobile
 }
 
 @media (max-width: 768px) {
-  #about {
+  .about-sticky {
     padding-top: 160px !important;
   }
   .about-title {
