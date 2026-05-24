@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "./animations.css";
+@import "../styles/animations.css";
 
 /*---------------------------------------------------------
 VARIABLES

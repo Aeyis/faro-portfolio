@@ -232,7 +232,7 @@ export default function HeroSectionMobile() {
                         <Image src="/assets/hero/tree_front_mobile.svg" alt="" fill />
                     </div>
                 </div>
-                <BubbleCanvas wave maxSize={18} speed={4} maxCount={300} spread={200} />
+                <BubbleCanvas wave maxSize={18} speed={4} maxCount={150} spread={200} throttle={2} />
             </div>
             </div>
         </section>

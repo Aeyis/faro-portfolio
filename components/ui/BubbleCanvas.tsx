@@ -24,6 +24,7 @@ interface BubbleCanvasProps {
   spread?:   number
   maxCount?: number
   wave?:     boolean  // mode vague unique : toutes les bulles partent en même temps
+  throttle?: number   // saute N-1 frames sur N (1=60fps, 2=30fps, 3=20fps)
 }
 
 export default function BubbleCanvas({
@@ -32,6 +33,7 @@ export default function BubbleCanvas({
   speed    = 4,
   spread   = 80,
   maxCount = 120,
+  throttle = 1,
   wave     = false,
 }: BubbleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -315,7 +317,11 @@ export default function BubbleCanvas({
 
     function spawnWave() { buildQueue() }
 
+    let loopFrame = 0
     function loop() {
+      loopFrame++
+      if (loopFrame % throttle !== 0) { rafId = requestAnimationFrame(loop); return }
+
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height)
 
       if (!wave) autoEmit()

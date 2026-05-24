@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import React from "react";
 import "./globals.css";
 import LenisProvider from "@/components/ui/LenisProvider";
+import LogoIntro from "@/components/ui/LogoIntro";
+import DiveMenu from "@/components/ui/DiveMenu";
 import { Syne, Inter_Tight } from "next/font/google";
 
 const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
@@ -16,7 +19,12 @@ export default function RootLayout(
 }>) {
     return (
         <html lang="fr" className={`${syne.variable} ${interTight.variable}`}>
-        <body><LenisProvider>{children}</LenisProvider></body>
+        <body>
+            <LogoIntro />
+            <DiveMenu />
+
+            <LenisProvider>{children}</LenisProvider>
+        </body>
         </html>
     );
 }

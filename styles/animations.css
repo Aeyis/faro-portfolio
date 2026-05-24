@@ -67,3 +67,68 @@ ANIMATIONS
 .cloud-morph-2 { animation: cloud-morph 11s ease-in-out infinite; animation-delay: -3s; }
 .cloud-morph-3 { animation: cloud-morph 9s ease-in-out infinite; animation-delay: -5s; }
 .cloud-morph-4 { animation: cloud-morph 13s ease-in-out infinite; animation-delay: -7s; }
+
+@keyframes cta-appear {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Chevron V menu */
+@keyframes bob-chevron {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(6px); }
+}
+
+.hamburger-icon {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: rgba(255, 184, 48, 0.5);
+  box-shadow:
+    0 6px 0 rgba(255, 184, 48, 0.5),
+    0 12px 0 rgba(255, 184, 48, 0.5);
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hamburger-icon.active {
+  transform: translateX(-50%);
+}
+
+/* Ham4 */
+.ham-btn {
+  cursor: pointer;
+  transition: transform 400ms;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+}
+.ham-btn.active {
+  transform: rotate(45deg);
+}
+.ham-btn .line {
+  fill: none;
+  transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+  stroke: #c43a08;
+  stroke-width: 5.5;
+  stroke-linecap: round;
+}
+.ham4 .top    { stroke-dasharray: 40 121; }
+.ham4 .bottom { stroke-dasharray: 40 121; }
+.ham4.active .top    { stroke-dashoffset: -68px; }
+.ham4.active .bottom { stroke-dashoffset: -68px; }
+
+@keyframes pulse-cta {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+.pulse-cta {
+  opacity: 0;
+  animation:
+    cta-appear 0.6s ease-out 4s forwards,
+    pulse-cta  2.2s ease-in-out 4.6s infinite;
+}

@@ -34,6 +34,19 @@ export default function HeroSection() {
   } = useHeroParallax();
 
   const stickyRef = useRef<HTMLDivElement>(null);
+  const ctaRef    = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const hide = () => {
+      const el = ctaRef.current;
+      if (!el) return;
+      el.style.animation = "none";
+      el.style.opacity   = getComputedStyle(el).opacity;
+      gsap.to(el, { opacity: 0, duration: 0.4 });
+    };
+    window.addEventListener("intro-done", hide, { once: true });
+    return () => window.removeEventListener("intro-done", hide);
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia("(hover: none)").matches) return;
@@ -220,10 +233,30 @@ export default function HeroSection() {
           </div>
         </div>
 
+        {/* CTA — Appuyer pour commencer */}
+        <div ref={ctaRef} className="pulse-cta" style={{
+          position: "absolute",
+          bottom: "5rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 20,
+          pointerEvents: "none",
+          color: "#fff",
+          fontSize: "11px",
+          letterSpacing: "0.18em",
+          fontFamily: "var(--font-syne)",
+          fontWeight: 400,
+          textTransform: "uppercase",
+          whiteSpace: "nowrap",
+        }}>
+          Appuyer pour commencer
+        </div>
+
         {/* COUCHE 10 — Premier plan */}
         <div ref={treeFrontRef} style={{ ...figmaToCSS(HERO_LAYERS.treeFront), zIndex: 10 }}>
           <Image src="/assets/hero/tree_front.svg" alt="" fill />
         </div>
+
 
       </div>
 
