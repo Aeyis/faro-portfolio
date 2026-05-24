@@ -64,7 +64,7 @@ export default function UnderwaterBackground() {
         ctx!.restore()
       })
 
-      /* Fade mask — transparent en haut, opaque vers le bas */
+      /* Fade mask — transparent haut, opaque bas */
       const mask = ctx!.createLinearGradient(0, 0, 0, canvas!.height * 0.35)
       mask.addColorStop(0,   'rgba(0,0,0,0)')
       mask.addColorStop(1,   'rgba(0,0,0,1)')

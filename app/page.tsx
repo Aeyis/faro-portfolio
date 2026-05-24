@@ -1,8 +1,8 @@
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import HeroSectionMobile from "@/components/hero/HeroSectionMobile";
 import HeroSection from "@/components/hero/HeroSection";
-import BubbleCanvas from "@/components/ui/BubbleCanvas";  // ← option A : bulles
-import WaveTransition from "@/components/ui/WaveTransition"; // ← option B : vague
+import BubbleCanvas from "@/components/ui/BubbleCanvas";
+
 import AboutSection from "@/components/about/AboutSection";
 
 export default function Home() {

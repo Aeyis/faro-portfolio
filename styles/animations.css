@@ -73,7 +73,7 @@ ANIMATIONS
   to   { opacity: 1; }
 }
 
-/* Chevron V menu */
+/* menu */
 @keyframes bob-chevron {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50%       { transform: translateX(-50%) translateY(6px); }
@@ -98,7 +98,7 @@ ANIMATIONS
   transform: translateX(-50%);
 }
 
-/* Ham4 */
+/* Hamburger + effet*/
 .ham-btn {
   cursor: pointer;
   transition: transform 400ms;
