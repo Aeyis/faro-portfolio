@@ -35,9 +35,9 @@ export default function AboutSection() {
 
 
         gsap.to(el, {
-            scale: 0.25,
-            x: () =>  16 - el.offsetLeft,
-            y: () => 16 - (floatRef.current?.offsetTop ?? 80),
+            scale: () => window.innerWidth < 768 ? 0.55 : 0.25,
+            x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
+            y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
             transformOrigin: "top left",
             ease: "none",
             scrollTrigger: {
