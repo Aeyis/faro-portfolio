@@ -15,8 +15,9 @@ interface SectionTitleProps {
 }
 
 export default function SectionTitle({ sectionRef, hue, eventPrefix, children }: SectionTitleProps) {
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const floatRef = useRef<HTMLDivElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const titleRef   = useRef<HTMLHeadingElement>(null);
+    const floatRef   = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
         const el = titleRef.current;
@@ -61,9 +62,10 @@ export default function SectionTitle({ sectionRef, hue, eventPrefix, children }:
             yoyo: true,
         });
 
-    }, { scope: sectionRef });
+    }, { scope: wrapperRef });
 
     return (
+        <div ref={wrapperRef}>
         <div ref={floatRef}>
             <h2
                 ref={titleRef}
@@ -90,6 +92,7 @@ export default function SectionTitle({ sectionRef, hue, eventPrefix, children }:
             >
                 {children}
             </h2>
+        </div>
         </div>
     );
 }

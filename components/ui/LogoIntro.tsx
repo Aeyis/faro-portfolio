@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import LogoFaro from "./LogoFaro";
+import { SECTION_HEIGHTS } from "@/lib/constants";
 
 export default function LogoIntro() {
     const containerRef        = useRef<HTMLDivElement>(null);
@@ -12,7 +13,7 @@ export default function LogoIntro() {
     const hamburgerOverlayRef = useRef<HTMLDivElement>(null);
     const hoverZoneRef        = useRef<HTMLDivElement>(null);
     const hamBtnRef           = useRef<SVGSVGElement>(null);
-    const aboutModeRef        = useRef(false);
+    const sectionModeRef = useRef<string | null>(null);
 
     useEffect(() => {
         const el = containerRef.current;
@@ -54,62 +55,64 @@ export default function LogoIntro() {
                         ham.style.left = `${targetCenterX - hamSize / 2}px`;
                     }
 
+                    // ── Section courante via getBoundingClientRect ──
+                    const updateSection = () => {
+                        const mid = window.innerHeight / 2;
+                        const stackRect = document.getElementById("stack")?.getBoundingClientRect();
+                        const aboutRect = document.getElementById("about")?.getBoundingClientRect();
+
+                        if (stackRect && stackRect.top <= mid && stackRect.bottom >= 0) {
+                            sectionModeRef.current = "stack";
+                            ham?.style.setProperty("--ham-color", "#021a06");
+                        } else if (aboutRect && aboutRect.top <= mid && aboutRect.bottom >= 0) {
+                            sectionModeRef.current = "about";
+                            ham?.style.setProperty("--ham-color", "#020818");
+                        } else {
+                            sectionModeRef.current = null;
+                            ham?.style.removeProperty("--ham-color");
+                        }
+                    };
+
+                    const baseFilter = () => {
+                        if (sectionModeRef.current === "about") return "hue-rotate(160deg) saturate(1.5) brightness(1.1)";
+                        if (sectionModeRef.current === "stack") return "hue-rotate(100deg) saturate(3.5) brightness(1.0)";
+                        return "drop-shadow(0 0 0px rgba(255,184,48,0))";
+                    };
+                    const hoverFilter = () => {
+                        if (sectionModeRef.current === "about") return "hue-rotate(160deg) saturate(1.5) brightness(1.3) drop-shadow(0 0 28px rgba(80,200,255,0.35))";
+                        if (sectionModeRef.current === "stack") return "hue-rotate(100deg) saturate(3.5) brightness(1.2) drop-shadow(0 0 28px rgba(60,220,120,0.35))";
+                        return "drop-shadow(0 0 28px rgba(255,184,48,0.25))";
+                    };
+
                     hz.addEventListener("mouseenter", () => {
-                        const glow = aboutModeRef.current
-                            ? "hue-rotate(160deg) saturate(1.5) brightness(1.3) drop-shadow(0 0 28px rgba(80,200,255,0.35))"
-                            : "drop-shadow(0 0 28px rgba(255,184,48,0.25))";
-                        gsap.to(el, { scale: targetScale * 1.08, filter: glow, duration: 0.4, ease: "power2.out" });
+                        updateSection();
+                        gsap.to(el, { scale: targetScale * 1.08, filter: hoverFilter(), duration: 0.4, ease: "power2.out" });
                         gsap.to(logoWrapperRef.current,      { opacity: 0, duration: 0.35, ease: "power2.inOut" });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 1, duration: 0.35, ease: "power2.inOut" });
                         gsap.to(ham,                         { opacity: 1, duration: 0.35, ease: "power2.out"   });
                     });
 
                     hz.addEventListener("mouseleave", () => {
-                        const base = aboutModeRef.current
-                            ? "hue-rotate(160deg) saturate(1.5) brightness(1.1)"
-                            : "drop-shadow(0 0 0px rgba(255,184,48,0))";
-                        gsap.to(el, { scale: targetScale, filter: base, duration: 0.5, ease: "power2.inOut" });
+                        gsap.to(el, { scale: targetScale, filter: baseFilter(), duration: 0.5, ease: "power2.inOut" });
                         gsap.to(ham,                         { opacity: 0, duration: 0.3 });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" });
                         gsap.to(logoWrapperRef.current,      { opacity: 1, duration: 0.4, ease: "power2.inOut" });
                     });
 
-                    // ── Disparition au scroll, réapparition dans la section About ──
-                    const hidelogo = () => {
-                        gsap.to(el, { autoAlpha: 0, duration: 0.5, ease: "power2.inOut" });
-                        if (hz) hz.style.pointerEvents = "none";
-                        if (ham) gsap.to(ham, { opacity: 0, duration: 0.3 });
+                    // ── Show/hide selon direction de scroll ──
+                    const onWheel = (e: WheelEvent) => {
+                        updateSection();
+                        if (e.deltaY > 0) {
+                            gsap.to(el, { autoAlpha: 0, duration: 0.4, ease: "power2.inOut" });
+                            if (hz) hz.style.pointerEvents = "none";
+                            if (ham) gsap.to(ham, { opacity: 0, duration: 0.3 });
+                        } else if (e.deltaY < 0) {
+                            gsap.set(el, { filter: baseFilter() });
+                            gsap.to(el, { autoAlpha: 1, duration: 0.5, ease: "power2.out" });
+                            if (hz) hz.style.pointerEvents = "all";
+                        }
                     };
-
-                    const addHideOnScrollDown = () => {
-                        const handler = (e: WheelEvent) => {
-                            if (e.deltaY <= 0) return;
-                            hidelogo();
-                            window.removeEventListener("wheel", handler);
-                        };
-                        window.addEventListener("wheel", handler, { passive: true });
-                    };
-
-                    const showAbout = () => {
-                        aboutModeRef.current = true;
-                        ham?.style.setProperty("--ham-color", "#020818");
-                        gsap.set(el, { filter: "hue-rotate(160deg) saturate(1.5) brightness(1.1)" });
-                        gsap.to(el, { autoAlpha: 1, duration: 0.7, ease: "power2.out" });
-                        if (hz) hz.style.pointerEvents = "all";
-                    };
-
-                    const hideAbout = () => {
-                        aboutModeRef.current = false;
-                        ham?.style.removeProperty("--ham-color");
-                        gsap.set(el, { filter: "none" });
-                        gsap.to(el, { autoAlpha: 1, duration: 0.7, ease: "power2.out" });
-                        if (hz) hz.style.pointerEvents = "all";
-                        addHideOnScrollDown();
-                    };
-
-                    addHideOnScrollDown();
-                    window.addEventListener("about-stuck",   showAbout as EventListener);
-                    window.addEventListener("about-unstuck", hideAbout as EventListener);
+                    window.addEventListener("wheel", onWheel, { passive: true });
                 },
             });
 
