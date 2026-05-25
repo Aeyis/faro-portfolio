@@ -109,11 +109,7 @@ export default function DiveMenu() {
                 </div>
             </div>
 
-            <div className="footer-pill">
-                <span className="foot-item">Visibilité <span>18 m</span></span>
-                <span className="foot-item">Courant <span>Nul</span></span>
-                <span className="foot-item">Durée max <span>∞</span></span>
-            </div>
+
         </nav>
     );
 }

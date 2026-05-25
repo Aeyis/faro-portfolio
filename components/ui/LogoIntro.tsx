@@ -12,6 +12,7 @@ export default function LogoIntro() {
     const hamburgerOverlayRef = useRef<HTMLDivElement>(null);
     const hoverZoneRef        = useRef<HTMLDivElement>(null);
     const hamBtnRef           = useRef<SVGSVGElement>(null);
+    const aboutModeRef        = useRef(false);
 
     useEffect(() => {
         const el = containerRef.current;
@@ -26,10 +27,10 @@ export default function LogoIntro() {
             const currentCenterX = rect.left + rect.width  / 2;
             const currentCenterY = rect.top  + rect.height / 2;
 
-            const targetScale   = 0.30;
-            const visualSize    = 600 * targetScale; // 180px
-            const targetCenterX = window.innerWidth / 2;
-            const targetCenterY = -60 + visualSize / 2;
+            const targetScale   = 0.34;
+            const visualSize    = 600 * targetScale;
+            const targetCenterX = window.innerWidth + 10 - visualSize / 2;
+            const targetCenterY = -68 + visualSize / 2;
 
             gsap.to(el, {
                 x:        targetCenterX - currentCenterX,
@@ -43,40 +44,72 @@ export default function LogoIntro() {
 
                     const ham = hamBtnRef.current;
 
-                    // Zone de hover + ham4 centrés sur le logo réduit
                     const hamSize = 47;
                     hz.style.width  = `${visualSize}px`;
                     hz.style.height = `${visualSize}px`;
                     hz.style.top    = `${targetCenterY - visualSize / 2}px`;
                     hz.style.left   = `${targetCenterX - visualSize / 2}px`;
                     if (ham) {
-                        ham.style.top = `${targetCenterY - hamSize / 2 + 35}px`;
+                        ham.style.top  = `${targetCenterY - hamSize / 2 + 40}px`;
                         ham.style.left = `${targetCenterX - hamSize / 2}px`;
                     }
 
                     hz.addEventListener("mouseenter", () => {
-                        gsap.to(el, {
-                            scale:    targetScale * 1.08,
-                            filter:   "drop-shadow(0 0 28px rgba(255,184,48,0.25))",
-                            duration: 0.4,
-                            ease:     "power2.out",
-                        });
+                        const glow = aboutModeRef.current
+                            ? "hue-rotate(160deg) saturate(1.5) brightness(1.3) drop-shadow(0 0 28px rgba(80,200,255,0.35))"
+                            : "drop-shadow(0 0 28px rgba(255,184,48,0.25))";
+                        gsap.to(el, { scale: targetScale * 1.08, filter: glow, duration: 0.4, ease: "power2.out" });
                         gsap.to(logoWrapperRef.current,      { opacity: 0, duration: 0.35, ease: "power2.inOut" });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 1, duration: 0.35, ease: "power2.inOut" });
                         gsap.to(ham,                         { opacity: 1, duration: 0.35, ease: "power2.out"   });
                     });
 
                     hz.addEventListener("mouseleave", () => {
-                        gsap.to(el, {
-                            scale:    targetScale,
-                            filter:   "drop-shadow(0 0 0px rgba(255,184,48,0))",
-                            duration: 0.5,
-                            ease:     "power2.inOut",
-                        });
+                        const base = aboutModeRef.current
+                            ? "hue-rotate(160deg) saturate(1.5) brightness(1.1)"
+                            : "drop-shadow(0 0 0px rgba(255,184,48,0))";
+                        gsap.to(el, { scale: targetScale, filter: base, duration: 0.5, ease: "power2.inOut" });
                         gsap.to(ham,                         { opacity: 0, duration: 0.3 });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" });
                         gsap.to(logoWrapperRef.current,      { opacity: 1, duration: 0.4, ease: "power2.inOut" });
                     });
+
+                    // ── Disparition au scroll, réapparition dans la section About ──
+                    const hidelogo = () => {
+                        gsap.to(el, { autoAlpha: 0, duration: 0.5, ease: "power2.inOut" });
+                        if (hz) hz.style.pointerEvents = "none";
+                        if (ham) gsap.to(ham, { opacity: 0, duration: 0.3 });
+                    };
+
+                    const addHideOnScrollDown = () => {
+                        const handler = (e: WheelEvent) => {
+                            if (e.deltaY <= 0) return;
+                            hidelogo();
+                            window.removeEventListener("wheel", handler);
+                        };
+                        window.addEventListener("wheel", handler, { passive: true });
+                    };
+
+                    const showAbout = () => {
+                        aboutModeRef.current = true;
+                        ham?.style.setProperty("--ham-color", "#020818");
+                        gsap.set(el, { filter: "hue-rotate(160deg) saturate(1.5) brightness(1.1)" });
+                        gsap.to(el, { autoAlpha: 1, duration: 0.7, ease: "power2.out" });
+                        if (hz) hz.style.pointerEvents = "all";
+                    };
+
+                    const hideAbout = () => {
+                        aboutModeRef.current = false;
+                        ham?.style.removeProperty("--ham-color");
+                        gsap.set(el, { filter: "none" });
+                        gsap.to(el, { autoAlpha: 1, duration: 0.7, ease: "power2.out" });
+                        if (hz) hz.style.pointerEvents = "all";
+                        addHideOnScrollDown();
+                    };
+
+                    addHideOnScrollDown();
+                    window.addEventListener("about-stuck",   showAbout as EventListener);
+                    window.addEventListener("about-unstuck", hideAbout as EventListener);
                 },
             });
 
@@ -118,7 +151,6 @@ export default function LogoIntro() {
                 <LogoFaro size={600} />
             </div>
 
-            {/* LOGO_Faro_hamburger — crossfade au hover */}
             <div
                 ref={hamburgerOverlayRef}
                 style={{
@@ -162,7 +194,7 @@ export default function LogoIntro() {
             </p>
         </div>
 
-        {/* Zone de hover transparente — positionnée sur le logo réduit */}
+        {/* Zone de hover transparente */}
         <div
             ref={hoverZoneRef}
             style={{
@@ -178,7 +210,7 @@ export default function LogoIntro() {
             }}
         />
 
-        {/* Ham4 — 3 lignes animées, fixed, au-dessus de tout */}
+        {/* Ham4 */}
         <svg
             ref={hamBtnRef}
             className="ham-btn ham4"

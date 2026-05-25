@@ -35,6 +35,41 @@ html {
   font-family: var(--font-inter-tight), sans-serif;
 }
 
+.font-fraunces {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
+
+/*---------------------------------------------------------
+ABOUT — bio reveal
+---------------------------------------------------------*/
+.about-bio {
+  position: absolute;
+  top: 18vh;
+  left: 5vw;
+  width: min(860px, 90vw);
+  font-size: clamp(24px, 3.2vw, 44px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  pointer-events: none;
+  filter: drop-shadow(0 0 24px oklch(0.75 0.22 210 / 0.25));
+}
+
+.about-bio .word {
+  display: inline-block;
+  overflow: visible;
+}
+
+.about-bio .char {
+  display: inline-block;
+  overflow: visible;
+  will-change: transform, opacity;
+  color: oklch(0.92 0.08 210);
+}
+
 /*---------------------------------------------------------
 ABOUT — responsive mobile
 ---------------------------------------------------------*/
@@ -165,7 +200,13 @@ ANIMATIONS
 }
 
 .cloud-morph-1 { animation: cloud-breathe 9s ease-in-out infinite; }
-.cloud-morph-2 { animation: cloud-morph 18s ease-in-out infinite; animation-delay: -3s; }
+@keyframes cloud-sway-2 {
+  0%   { transform: translateX(-18px); }
+  50%  { transform: translateX(18px);  }
+  100% { transform: translateX(-18px); }
+}
+
+.cloud-morph-2 { animation: cloud-sway-2 22s ease-in-out infinite; animation-delay: -6s; }
 .cloud-morph-3 { animation: cloud-morph 15s ease-in-out infinite; animation-delay: -5s; }
 .cloud-morph-4 { animation: cloud-morph 22s ease-in-out infinite; animation-delay: -7s; }
 

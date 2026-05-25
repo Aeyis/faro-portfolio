@@ -112,7 +112,7 @@ ANIMATIONS
 .ham-btn .line {
   fill: none;
   transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
-  stroke: #c43a08;
+  stroke: var(--ham-color, #c43a08);
   stroke-width: 5.5;
   stroke-linecap: round;
 }

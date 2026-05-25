@@ -15,8 +15,8 @@ export const COLORS = {
 export const SECTION_HEIGHTS = {
     hero: 2500,
     transition: 800,
-    about: 2500,
-    stack: 1000,
+    about: 4500,
+    stack: 3000,
     contact: 800,
 } as const;
 // --------------------------------------------------------- //
@@ -27,7 +27,7 @@ export const PARALLAX_SPEEDS = {
     backgroundClouds: 0.08,
     cloud4: 0.13,
     cloud3: 0.17,
-    cloud2: 0.22,
+    cloud2: 0.15,
     cloud1: 0.28,
     sea: 0.4,
     ground: 0.5,

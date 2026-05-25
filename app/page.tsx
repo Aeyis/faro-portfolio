@@ -4,6 +4,7 @@ import HeroSection from "@/components/hero/HeroSection";
 import BubbleCanvas from "@/components/ui/BubbleCanvas";
 
 import AboutSection from "@/components/about/AboutSection";
+import StackSection from "@/components/stack/StackSection";
 
 export default function Home() {
     return (
@@ -19,7 +20,7 @@ export default function Home() {
             {/* <WaveTransition sectionHeight={SECTION_HEIGHTS.transition} /> */}
 
             <AboutSection />
-            <section id="stack" style={{ height: SECTION_HEIGHTS.stack }} />
+            <StackSection />
             <section id="contact" style={{ height: SECTION_HEIGHTS.contact }} />
         </main>
     );
