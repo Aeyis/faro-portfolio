@@ -8,6 +8,7 @@ import SplitType from "split-type";
 import { useAboutParallax } from "@/hooks/useAboutParallax";
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
+import FluidCursor from "@/components/about/FluidCursor";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,8 +97,16 @@ export default function AboutSection() {
         >
             <UnderwaterBackground />
 
+            {/* Transition bas → vert Stack */}
+            <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0,
+                height: "35vh", pointerEvents: "none", zIndex: 2,
+                background: "linear-gradient(to bottom, transparent, #000703)",
+            }} />
+
             <div className="about-sticky" style={{ position: "sticky", top: 0, height: "100vh", padding: "80px 40px" }}>
-                <div ref={floatRef}>
+                <FluidCursor />
+                <div ref={floatRef} style={{ position: "relative", zIndex: 1 }}>
                     <h2
                         ref={titleRef}
                         className="font-inter-tight about-title"
@@ -129,7 +138,7 @@ export default function AboutSection() {
                 <p
                     ref={bioRef}
                     className="about-bio font-fraunces"
-                    style={{ userSelect: "none" }}
+                    style={{ userSelect: "none", zIndex: 1 }}
                 >
                     {BIO}
                 </p>

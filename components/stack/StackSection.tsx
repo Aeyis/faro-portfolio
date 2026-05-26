@@ -5,6 +5,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SECTION_HEIGHTS } from "@/lib/constants";
+import FluidCursor from "@/components/about/FluidCursor";
+import UnderwaterBackground from "@/components/about/UnderwaterBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,10 +67,12 @@ export default function StackSection() {
         <section
             id="stack"
             ref={sectionRef}
-            style={{ height: SECTION_HEIGHTS.stack, position: "relative" }}
+            style={{ height: SECTION_HEIGHTS.stack, position: "relative", backgroundColor: "#000703" }}
         >
+            <UnderwaterBackground variant="green" />
             <div style={{ position: "sticky", top: 0, height: "100vh", padding: "80px 40px" }}>
-                <div ref={floatRef}>
+                <FluidCursor variant="green" />
+                <div ref={floatRef} style={{ position: "relative", zIndex: 1 }}>
                     <h2
                         ref={titleRef}
                         className="font-inter-tight about-title"

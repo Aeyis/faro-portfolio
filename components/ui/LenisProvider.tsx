@@ -14,6 +14,11 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     useEffect(() => {
         const lenis = new Lenis({ duration: 1.4, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) })
         window.lenisInstance = lenis;
+        lenis.stop()
+
+        const onIntroDone = () => lenis.start()
+        window.addEventListener('intro-done', onIntroDone, { once: true })
+
         lenis.on('scroll', ScrollTrigger.update)
         function raf(time: number) {
             lenis.raf(time)
@@ -22,6 +27,7 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
         requestAnimationFrame(raf)
         return () => {
             lenis.off('scroll', ScrollTrigger.update)
+            window.removeEventListener('intro-done', onIntroDone)
             lenis.destroy()
         }
     }, [])
