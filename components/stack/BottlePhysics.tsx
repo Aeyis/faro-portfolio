@@ -11,26 +11,49 @@ interface Props {
   bt?: number;
   bb?: number;
   onShake?: () => void;
+  shakeThreshold?: number;
+  clearAll?: boolean;
+  disabled?: boolean;
 }
 
 const W = 552;
 const H = 1380;
 
-export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt = 300, bb = 840, onShake }: Props) {
+export default function BottlePhysics({
+  bottleSrc, items,
+  bl = 120, br = 340, bt = 300, bb = 840,
+  onShake, shakeThreshold = 6,
+  clearAll = false, disabled = false,
+}: Props) {
   const CW = br - bl;
   const CH = bb - bt;
-  const sceneRef  = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const grabbed   = useRef(false);
-  const prevPos   = useRef({ x: 0, y: 0 });
-  const curTilt   = useRef(0);
-  const curTiltY  = useRef(0);
-  const rafId      = useRef<number | null>(null);
-  const lastDir    = useRef(0);
-  const shakeCount = useRef(0);
-  const lastShakeT = useRef(0);
-  const onShakeRef = useRef(onShake);
-  useEffect(() => { onShakeRef.current = onShake; }, [onShake]);
+
+  const sceneRef    = useRef<HTMLDivElement>(null);
+  const canvasRef   = useRef<HTMLCanvasElement>(null);
+  const grabbed     = useRef(false);
+  const prevPos     = useRef({ x: 0, y: 0 });
+  const curTilt     = useRef(0);
+  const curTiltY    = useRef(0);
+  const rafId       = useRef<number | null>(null);
+  const lastDir     = useRef(0);
+  const shakeCount  = useRef(0);
+  const lastShakeT  = useRef(0);
+  const onShakeRef  = useRef(onShake);
+  const disabledRef = useRef(disabled);
+  const engineRef   = useRef<Matter.Engine | null>(null);
+  const bodiesRef   = useRef<Matter.Body[]>([]);
+
+  useEffect(() => { onShakeRef.current  = onShake;  }, [onShake]);
+  useEffect(() => { disabledRef.current = disabled; }, [disabled]);
+
+  /* supprime tous les corps quand clearAll passe à true */
+  useEffect(() => {
+    if (!clearAll) return;
+    const engine = engineRef.current;
+    if (!engine) return;
+    bodiesRef.current.forEach(b => Matter.World.remove(engine.world, b));
+    bodiesRef.current = [];
+  }, [clearAll]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -44,6 +67,7 @@ export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt
       positionIterations: 12,
       velocityIterations: 10,
     });
+    engineRef.current = engine;
 
     const render = Render.create({
       canvas,
@@ -78,6 +102,7 @@ export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt
       });
     });
     World.add(engine.world, bodies);
+    bodiesRef.current = bodies;
 
     const MAX_SPEED = 14, MAX_ANG = 0.5;
     Events.on(engine, 'beforeUpdate', () => {
@@ -94,6 +119,7 @@ export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt
                      : { x: e.clientX, y: e.clientY };
 
     const onStart = (e: MouseEvent | TouchEvent) => {
+      if (disabledRef.current) return;
       grabbed.current    = true;
       prevPos.current    = getPos(e);
       lastDir.current    = 0;
@@ -120,20 +146,17 @@ export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt
         const dir = dx > 0 ? 1 : -1;
         const now = Date.now();
         if (now - lastShakeT.current > 1000) {
-          // trop lent : reset
           lastDir.current    = dir;
           shakeCount.current = 0;
           lastShakeT.current = now;
         } else if (lastDir.current === 0) {
-          // première direction
           lastDir.current    = dir;
           lastShakeT.current = now;
         } else if (dir !== lastDir.current) {
-          // inversion détectée
           shakeCount.current++;
           lastShakeT.current = now;
           lastDir.current    = dir;
-          if (shakeCount.current >= 6) { shakeCount.current = 0; onShakeRef.current?.(); }
+          if (shakeCount.current >= shakeThreshold) { shakeCount.current = 0; onShakeRef.current?.(); }
         }
       }
 
