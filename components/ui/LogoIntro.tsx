@@ -58,8 +58,9 @@ export default function LogoIntro() {
                     // ── Section courante via getBoundingClientRect ──
                     const updateSection = () => {
                         const mid = window.innerHeight / 2;
-                        const stackRect = document.getElementById("stack")?.getBoundingClientRect();
-                        const aboutRect = document.getElementById("about")?.getBoundingClientRect();
+                        const stackRect   = document.getElementById("stack")  ?.getBoundingClientRect();
+                        const aboutRect   = document.getElementById("about")  ?.getBoundingClientRect();
+                        const projetsRect = document.getElementById("projets")?.getBoundingClientRect();
 
                         if (stackRect && stackRect.top <= mid && stackRect.bottom >= 0) {
                             sectionModeRef.current = "stack";
@@ -67,6 +68,9 @@ export default function LogoIntro() {
                         } else if (aboutRect && aboutRect.top <= mid && aboutRect.bottom >= 0) {
                             sectionModeRef.current = "about";
                             ham?.style.setProperty("--ham-color", "#020818");
+                        } else if (projetsRect && projetsRect.top <= mid && projetsRect.bottom >= 0) {
+                            sectionModeRef.current = "projets";
+                            ham?.style.setProperty("--ham-color", "#150820");
                         } else {
                             sectionModeRef.current = null;
                             ham?.style.removeProperty("--ham-color");
@@ -74,13 +78,15 @@ export default function LogoIntro() {
                     };
 
                     const baseFilter = () => {
-                        if (sectionModeRef.current === "about") return "hue-rotate(160deg) saturate(1.5) brightness(1.1)";
-                        if (sectionModeRef.current === "stack") return "hue-rotate(100deg) saturate(3.5) brightness(1.0)";
+                        if (sectionModeRef.current === "about")   return "hue-rotate(160deg) saturate(1.5) brightness(1.1)";
+                        if (sectionModeRef.current === "stack")   return "hue-rotate(100deg) saturate(3.5) brightness(1.0)";
+                        if (sectionModeRef.current === "projets") return "hue-rotate(255deg) saturate(2.5) brightness(1.05)";
                         return "drop-shadow(0 0 0px rgba(255,184,48,0))";
                     };
                     const hoverFilter = () => {
-                        if (sectionModeRef.current === "about") return "hue-rotate(160deg) saturate(1.5) brightness(1.3) drop-shadow(0 0 28px rgba(80,200,255,0.35))";
-                        if (sectionModeRef.current === "stack") return "hue-rotate(100deg) saturate(3.5) brightness(1.2) drop-shadow(0 0 28px rgba(60,220,120,0.35))";
+                        if (sectionModeRef.current === "about")   return "hue-rotate(160deg) saturate(1.5) brightness(1.3) drop-shadow(0 0 28px rgba(80,200,255,0.35))";
+                        if (sectionModeRef.current === "stack")   return "hue-rotate(100deg) saturate(3.5) brightness(1.2) drop-shadow(0 0 28px rgba(60,220,120,0.35))";
+                        if (sectionModeRef.current === "projets") return "hue-rotate(255deg) saturate(2.5) brightness(1.3) drop-shadow(0 0 28px rgba(180,80,255,0.40))";
                         return "drop-shadow(0 0 28px rgba(255,184,48,0.25))";
                     };
 

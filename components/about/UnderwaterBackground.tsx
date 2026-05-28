@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-interface Props { variant?: 'blue' | 'green' }
+interface Props { variant?: 'blue' | 'green' | 'violet' }
 
 export default function UnderwaterBackground({ variant = 'blue' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -13,10 +13,10 @@ export default function UnderwaterBackground({ variant = 'blue' }: Props) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const isGreen = variant === 'green'
-    const particleColor = isGreen
-      ? (a: number) => `rgba(220, 190, 255, ${a})`
-      : (a: number) => `rgba(180, 230, 255, ${a})`
+    const particleColor =
+      variant === 'green'  ? (a: number) => `rgba(220, 190, 255, ${a})` :
+      variant === 'violet' ? (a: number) => `rgba(195, 150, 255, ${a})` :
+                             (a: number) => `rgba(180, 230, 255, ${a})`
 
     function resize() {
       if (!canvas) return

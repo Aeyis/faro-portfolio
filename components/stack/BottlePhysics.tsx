@@ -1,7 +1,48 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
+
+/* ── filtres par logo (logos noirs → teinte correcte) ── */
+// sepia donne ~34° de teinte; hue-rotate décale vers la cible
+const LOGO_FILTERS: [string, string][] = [
+    // vert section  (Express, GitHub, WordPress)
+    ['express',    'invert(1) sepia(1) saturate(4) hue-rotate(110deg) brightness(0.85)'],
+    ['github',     'invert(1) sepia(1) saturate(4) hue-rotate(110deg) brightness(0.85)'],
+    ['wordpress',  'invert(1) sepia(1) saturate(4) hue-rotate(110deg) brightness(0.85)'],
+    // Photoshop  #31A8FF  hsl(205°) → rotate 171°
+    ['photoshop',  'invert(1) sepia(1) saturate(6) hue-rotate(171deg) brightness(1.05)'],
+    // Illustrator #FF9A00  hsl(36°) ≈ sepia natif → rotation ~0
+    ['illustrator','invert(1) sepia(1) saturate(9) brightness(0.90)'],
+    // Adobe XD   #E234A4  hsl(318°) → rotate 284°
+    ['adobe_xd',   'invert(1) sepia(1) saturate(7) hue-rotate(284deg) brightness(1.0)'],
+];
+
+export function getLogoFilter(src: string): string | undefined {
+    return LOGO_FILTERS.find(([key]) => src.includes(key))?.[1];
+}
+
+const tintCache = new Map<string, string>();
+function getTinted(src: string, filter: string): Promise<string> {
+    const key = src + filter;
+    if (tintCache.has(key)) return Promise.resolve(tintCache.get(key)!);
+    return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+            const c = document.createElement('canvas');
+            c.width = img.naturalWidth;
+            c.height = img.naturalHeight;
+            const ctx = c.getContext('2d')!;
+            ctx.filter = filter;
+            ctx.drawImage(img, 0, 0);
+            const url = c.toDataURL();
+            tintCache.set(key, url);
+            resolve(url);
+        };
+        img.onerror = () => resolve(src);
+        img.src = src;
+    });
+}
 
 interface Props {
   bottleSrc: string;
@@ -43,6 +84,14 @@ export default function BottlePhysics({
   const engineRef   = useRef<Matter.Engine | null>(null);
   const bodiesRef   = useRef<Matter.Body[]>([]);
 
+  /* logos pré-traités : Express → vert */
+  const [processedItems, setProcessedItems] = useState<string[]>([]);
+  useEffect(() => {
+    Promise.all(
+      items.slice(0, 12).map(src => { const f = getLogoFilter(src); return f ? getTinted(src, f) : Promise.resolve(src); })
+    ).then(setProcessedItems);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => { onShakeRef.current  = onShake;  }, [onShake]);
   useEffect(() => { disabledRef.current = disabled; }, [disabled]);
 
@@ -56,6 +105,7 @@ export default function BottlePhysics({
   }, [clearAll]);
 
   useEffect(() => {
+    if (processedItems.length === 0) return;
     const canvas = canvasRef.current;
     const scene  = sceneRef.current;
     if (!canvas || !scene) return;
@@ -89,7 +139,7 @@ export default function BottlePhysics({
 
     const r     = 20;
     const scale = (r * 2) / 128;
-    const bodies = items.slice(0, 12).map((src, i) => {
+    const bodies = processedItems.map((src, i) => {
       const col = i % 3;
       const row = Math.floor(i / 3);
       const x   = (CW / 4) * (col + 1) + (Math.random() - 0.5) * 10;
@@ -208,7 +258,7 @@ export default function BottlePhysics({
       Render.stop(render);
       Runner.stop(runner);
     };
-  }, [bl, br, bt, bb]);
+  }, [bl, br, bt, bb, processedItems]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div

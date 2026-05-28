@@ -5,6 +5,7 @@ import BubbleCanvas from "@/components/ui/BubbleCanvas";
 
 import AboutSection from "@/components/about/AboutSection";
 import StackSection from "@/components/stack/StackSection";
+import ProjectsSection from "@/components/projects/ProjectsSection";
 
 export default function Home() {
     return (
@@ -21,6 +22,7 @@ export default function Home() {
 
             <AboutSection />
             <StackSection />
+            <ProjectsSection />
             <section id="contact" style={{ height: SECTION_HEIGHTS.contact }} />
         </main>
     );

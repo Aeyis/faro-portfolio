@@ -17,6 +17,7 @@ export const SECTION_HEIGHTS = {
     transition: 800,
     about: 4500,
     stack: 3000,
+    projects: 3000,
     contact: 800,
 } as const;
 // --------------------------------------------------------- //

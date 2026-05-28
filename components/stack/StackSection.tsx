@@ -7,7 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import FluidCursor from "@/components/about/FluidCursor";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
-import BottlePhysics from "@/components/stack/BottlePhysics";
+import Matter from "matter-js";
+import BottlePhysics, { getLogoFilter } from "@/components/stack/BottlePhysics";
 
 const S = "/assets/stacks/";
 
@@ -128,52 +129,65 @@ function BottleModal({ bottle, onClose }: {
     useEffect(() => {
         if (!poured) return;
 
-        /* 1 — effet sur le verre : compression + surbrillance brève */
-        if (bottleRef.current) {
-            const tl = gsap.timeline();
-            tl.to(bottleRef.current, {
-                scale:    0.97,
-                filter:   "brightness(1.6) saturate(0.5)",
-                duration: 0.06,
-                ease:     "power1.out",
-            })
-            .to(bottleRef.current, {
-                opacity:  0,
-                filter:   "brightness(1) saturate(1)",
-                duration: 0.08,
-            });
-        }
+        /* 1 — bouteille disparaît instantanément (aucun flash) */
+        if (bottleRef.current) bottleRef.current.style.opacity = '0';
 
-        /* 2 — fragments tombent avec physique réaliste */
-        pieceRefs.current.forEach((piece, i) => {
-            if (!piece) return;
-            const row    = Math.floor(i / S_COLS);
-            const startY = row * PIECE_H;
-            const dist   = MODAL_H - startY + 60;            // distance jusqu'à la sortie du modal
-            gsap.fromTo(piece,
-                { opacity: 1, x: 0, y: 0, rotation: 0 },
-                {
-                    x:        (Math.random() - 0.5) * 22,
-                    y:        dist,
-                    rotation: (Math.random() - 0.5) * 38,
-                    duration: Math.max(0.14, 0.58 * (dist / MODAL_H)) + Math.random() * 0.08,
-                    ease:     "power3.in",
-                    delay:    Math.random() * 0.03,
-                }
+        /* 2 — fragments visibles */
+        pieceRefs.current.forEach(p => { if (p) p.style.opacity = '1'; });
+
+        /* 3 — physique Matter.js pour les fragments */
+        const { Engine, Runner, Bodies, Body, World } = Matter;
+        const fragEngine = Engine.create({ gravity: { x: 0, y: 2.8 } });
+        const fragRunner = Runner.create();
+        Runner.run(fragRunner, fragEngine);
+
+        const fragBodies: Matter.Body[] = [];
+        pieceRefs.current.forEach((_, i) => {
+            const col = i % S_COLS;
+            const row = Math.floor(i / S_COLS);
+            const b   = Bodies.rectangle(
+                col * PIECE_W + PIECE_W / 2,
+                row * PIECE_H + PIECE_H / 2,
+                PIECE_W * 0.85,
+                PIECE_H * 0.85,
+                { frictionAir: 0.012, restitution: 0.15, collisionFilter: { mask: 0 } }
             );
+            Body.setVelocity(b, { x: (Math.random() - 0.5) * 14, y: -2 - Math.random() * 7 });
+            Body.setAngularVelocity(b, (Math.random() - 0.5) * 0.5);
+            fragBodies.push(b);
         });
+        World.add(fragEngine.world, fragBodies);
 
-        /* 3 — logos arrivent un par un */
+        /* sync CSS ↔ physique */
+        let rafId: number;
+        const sync = () => {
+            let active = false;
+            fragBodies.forEach((body, i) => {
+                const piece = pieceRefs.current[i];
+                if (!piece) return;
+                piece.style.left      = `${body.position.x - PIECE_W / 2}px`;
+                piece.style.top       = `${body.position.y - PIECE_H / 2}px`;
+                piece.style.transform = `rotate(${body.angle}rad)`;
+                if (body.position.y < MODAL_H + PIECE_H * 2) active = true;
+            });
+            if (active) {
+                rafId = requestAnimationFrame(sync);
+            } else {
+                Runner.stop(fragRunner);
+                Engine.clear(fragEngine);
+            }
+        };
+        rafId = requestAnimationFrame(sync);
+
+        /* 4 — logos arrivent un par un */
         bottle.items.forEach((_, idx) => {
             const delay = 0.18 + idx * 0.09;
-
             const img = iconImgRefs.current[idx];
             if (img)
                 gsap.fromTo(img,
                     { x: -70, opacity: 0, scale: 0.4 },
                     { x: 0, opacity: 1, scale: 1, duration: 0.42, ease: "back.out(2.2)", delay }
                 );
-
             const name = nameRefs.current[idx];
             if (name)
                 gsap.fromTo(name,
@@ -181,6 +195,12 @@ function BottleModal({ bottle, onClose }: {
                     { y: 0, opacity: 1, duration: 0.28, ease: "power2.out", delay: delay + 0.15 }
                 );
         });
+
+        return () => {
+            cancelAnimationFrame(rafId);
+            Runner.stop(fragRunner);
+            Engine.clear(fragEngine);
+        };
     }, [poured]);
 
     const handlePour = () => { if (!poured) setPoured(true); };
@@ -328,6 +348,7 @@ function BottleModal({ bottle, onClose }: {
                                     borderRadius: 10,
                                     objectFit:    "contain",
                                     opacity:      0,
+                                    filter:       getLogoFilter(item),
                                 }}
                             />
                             <span
@@ -498,7 +519,7 @@ export default function StackSection() {
                 <FluidCursor variant="green" />
             </div>
 
-            <div style={{ position: "sticky", top: 0, height: 0, zIndex: 10, overflow: "visible", pointerEvents: "none" }}>
+            <div style={{ position: "sticky", top: 0, height: "100vh", zIndex: 10, pointerEvents: "none" }}>
                 <div ref={floatRef} style={{ position: "absolute", top: "80px", left: "40px", right: "40px" }}>
                     <h2
                         ref={titleRef}
