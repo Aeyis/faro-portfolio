@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -38,6 +38,104 @@ const BOTTLES = [
     },
 ];
 
+const MODAL_SCALE = 0.82;
+const MODAL_H     = 500;
+
+function BottleModal({ bottle, onClose }: {
+    bottle: (typeof BOTTLES)[0];
+    onClose: () => void;
+}) {
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (cardRef.current) {
+            gsap.fromTo(cardRef.current,
+                { y: 52, opacity: 0, scale: 0.88 },
+                { y: 0,  opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.5)" }
+            );
+        }
+    }, []);
+
+    return (
+        <>
+            {/* Backdrop */}
+            <div
+                onClick={onClose}
+                style={{
+                    position:       "fixed",
+                    inset:          0,
+                    zIndex:         98,
+                    background:     "oklch(0.03 0.04 155 / 0.90)",
+                    backdropFilter: "blur(6px)",
+                }}
+            />
+
+            {/* Fenêtre */}
+            <div
+                ref={cardRef}
+                style={{
+                    position:     "fixed",
+                    inset:        0,
+                    margin:       "auto",
+                    zIndex:       99,
+                    width:        Math.round(552 * MODAL_SCALE),
+                    height:       MODAL_H,
+                    background:   "oklch(0.07 0.05 155 / 0.82)",
+                    border:       "1px solid oklch(0.45 0.14 155 / 0.30)",
+                    borderRadius: 20,
+                    overflow:     "hidden",
+                    boxShadow:    "0 28px 72px oklch(0 0 0 / 0.55)",
+                }}
+            >
+                {/* Bouton × */}
+                <button
+                    onClick={onClose}
+                    style={{
+                        position:       "absolute",
+                        top:            12,
+                        right:          12,
+                        zIndex:         10,
+                        width:          32,
+                        height:         32,
+                        borderRadius:   "50%",
+                        background:     "rgba(255,255,255,0.09)",
+                        border:         "1px solid rgba(255,255,255,0.22)",
+                        color:          "white",
+                        fontSize:       18,
+                        lineHeight:     "1",
+                        cursor:         "pointer",
+                        display:        "flex",
+                        alignItems:     "center",
+                        justifyContent: "center",
+                        backdropFilter: "blur(8px)",
+                        transition:     "background 0.15s",
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.20)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
+                >
+                    ×
+                </button>
+
+                {/* Bouteille droite, scalée */}
+                <div style={{
+                    transform:       `scale(${MODAL_SCALE})`,
+                    transformOrigin: "top left",
+                    position:        "absolute",
+                    top:             0,
+                    left:            0,
+                }}>
+                    <BottlePhysics
+                        bottleSrc={bottle.src}
+                        items={bottle.items}
+                        bl={bottle.bl} br={bottle.br}
+                        bt={bottle.bt} bb={bottle.bb}
+                    />
+                </div>
+            </div>
+        </>
+    );
+}
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function StackSection() {
@@ -46,6 +144,7 @@ export default function StackSection() {
     const floatRef       = useRef<HTMLDivElement>(null);
     const bottleRefs     = useRef<(HTMLDivElement | null)[]>([]);
     const floatInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [focusedBottle, setFocusedBottle] = useState<number | null>(null);
 
     useGSAP(() => {
         const el = titleRef.current;
@@ -208,10 +307,19 @@ export default function StackSection() {
                             items={b.items}
                             bl={b.bl} br={b.br}
                             bt={b.bt} bb={b.bb}
+                            onShake={() => setFocusedBottle(i)}
                         />
                     </div>
                 </div>
             ))}
+
+            {/* Fenêtre focus bouteille */}
+            {focusedBottle !== null && (
+                <BottleModal
+                    bottle={BOTTLES[focusedBottle]}
+                    onClose={() => setFocusedBottle(null)}
+                />
+            )}
         </section>
     );
 }

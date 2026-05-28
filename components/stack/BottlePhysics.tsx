@@ -10,12 +10,13 @@ interface Props {
   br?: number;
   bt?: number;
   bb?: number;
+  onShake?: () => void;
 }
 
 const W = 552;
 const H = 1380;
 
-export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt = 300, bb = 840 }: Props) {
+export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt = 300, bb = 840, onShake }: Props) {
   const CW = br - bl;
   const CH = bb - bt;
   const sceneRef  = useRef<HTMLDivElement>(null);
@@ -24,7 +25,12 @@ export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt
   const prevPos   = useRef({ x: 0, y: 0 });
   const curTilt   = useRef(0);
   const curTiltY  = useRef(0);
-  const rafId     = useRef<number | null>(null);
+  const rafId      = useRef<number | null>(null);
+  const lastDir    = useRef(0);
+  const shakeCount = useRef(0);
+  const lastShakeT = useRef(0);
+  const onShakeRef = useRef(onShake);
+  useEffect(() => { onShakeRef.current = onShake; }, [onShake]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -88,8 +94,11 @@ export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt
                      : { x: e.clientX, y: e.clientY };
 
     const onStart = (e: MouseEvent | TouchEvent) => {
-      grabbed.current = true;
-      prevPos.current = getPos(e);
+      grabbed.current    = true;
+      prevPos.current    = getPos(e);
+      lastDir.current    = 0;
+      shakeCount.current = 0;
+      lastShakeT.current = Date.now();
       if (rafId.current) { cancelAnimationFrame(rafId.current); rafId.current = null; }
       e.preventDefault();
     };
@@ -106,6 +115,27 @@ export default function BottlePhysics({ bottleSrc, items, bl = 120, br = 340, bt
         if (Math.abs(dx) > 5 || Math.abs(dy) > 5)
           Body.setAngularVelocity(b, b.angularVelocity + (Math.random() - 0.5) * 0.07);
       });
+
+      if (Math.abs(dx) > 6) {
+        const dir = dx > 0 ? 1 : -1;
+        const now = Date.now();
+        if (now - lastShakeT.current > 1000) {
+          // trop lent : reset
+          lastDir.current    = dir;
+          shakeCount.current = 0;
+          lastShakeT.current = now;
+        } else if (lastDir.current === 0) {
+          // première direction
+          lastDir.current    = dir;
+          lastShakeT.current = now;
+        } else if (dir !== lastDir.current) {
+          // inversion détectée
+          shakeCount.current++;
+          lastShakeT.current = now;
+          lastDir.current    = dir;
+          if (shakeCount.current >= 6) { shakeCount.current = 0; onShakeRef.current?.(); }
+        }
+      }
 
       curTilt.current  = curTilt.current  * 0.6 + Math.max(-18, Math.min(18, dx * 1.4)) * 0.4;
       curTiltY.current = curTiltY.current * 0.6 + Math.max(-30, Math.min(30, dy * 1.2)) * 0.4;
