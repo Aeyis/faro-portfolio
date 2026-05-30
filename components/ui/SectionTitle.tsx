@@ -38,7 +38,7 @@ export default function SectionTitle({ sectionRef, hue, eventPrefix, children }:
         );
 
         gsap.to(el, {
-            scale: () => window.innerWidth < 768 ? 0.55 : 0.25,
+            scale: () => window.innerWidth < 768 ? 0.55 : 0.32,
             x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
             transformOrigin: "top left",

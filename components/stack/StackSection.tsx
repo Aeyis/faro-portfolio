@@ -9,6 +9,7 @@ import FluidCursor from "@/components/about/FluidCursor";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
 import Matter from "matter-js";
 import BottlePhysics, { getLogoFilter } from "@/components/stack/BottlePhysics";
+import WaterBackground from "@/components/stack/WaterBackground";
 
 const S = "/assets/stacks/";
 
@@ -47,35 +48,43 @@ function getTechName(path: string): string {
 const BOTTLES = [
     {
         src:    "/assets/bouteilles/bouteille1.webp",
+        label:  "Frontend",
         items:  ["react","javascript","typescript","html5","css3","scss","angular","next_js","vite"].map(n => `${S}${n}.webp`),
-        left:   "15%", right: "auto", top: 650, rotate: -22,
+        sticker: { src: "/assets/stickers/frontendStick.webp", top: 200, left: 195, width: 165 },
+        left:   "15%", right: "auto", top: 400, rotate: -22,
         bl: 198, br: 354, bt: 180, bb: 492,
     },
     {
         src:    "/assets/bouteilles/bouteille2.webp",
+        label:  "Backend",
         items:  ["node_js","express","nest_js","python","php","mongodb","mysql","postgresql"].map(n => `${S}${n}.webp`),
-        left:   "auto", right: "15%", top: 1100, rotate: 18,
-        bl: 198, br: 360, bt: 216, bb: 480,
+        sticker: { src: "/assets/stickers/backendSticker.webp", top: 230, left: 195, width: 165 },
+        left:   "auto", right: "15%", top: 850, rotate: 18,
+        bl: 198, br: 345, bt: 250, bb: 470,
     },
     {
         src:    "/assets/bouteilles/bouteille3.webp",
+        label:  "UI / UX",
         items:  ["figma","adobe_xd","illustrator","photoshop"].map(n => `${S}${n}.webp`),
-        left:   "18%", right: "auto", top: 1250, rotate: -28,
+        sticker: { src: "/assets/stickers/uiuxSticker.webp", top: 250, left: 199, width: 165 },
+        left:   "18%", right: "auto", top: 650, rotate: -28,
         bl: 186, br: 365, bt: 240, bb: 480,
     },
     {
         src:    "/assets/bouteilles/bouteille1.webp",
+        label:  "Autres",
         items:  ["github","wordpress","3ds_max"].map(n => `${S}${n}.webp`),
-        left:   "auto", right: "12%", top: 1800, rotate: 15,
+        sticker: { src: "/assets/stickers/other.webp", top: 200, left: 195, width: 165 },
+        left:   "auto", right: "12%", top: 1450, rotate: 15,
         bl: 198, br: 354, bt: 192, bb: 504,
     },
 ];
 
 /* ─── Modale ────────────────────────────────────────────── */
 
-const MODAL_W      = 820;
-const MODAL_H      = 580;
-const BOTTLE_SCALE = 0.78;
+const MODAL_W      = 980;
+const MODAL_H      = 660;
+const BOTTLE_SCALE = 0.92;
 const BOTTLE_COL_W = 360;
 const BOTTLE_W     = 552;
 const BOTTLE_VIS_W = Math.round(BOTTLE_W * BOTTLE_SCALE); // 430px
@@ -84,7 +93,7 @@ const S_ROWS       = 5;
 const PIECE_W      = BOTTLE_VIS_W / S_COLS;
 const PIECE_H      = MODAL_H      / S_ROWS;
 
-/* clip-paths en forme d'éclats de verre — 8 points avec jitter seeded */
+/* éclats de verre */
 const SHARD_PATHS = Array.from({ length: S_COLS * S_ROWS }, (_, i) => {
     const r = (n: number) => {
         const x = Math.sin(i * 91.3 + n * 37.7) * 43758.5453;
@@ -229,7 +238,7 @@ function BottleModal({ bottle, onClose }: {
                     zIndex:       99,
                     width:        MODAL_W,
                     height:       MODAL_H,
-                    background:   "oklch(0.07 0.05 155 / 0.85)",
+                    background:   "oklch(0.05 0.04 155 / 0.45)",
                     border:       "1px solid oklch(0.45 0.14 155 / 0.28)",
                     borderRadius: 20,
                     overflow:     "hidden",
@@ -237,6 +246,58 @@ function BottleModal({ bottle, onClose }: {
                     display:      "flex",
                 }}
             >
+                <WaterBackground width={MODAL_W} height={MODAL_H} />
+
+                {/* fragments de bris — au niveau du modal pour passer devant tout */}
+                {Array.from({ length: S_COLS * S_ROWS }, (_, i) => {
+                    const col = i % S_COLS;
+                    const row = Math.floor(i / S_COLS);
+                    return (
+                        <div
+                            key={i}
+                            ref={el => { pieceRefs.current[i] = el; }}
+                            style={{
+                                position:            "absolute",
+                                left:                col * PIECE_W,
+                                top:                 row * PIECE_H,
+                                width:               PIECE_W,
+                                height:              PIECE_H,
+                                backgroundImage:     `url(${bottle.src})`,
+                                backgroundSize:      `${BOTTLE_VIS_W}px auto`,
+                                backgroundPosition:  `${-col * PIECE_W}px ${-row * PIECE_H}px`,
+                                backgroundRepeat:    "no-repeat",
+                                clipPath:            SHARD_PATHS[i],
+                                filter:              "brightness(1.08) contrast(1.04)",
+                                opacity:             0,
+                                zIndex:              20,
+                                pointerEvents:       "none",
+                            }}
+                        />
+                    );
+                })}
+
+                {/* ── Titre thème ── */}
+                <h3
+                    className="font-inter-tight"
+                    style={{
+                        position:      "absolute",
+                        top:           60,
+                        left:          0,
+                        right:         0,
+                        textAlign:     "center",
+                        margin:        0,
+                        fontSize:      50,
+                        fontWeight:    900,
+                        letterSpacing: "-0.04em",
+                        color:         "oklch(0.88 0.10 155)",
+                        zIndex:        5,
+                        pointerEvents: "none",
+                        userSelect:    "none",
+                    }}
+                >
+                    {bottle.label}
+                </h3>
+
                 {/* ── Colonne gauche : bouteille cliquable ── */}
                 <div
                     onClick={handlePour}
@@ -257,7 +318,7 @@ function BottleModal({ bottle, onClose }: {
                             transform:       `scale(${BOTTLE_SCALE})`,
                             transformOrigin: "top left",
                             position:        "absolute",
-                            top:             0,
+                            top:             60,
                             left:            0,
                         }}
                     >
@@ -272,32 +333,6 @@ function BottleModal({ bottle, onClose }: {
                         />
                     </div>
 
-                    {/* fragments de bris — visibles pendant l'animation */}
-                    {Array.from({ length: S_COLS * S_ROWS }, (_, i) => {
-                        const col = i % S_COLS;
-                        const row = Math.floor(i / S_COLS);
-                        return (
-                            <div
-                                key={i}
-                                ref={el => { pieceRefs.current[i] = el; }}
-                                style={{
-                                    position:            "absolute",
-                                    left:                col * PIECE_W,
-                                    top:                 row * PIECE_H,
-                                    width:               PIECE_W,
-                                    height:              PIECE_H,
-                                    backgroundImage:     `url(${bottle.src})`,
-                                    backgroundSize:      `${BOTTLE_VIS_W}px auto`,
-                                    backgroundPosition:  `${-col * PIECE_W}px ${-row * PIECE_H}px`,
-                                    backgroundRepeat:    "no-repeat",
-                                    clipPath:            SHARD_PATHS[i],
-                                    filter:              "brightness(1.08) contrast(1.04)",
-                                    opacity:             0,
-                                    pointerEvents:       "none",
-                                }}
-                            />
-                        );
-                    })}
 
                     {/* hint */}
                     {!poured && (
@@ -317,9 +352,11 @@ function BottleModal({ bottle, onClose }: {
                     )}
                 </div>
 
-                {/* ── Colonne droite : icônes 3×3 ── */}
+                {/* ── Colonne droite ── */}
                 <div style={{
                     flex:                1,
+                    position:            "relative",
+                    zIndex:              1,
                     padding:             "36px 16px 20px 16px",
                     overflowY:           "auto",
                     display:             "grid",
@@ -338,19 +375,29 @@ function BottleModal({ bottle, onClose }: {
                                 gap:            7,
                             }}
                         >
-                            <img
-                                ref={el => { iconImgRefs.current[idx] = el; }}
-                                src={item}
-                                alt=""
-                                width={52}
-                                height={52}
-                                style={{
-                                    borderRadius: 10,
-                                    objectFit:    "contain",
-                                    opacity:      0,
-                                    filter:       getLogoFilter(item),
-                                }}
-                            />
+                            <div style={{
+                                width:      bottle.items.length <= 3 ? 88 : 56,
+                                height:     bottle.items.length <= 3 ? 88 : 56,
+                                flexShrink: 0,
+                                overflow:   "hidden",
+                                borderRadius: 10,
+                                display:    "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}>
+                                <img
+                                    ref={el => { iconImgRefs.current[idx] = el; }}
+                                    src={item}
+                                    alt=""
+                                    style={{
+                                        maxWidth:  "100%",
+                                        maxHeight: "100%",
+                                        objectFit: "contain",
+                                        display:   "block",
+                                        opacity:   0,
+                                    }}
+                                />
+                            </div>
                             <span
                                 ref={el => { nameRefs.current[idx] = el; }}
                                 className="font-inter-tight"
@@ -434,7 +481,7 @@ export default function StackSection() {
         );
 
         gsap.to(el, {
-            scale: () => window.innerWidth < 768 ? 0.55 : 0.25,
+            scale: () => window.innerWidth < 768 ? 0.55 : 0.32,
             x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
             transformOrigin: "top left",
@@ -568,6 +615,8 @@ export default function StackSection() {
                             bl={b.bl} br={b.br}
                             bt={b.bt} bb={b.bb}
                             onShake={() => setFocusedBottle(i)}
+                            sticker={"sticker" in b ? b.sticker : undefined}
+                            itemRadius={b.items.length <= 3 ? 30 : 20}
                         />
                     </div>
                 </div>

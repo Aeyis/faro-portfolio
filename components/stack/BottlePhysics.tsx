@@ -10,12 +10,6 @@ const LOGO_FILTERS: [string, string][] = [
     ['express',    'invert(1) sepia(1) saturate(4) hue-rotate(110deg) brightness(0.85)'],
     ['github',     'invert(1) sepia(1) saturate(4) hue-rotate(110deg) brightness(0.85)'],
     ['wordpress',  'invert(1) sepia(1) saturate(4) hue-rotate(110deg) brightness(0.85)'],
-    // Photoshop  #31A8FF  hsl(205°) → rotate 171°
-    ['photoshop',  'invert(1) sepia(1) saturate(6) hue-rotate(171deg) brightness(1.05)'],
-    // Illustrator #FF9A00  hsl(36°) ≈ sepia natif → rotation ~0
-    ['illustrator','invert(1) sepia(1) saturate(9) brightness(0.90)'],
-    // Adobe XD   #E234A4  hsl(318°) → rotate 284°
-    ['adobe_xd',   'invert(1) sepia(1) saturate(7) hue-rotate(284deg) brightness(1.0)'],
 ];
 
 export function getLogoFilter(src: string): string | undefined {
@@ -23,23 +17,25 @@ export function getLogoFilter(src: string): string | undefined {
 }
 
 const tintCache = new Map<string, string>();
-function getTinted(src: string, filter: string): Promise<string> {
-    const key = src + filter;
+const SPRITE_SIZE = 128;
+function normalizeSprite(src: string, filter?: string): Promise<string> {
+    const key = src + (filter ?? '');
     if (tintCache.has(key)) return Promise.resolve(tintCache.get(key)!);
     return new Promise(resolve => {
         const img = new Image();
         img.onload = () => {
             const c = document.createElement('canvas');
-            c.width = img.naturalWidth;
-            c.height = img.naturalHeight;
+            c.width = SPRITE_SIZE;
+            c.height = SPRITE_SIZE;
             const ctx = c.getContext('2d')!;
-            ctx.filter = filter;
-            ctx.drawImage(img, 0, 0);
+            if (filter) ctx.filter = filter;
+            ctx.drawImage(img, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
             const url = c.toDataURL();
             tintCache.set(key, url);
             resolve(url);
         };
         img.onerror = () => resolve(src);
+        img.crossOrigin = 'anonymous';
         img.src = src;
     });
 }
@@ -55,6 +51,8 @@ interface Props {
   shakeThreshold?: number;
   clearAll?: boolean;
   disabled?: boolean;
+  sticker?: { src: string; top: number; left: number; width: number };
+  itemRadius?: number;
 }
 
 const W = 552;
@@ -65,6 +63,7 @@ export default function BottlePhysics({
   bl = 120, br = 340, bt = 300, bb = 840,
   onShake, shakeThreshold = 6,
   clearAll = false, disabled = false,
+  sticker, itemRadius = 20,
 }: Props) {
   const CW = br - bl;
   const CH = bb - bt;
@@ -84,11 +83,11 @@ export default function BottlePhysics({
   const engineRef   = useRef<Matter.Engine | null>(null);
   const bodiesRef   = useRef<Matter.Body[]>([]);
 
-  /* logos pré-traités : Express → vert */
+  /* logos pré-traités : normalisés à 128×128 + filtre couleur si besoin */
   const [processedItems, setProcessedItems] = useState<string[]>([]);
   useEffect(() => {
     Promise.all(
-      items.slice(0, 12).map(src => { const f = getLogoFilter(src); return f ? getTinted(src, f) : Promise.resolve(src); })
+      items.slice(0, 12).map(src => normalizeSprite(src, getLogoFilter(src)))
     ).then(setProcessedItems);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -137,7 +136,7 @@ export default function BottlePhysics({
       Bodies.rectangle(CW / 2,     -T / 2,       CW,      T,  sw),
     ]);
 
-    const r     = 20;
+    const r     = itemRadius;
     const scale = (r * 2) / 128;
     const bodies = processedItems.map((src, i) => {
       const col = i % 3;
@@ -284,6 +283,22 @@ export default function BottlePhysics({
         ref={canvasRef}
         style={{ position: 'absolute', left: bl, top: bt, zIndex: 2 }}
       />
+      {sticker && (
+        <img
+          src={sticker.src}
+          alt=""
+          draggable={false}
+          style={{
+            position:      'absolute',
+            top:           sticker.top,
+            left:          sticker.left,
+            width:         sticker.width,
+            pointerEvents: 'none',
+            zIndex:        3,
+            userSelect:    'none',
+          }}
+        />
+      )}
     </div>
   );
 }

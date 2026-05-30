@@ -13,6 +13,7 @@ export default function LogoIntro() {
     const hamburgerOverlayRef = useRef<HTMLDivElement>(null);
     const hoverZoneRef        = useRef<HTMLDivElement>(null);
     const hamBtnRef           = useRef<SVGSVGElement>(null);
+    const menuLabelRef        = useRef<HTMLSpanElement>(null);
     const sectionModeRef = useRef<string | null>(null);
 
     useEffect(() => {
@@ -28,10 +29,10 @@ export default function LogoIntro() {
             const currentCenterX = rect.left + rect.width  / 2;
             const currentCenterY = rect.top  + rect.height / 2;
 
-            const targetScale   = 0.34;
+            const targetScale   = 0.42;
             const visualSize    = 600 * targetScale;
             const targetCenterX = window.innerWidth + 10 - visualSize / 2;
-            const targetCenterY = -68 + visualSize / 2;
+            const targetCenterY = -90 + visualSize / 2;
 
             gsap.to(el, {
                 x:        targetCenterX - currentCenterX,
@@ -50,6 +51,14 @@ export default function LogoIntro() {
                     hz.style.height = `${visualSize}px`;
                     hz.style.top    = `${targetCenterY - visualSize / 2}px`;
                     hz.style.left   = `${targetCenterX - visualSize / 2}px`;
+
+                    const menuLabel = menuLabelRef.current;
+                    if (menuLabel) {
+                        menuLabel.style.width = `${visualSize}px`;
+                        menuLabel.style.top   = `${targetCenterY + visualSize / 2 - 40}px`;
+                        menuLabel.style.left  = `${targetCenterX - visualSize / 2}px`;
+                        gsap.to(menuLabel, { opacity: 1, duration: 0.5, delay: 0.3 });
+                    }
                     if (ham) {
                         ham.style.top  = `${targetCenterY - hamSize / 2 + 40}px`;
                         ham.style.left = `${targetCenterX - hamSize / 2}px`;
@@ -75,6 +84,14 @@ export default function LogoIntro() {
                             sectionModeRef.current = null;
                             ham?.style.removeProperty("--ham-color");
                         }
+                        if (menuLabel) menuLabel.style.color = labelColor();
+                    };
+
+                    const labelColor = () => {
+                        if (sectionModeRef.current === "about")   return "oklch(0.85 0.15 210)";
+                        if (sectionModeRef.current === "stack")   return "oklch(0.85 0.18 155)";
+                        if (sectionModeRef.current === "projets") return "oklch(0.85 0.18 290)";
+                        return "oklch(0.88 0.18 40)";
                     };
 
                     const baseFilter = () => {
@@ -110,11 +127,14 @@ export default function LogoIntro() {
                         updateSection();
                         if (e.deltaY > 0) {
                             gsap.to(el, { autoAlpha: 0, duration: 0.4, ease: "power2.inOut" });
+                            gsap.to(menuLabelRef.current, { opacity: 0, duration: 0.3 });
                             if (hz) hz.style.pointerEvents = "none";
                             if (ham) gsap.to(ham, { opacity: 0, duration: 0.3 });
                         } else if (e.deltaY < 0) {
+                            updateSection();
                             gsap.set(el, { filter: baseFilter() });
                             gsap.to(el, { autoAlpha: 1, duration: 0.5, ease: "power2.out" });
+                            gsap.to(menuLabelRef.current, { opacity: 1, duration: 0.5 });
                             if (hz) hz.style.pointerEvents = "all";
                         }
                     };
@@ -218,6 +238,27 @@ export default function LogoIntro() {
                 window.dispatchEvent(new Event("menu-toggle"));
             }}
         />
+
+        {/* Label Menu */}
+        <span
+            ref={menuLabelRef}
+            className="font-inter-tight"
+            style={{
+                position:      "fixed",
+                zIndex:        101,
+                opacity:       0,
+                pointerEvents: "none",
+                fontSize:      11,
+                fontWeight:    900,
+                letterSpacing: "-0.03em",
+                color:         "oklch(0.85 0.18 155)",
+                textAlign:     "center",
+                textTransform: "uppercase",
+                display:       "block",
+            }}
+        >
+            Menu
+        </span>
 
         {/* Ham4 */}
         <svg
