@@ -29,10 +29,10 @@ export default function LogoIntro() {
             const currentCenterX = rect.left + rect.width  / 2;
             const currentCenterY = rect.top  + rect.height / 2;
 
-            const targetScale   = 0.42;
+            const targetScale   = 0.38;
             const visualSize    = 600 * targetScale;
             const targetCenterX = window.innerWidth + 10 - visualSize / 2;
-            const targetCenterY = -90 + visualSize / 2;
+            const targetCenterY = -60 + visualSize / 2;
 
             gsap.to(el, {
                 x:        targetCenterX - currentCenterX,
@@ -55,7 +55,7 @@ export default function LogoIntro() {
                     const menuLabel = menuLabelRef.current;
                     if (menuLabel) {
                         menuLabel.style.width = `${visualSize}px`;
-                        menuLabel.style.top   = `${targetCenterY + visualSize / 2 - 40}px`;
+                        menuLabel.style.top   = `${targetCenterY + visualSize / 2 - 45}px`;
                         menuLabel.style.left  = `${targetCenterX - visualSize / 2}px`;
                         gsap.to(menuLabel, { opacity: 1, duration: 0.5, delay: 0.3 });
                     }
@@ -113,6 +113,7 @@ export default function LogoIntro() {
                         gsap.to(logoWrapperRef.current,      { opacity: 0, duration: 0.35, ease: "power2.inOut" });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 1, duration: 0.35, ease: "power2.inOut" });
                         gsap.to(ham,                         { opacity: 1, duration: 0.35, ease: "power2.out"   });
+                        gsap.to(menuLabel,                   { opacity: 0, duration: 0.2, ease: "power2.out"    });
                     });
 
                     hz.addEventListener("mouseleave", () => {
@@ -120,6 +121,7 @@ export default function LogoIntro() {
                         gsap.to(ham,                         { opacity: 0, duration: 0.3 });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" });
                         gsap.to(logoWrapperRef.current,      { opacity: 1, duration: 0.4, ease: "power2.inOut" });
+                        gsap.to(menuLabel,                   { opacity: 1, duration: 0.3, delay: 0.1, ease: "power2.out" });
                     });
 
                     // ── Show/hide selon direction de scroll ──
@@ -248,7 +250,7 @@ export default function LogoIntro() {
                 zIndex:        101,
                 opacity:       0,
                 pointerEvents: "none",
-                fontSize:      11,
+                fontSize:      14,
                 fontWeight:    900,
                 letterSpacing: "-0.03em",
                 color:         "oklch(0.85 0.18 155)",

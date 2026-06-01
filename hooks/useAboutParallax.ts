@@ -15,7 +15,6 @@ export function useAboutParallax() {
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom bottom",
-            markers: true,
         });
     }, { scope: sectionRef });
 

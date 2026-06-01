@@ -8,21 +8,25 @@ import SplitType from "split-type";
 import { useAboutParallax } from "@/hooks/useAboutParallax";
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
-import FluidCursor from "@/components/about/FluidCursor";
+import dynamic from "next/dynamic";
+const FluidCursor = dynamic(() => import("@/components/about/FluidCursor"), { ssr: false, loading: () => null });
 
 gsap.registerPlugin(ScrollTrigger);
 
-const BIO =
-    "Je suis Rafael Solis Ramos, développeur fullstack en formation. " +
-    "J'aime créer des interfaces qui ont quelque chose à dire — " +
-    "là où le code et le design se confondent. " +
-    "Curieux de tout, perfectionniste sur les détails.";
+const HN  = "bio-roboto"; // DM Sans
+const DID = "bio-meie";
 
 export default function AboutSection() {
     const { sectionRef } = useAboutParallax();
     const titleRef = useRef<HTMLHeadingElement>(null);
     const floatRef = useRef<HTMLDivElement>(null);
     const bioRef   = useRef<HTMLParagraphElement>(null);
+    const lineRef     = useRef<HTMLDivElement>(null);
+    const linesRef    = useRef<(HTMLDivElement | null)[]>([]);
+    const svgLinesRef = useRef<(SVGPathElement | SVGLineElement | null)[]>([]);
+    const photoWrapRef = useRef<HTMLDivElement>(null);
+    const photo2Ref    = useRef<HTMLDivElement>(null);
+
 
     useGSAP(() => {
         const el  = titleRef.current;
@@ -46,7 +50,7 @@ export default function AboutSection() {
 
         // ── Titre → coin haut-gauche ──
         gsap.to(el, {
-            scale: () => window.innerWidth < 768 ? 0.55 : 0.25,
+            scale: () => window.innerWidth < 768 ? 0.55 : 0.40,
             x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
             transformOrigin: "top left",
@@ -74,11 +78,20 @@ export default function AboutSection() {
         // ── Reveal bio lettre par lettre ──
         const split = new SplitType(bio, { types: "chars,words" });
 
+        split.chars?.forEach(char => {
+            let el: HTMLElement | null = char.parentElement;
+            while (el && el !== bio) {
+                if (el.classList.contains("bio-roboto")) { char.classList.add("bio-roboto"); break; }
+                if (el.classList.contains("bio-meie"))   { char.classList.add("bio-meie");   break; }
+                el = el.parentElement;
+            }
+        });
+
         gsap.from(split.chars, {
             opacity: 0,
-            y: 20,
+            filter: "blur(12px)",
             ease: "power2.out",
-            stagger: 0.35,
+            stagger: 0.015,
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top+=420 top",
@@ -87,7 +100,83 @@ export default function AboutSection() {
             },
         });
 
+        /* SVG lignes — effet tracé strokeDashoffset */
+        svgLinesRef.current.forEach((path, i) => {
+            if (!path) return;
+            const len = (path as SVGGeometryElement).getTotalLength?.() ?? 300;
+            gsap.set(path, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 });
+            gsap.to(path, {
+                strokeDashoffset: 0,
+                ease: "power2.inOut",
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: `top+=${420 + i * 220}`,
+                    end:   `top+=${680 + i * 220}`,
+                    scrub: 1,
+                },
+            });
+        });
+
+        /* Photo — entrée au scroll */
+        if (photoWrapRef.current) {
+            gsap.fromTo(photoWrapRef.current,
+                { clipPath: "inset(0 0 100% 0 round 16px)", opacity: 0 },
+                {
+                    clipPath: "inset(0 0 0% 0 round 16px)", opacity: 1,
+                    ease: "power3.inOut",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top+=420 top",
+                        end:   "top+=780 top",
+                        scrub: 0.8,
+                    },
+                }
+            );
+        }
+
+        /* Photo hover — clip-path wipe + tilt */
+        const wrap = photoWrapRef.current;
+        const p2   = photo2Ref.current;
+        if (wrap && p2) {
+            const onEnter = () => {
+                gsap.to(p2,   { clipPath: "inset(0% 0 0% 0)", duration: 0.6, ease: "power3.inOut" });
+                gsap.to(wrap, { scale: 1.03, duration: 0.5, ease: "power2.out" });
+            };
+            const onLeave = () => {
+                gsap.to(p2,   { clipPath: "inset(100% 0 0% 0)", duration: 0.5, ease: "power3.inOut" });
+                gsap.to(wrap, { scale: 1, rotateX: 0, rotateY: 0, duration: 0.6, ease: "power2.out" });
+            };
+            const onMove = (e: MouseEvent) => {
+                const r = wrap.getBoundingClientRect();
+                const x = ((e.clientX - r.left) / r.width  - 0.5) * 12;
+                const y = ((e.clientY - r.top)  / r.height - 0.5) * -12;
+                gsap.to(wrap, { rotateY: x, rotateX: y, duration: 0.4, ease: "power2.out", transformPerspective: 800 });
+            };
+            wrap.addEventListener("mouseenter", onEnter);
+            wrap.addEventListener("mouseleave", onLeave);
+            wrap.addEventListener("mousemove",  onMove  as EventListener);
+        }
+
+        /* Ligne sous le texte */
+        if (lineRef.current) {
+            gsap.fromTo(lineRef.current,
+                { scaleX: 0, opacity: 0 },
+                {
+                    scaleX: 1, opacity: 1,
+                    transformOrigin: "left center",
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: () => `top+=${420 + window.innerHeight * 3.0}`,
+                        end:   () => `top+=${420 + window.innerHeight * 3.5}`,
+                        scrub: true,
+                    },
+                }
+            );
+        }
+
     }, { scope: sectionRef });
+
 
     return (
         <section
@@ -106,6 +195,48 @@ export default function AboutSection() {
 
             <div className="about-sticky" style={{ position: "sticky", top: 0, height: "100vh", padding: "80px 40px" }}>
                 <FluidCursor />
+
+                {/* Photo droite */}
+                <div
+                    ref={photoWrapRef}
+                    style={{
+                        position: "absolute",
+                        right: "5vw",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        width: "clamp(200px, 30vw, 420px)",
+                        aspectRatio: "3/4",
+                        borderRadius: 16,
+                        overflow: "hidden",
+                        zIndex: 2,
+                        cursor: "crosshair",
+                        opacity: 0,
+                        clipPath: "inset(0 0 100% 0 round 16px)",
+                        boxShadow: "0 24px 64px oklch(0 0 0 / 0.5)",
+                    }}
+                >
+                    {/* Photo 1 — placeholder */}
+                    <div style={{
+                        position: "absolute", inset: 0,
+                        background: "linear-gradient(135deg, oklch(0.25 0.12 210) 0%, oklch(0.15 0.18 240) 100%)",
+                    }} />
+                    {/* Photo 2 — hover placeholder */}
+                    <div
+                        ref={photo2Ref}
+                        style={{
+                            position: "absolute", inset: 0,
+                            clipPath: "inset(100% 0 0% 0)",
+                            zIndex: 1,
+                            background: "linear-gradient(135deg, oklch(0.30 0.18 50) 0%, oklch(0.18 0.14 30) 100%)",
+                        }}
+                    />
+                    {/* Hint */}
+                    <p className="font-fraunces" style={{
+                        position: "absolute", bottom: 14, right: 16, zIndex: 2,
+                        fontSize: 11, fontStyle: "italic", fontWeight: 300,
+                        color: "rgba(255,255,255,0.55)", margin: 0, pointerEvents: "none",
+                    }}>hover →</p>
+                </div>
                 <div ref={floatRef} style={{ position: "relative", zIndex: 1 }}>
                     <h2
                         ref={titleRef}
@@ -135,14 +266,72 @@ export default function AboutSection() {
                 </div>
 
                 {/* Bio reveal */}
-                <p
-                    ref={bioRef}
-                    className="about-bio font-fraunces"
-                    style={{ userSelect: "none", zIndex: 1 }}
-                >
-                    {BIO}
+                <div className="about-bio" style={{ userSelect: "none", zIndex: 1 }}>
+                <p ref={bioRef} style={{ margin: 0 }}>
+                    <span className="bio-line-block" style={{ textAlign: "right" }}>
+                        <span className={DID} style={{ textAlign: "right" }} >Rafael Solis Ramos, </span>
+                        <span className={HN} style={{ fontSize: "0.75em" }}>développeur FullStack.</span>
+                    </span>
+                    <span className={`${HN} block`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>Je fusionne la logique <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>technique</span></span>
+                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>et la sensibilité <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>visuelle</span></span>
+                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>pour créer des <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>interfaces</span></span>
+                    <span className={`${DID} block`} style={{ paddingLeft:"5%"}}>qui ont quelque chose à dire.</span>
+                    <span className={`${HN} block bio-bold`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>Mon moteur ?</span>
+                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>Une <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>curiosité</span> insatiable</span>
+                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>et une obsessions pour <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>les détails</span></span>
+                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>qui font la <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>différence</span></span>
                 </p>
+                <div ref={lineRef} style={{
+                    marginTop: 18,
+                    height: 1,
+                    background: "linear-gradient(to right, oklch(0.72 0.16 210 / 0.8), oklch(0.55 0.12 210 / 0.3) 60%, transparent)",
+                    transformOrigin: "left center",
+                }} />
+                </div>
             </div>
+
+            {/* SVG lignes décoratives */}
+            <svg
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 1, overflow: "visible" }}
+                preserveAspectRatio="none"
+            >
+                {/* Longue diagonale principale */}
+                <path
+                    ref={el => { svgLinesRef.current[0] = el; }}
+                    d="M 5% 35% L 72% 62%"
+                    stroke="oklch(0.65 0.16 210 / 0.45)" strokeWidth="0.8" fill="none" opacity="0"
+                />
+                {/* Arc élégant */}
+                <path
+                    ref={el => { svgLinesRef.current[1] = el; }}
+                    d="M 8% 55% Q 35% 42% 62% 58%"
+                    stroke="oklch(0.60 0.14 210 / 0.35)" strokeWidth="0.7" fill="none" opacity="0"
+                />
+                {/* Ligne horizontale courte haute droite */}
+                <path
+                    ref={el => { svgLinesRef.current[2] = el; }}
+                    d="M 68% 38% L 92% 38%"
+                    stroke="oklch(0.70 0.18 210 / 0.50)" strokeWidth="1" fill="none" opacity="0"
+                />
+                {/* Diagonale inverse basse */}
+                <path
+                    ref={el => { svgLinesRef.current[3] = el; }}
+                    d="M 15% 72% L 58% 58%"
+                    stroke="oklch(0.58 0.14 210 / 0.30)" strokeWidth="0.6" fill="none" opacity="0"
+                />
+                {/* Trait vertical accent */}
+                <path
+                    ref={el => { svgLinesRef.current[4] = el; }}
+                    d="M 78% 44% L 78% 68%"
+                    stroke="oklch(0.65 0.16 210 / 0.40)" strokeWidth="0.7" fill="none" opacity="0"
+                />
+                {/* Arc secondaire droit */}
+                <path
+                    ref={el => { svgLinesRef.current[5] = el; }}
+                    d="M 55% 70% Q 72% 62% 88% 72%"
+                    stroke="oklch(0.62 0.15 210 / 0.35)" strokeWidth="0.7" fill="none" opacity="0"
+                />
+            </svg>
         </section>
     );
 }

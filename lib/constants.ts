@@ -13,12 +13,12 @@ export const COLORS = {
 // ---------------- HAUTEUR DES SECTIONS -------------- //
 // --------------------------------------------------------- //
 export const SECTION_HEIGHTS = {
-    hero: 2500,
-    transition: 800,
+    hero: 2600,
+    transition: 200,
     about: 4500,
-    stack: 3000,
-    projects: 3000,
-    contact: 800,
+    stack: 3500,
+    projects: 2500,
+    contact: 900,
 } as const;
 // --------------------------------------------------------- //
 // ----- VITESSE PARALLAX (0=fixe, 1= vitesse scroll) ------- //
@@ -26,16 +26,17 @@ export const SECTION_HEIGHTS = {
 export const PARALLAX_SPEEDS = {
     stars: 0.05,
     backgroundClouds: 0.08,
-    cloud4: 0.13,
-    cloud3: 0.17,
-    cloud2: 0.15,
-    cloud1: 0.28,
+    cloud1: 0.32,
+    cloud2: 0.20,
+    cloud3: 0.12,
+    cloud4: 0.06,
     sea: 0.4,
     ground: 0.5,
     faro: 0.5,
     treesBack: 0.6,
     treesMid: 0.7,
     treesFront: 0.75,
+    racine:     1.6,
 } as const;
 
 // --------------------------------------------------------- //
@@ -64,4 +65,5 @@ export const HERO_LAYERS = {
     treeShadow3:      { x: 684,    y: 569,    w: 1247.76, h: 689.43  },
     treeLight1:       { x: 357,    y: 10,     w: 1564,    h: 880     },
     treeFront:        { x: -5100,   y: -210,    w: 12000,   h: 2500     },
+    racine:           { x: -6500, y: 1100, w: 15000, h: 1500 },
 } as const;

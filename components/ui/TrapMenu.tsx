@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { navigateTo } from "@/lib/navigateTo";
 import "@/styles/trap-menu.css";
 
 const NAV_ITEMS = [
@@ -54,7 +55,11 @@ export default function TrapMenu() {
                             key={item.name}
                             href={item.href}
                             className="tp-link"
-                            onClick={close}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                close();
+                                navigateTo(item.href.slice(1));
+                            }}
                         >
                             <span className="tp-name">{item.name}</span>
                             <div className="tp-right">

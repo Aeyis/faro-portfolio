@@ -5,7 +5,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SECTION_HEIGHTS } from "@/lib/constants";
-import FluidCursor from "@/components/about/FluidCursor";
+import dynamic from "next/dynamic";
+const FluidCursor = dynamic(() => import("@/components/about/FluidCursor"), { ssr: false, loading: () => null });
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
 import Matter from "matter-js";
 import BottlePhysics, { getLogoFilter } from "@/components/stack/BottlePhysics";
@@ -481,7 +482,7 @@ export default function StackSection() {
         );
 
         gsap.to(el, {
-            scale: () => window.innerWidth < 768 ? 0.55 : 0.32,
+            scale: () => window.innerWidth < 768 ? 0.55 : 0.40,
             x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
             transformOrigin: "top left",
@@ -489,7 +490,7 @@ export default function StackSection() {
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top top",
-                end: "+=400",
+                end: "+=800",
                 scrub: 0.4,
                 invalidateOnRefresh: true,
                 onLeave:     () => window.dispatchEvent(new Event("stack-stuck")),

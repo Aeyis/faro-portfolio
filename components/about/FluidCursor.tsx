@@ -30,7 +30,7 @@ interface DoubleFBO {
     swap(): void;
 }
 
-interface Props { variant?: "blue" | "green" | "violet"; }
+interface Props { variant?: "blue" | "green" | "violet" | "amber"; }
 
 export default function FluidCursor({ variant = "blue" }: Props) {
     const canvasRef   = useRef<HTMLCanvasElement>(null);
@@ -57,6 +57,7 @@ export default function FluidCursor({ variant = "blue" }: Props) {
         const randColor = (): number[] =>
             variantRef.current === "green"  ? [Math.random() * 0.05, Math.random() * 0.25 + 0.3, Math.random() * 0.1] :
             variantRef.current === "violet" ? [Math.random() * 0.4 + 0.3, Math.random() * 0.05, Math.random() * 0.4 + 0.6] :
+            variantRef.current === "amber"  ? [Math.random() * 0.5 + 0.5, Math.random() * 0.3 + 0.2, Math.random() * 0.05] :
                                               [Math.random() * 0.1,  Math.random() * 0.3 + 0.2, Math.random() * 0.5 + 0.5];
 
         const pointers: Pointer[] = [{

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import "@/styles/dive-menu.css";
+import { navigateTo } from "@/lib/navigateTo";
 
 const NAV_ITEMS = [
     { depth: "0 m",   name: "Accueil",  zone: "Surface · Zone épipélagique", pressure: "1.0 bar", temp: "26 °C", href: "#hero"    },
@@ -89,7 +90,11 @@ export default function DiveMenu() {
             <div className="depth-layout">
                 <div className="nav-list">
                     {NAV_ITEMS.map(item => (
-                        <a key={item.name} href={item.href} className="nav-item" onClick={close}>
+                        <a key={item.name} href={item.href} className="nav-item" onClick={(e) => {
+                                e.preventDefault();
+                                close();
+                                navigateTo(item.href.slice(1));
+                            }}>
                             <div className="depth-bar" />
                             <div className="card-body">
                                 <span className="depth-badge">{item.depth}</span>

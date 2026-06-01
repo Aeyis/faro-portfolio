@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import gsap from "gsap";
-import { SECTION_HEIGHTS, HERO_LAYERS } from "@/lib/constants";
+import { SECTION_HEIGHTS, HERO_LAYERS, PARALLAX_SPEEDS } from "@/lib/constants";
+
+gsap.registerPlugin(ScrollTrigger);
 import { figmaToCSS } from "@/lib/utils";
 import { useHeroParallax } from "@/hooks/useHeroParallax";
 import StarsBackground from "./StarsBackground";
@@ -31,10 +35,12 @@ export default function HeroSection() {
     treeShadow3Ref,
     treeLight1Ref,
     treeFrontRef,
+    racineRef,
   } = useHeroParallax();
 
   const stickyRef = useRef<HTMLDivElement>(null);
   const ctaRef    = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const hide = () => {
@@ -112,41 +118,41 @@ export default function HeroSection() {
         {/* COUCHE 2 — Nuages de fond */}
         <div ref={bgCloud1Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud1), left: 0, zIndex: -2 }}>
           <div className="cloud-drift-1" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/background_cloud_1.svg" alt="" fill />
+            <Image src="/assets/hero/background_cloud_1.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
         <div ref={bgCloud2Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud2), left: 0, zIndex: -3 }}>
           <div className="cloud-drift-2" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/background_cloud_2.svg" alt="" fill />
+            <Image src="/assets/hero/background_cloud_2.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
 
         {/* COUCHE 3 — Nuages avant */}
         <div ref={cloud1Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud1), zIndex: 3 }}>
-          <div className="cloud-morph-1" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/cloud_1.svg" alt="" fill />
+          <div className="cloud-morph-1" style={{ position: "absolute", inset: 1 }}>
+            <Image src="/assets/hero/cloud_1.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
         <div ref={cloud2Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud2), zIndex: 2 }}>
           <div className="cloud-morph-2" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/cloud_2.svg" alt="" fill />
+            <Image src="/assets/hero/cloud_2.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
         <div ref={cloud3Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud3), zIndex: 1 }}>
           <div className="cloud-morph-3" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/cloud_3.svg" alt="" fill />
+            <Image src="/assets/hero/cloud_3.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
         <div ref={cloud4Ref} style={{ ...figmaToCSS(HERO_LAYERS.cloud4), zIndex: 0 }}>
           <div className="cloud-morph-4" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/cloud_4.svg" alt="" fill />
+            <Image src="/assets/hero/cloud_4.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
 
         {/* COUCHE 4 — Mer */}
         <div ref={seaRef} style={{ ...figmaToCSS(HERO_LAYERS.sea), zIndex: 4 }}>
-          <div className="sea-sway" style={{ position: "absolute", inset: "0 -40px" }}>
-            <Image src="/assets/hero/sea.svg" alt="" fill />
+          <div className="sea-sway" style={{ position: "absolute", inset: "0 -280px" }}>
+            <Image src="/assets/hero/sea.webp" alt="" fill priority sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
 
@@ -159,12 +165,12 @@ export default function HeroSection() {
           height: "55vw",
           zIndex: 5,
         }}>
-          <Image src="/assets/hero/ground_1.svg" alt="" fill />
+          <Image src="/assets/hero/ground_1.webp" alt="" fill priority sizes="100vw" style={{ objectFit: "fill" }} />
         </div>
 
         {/* COUCHE 6 — Phare */}
         <div ref={faroRef} style={{ ...figmaToCSS(HERO_LAYERS.faro), zIndex: 6, top: "15%" }}>
-          <Image src="/assets/hero/faro.svg" alt="" fill />
+          <Image src="/assets/hero/faro.webp" alt="" fill priority sizes="15vw" style={{ objectFit: "contain", objectPosition: "bottom" }} />
         </div>
 
         {/* COUCHE 7 — Végétation gauche */}
@@ -177,7 +183,7 @@ export default function HeroSection() {
           zIndex: 7,
         }}>
           <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/trees_left.svg" alt="" fill />
+            <Image src="/assets/hero/trees_left.webp" alt="" fill priority sizes="83vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
 
@@ -191,19 +197,19 @@ export default function HeroSection() {
           zIndex: 8,
         }}>
           <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/tree_shadow_1.svg" alt="" fill />
+            <Image src="/assets/hero/tree_shadow_1.webp" alt="" fill sizes="70vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
         <div ref={treeShadow2Ref} style={{
           position: "absolute",
-          bottom: "0.8vw",
-          right: "-10vw",
-          width: "70.1vw",
-          height: "33.85vw",
+          bottom: "-6vw",
+          right: "-18vw",
+          width: "92vw",
+          height: "45vw",
           zIndex: 8,
         }}>
           <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/tree_shadow_2.svg" alt="" fill />
+            <Image src="/assets/hero/tree_shadow_2.webp" alt="" fill sizes="92vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
         <div ref={treeShadow3Ref} style={{
@@ -215,7 +221,7 @@ export default function HeroSection() {
           zIndex: 9,
         }}>
           <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/tree_shadow_3.svg" alt="" fill />
+            <Image src="/assets/hero/tree_shadow_3.webp" alt="" fill sizes="95vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
 
@@ -229,7 +235,7 @@ export default function HeroSection() {
           zIndex: 7,
         }}>
           <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/tree_light_1.svg" alt="" fill />
+            <Image src="/assets/hero/tree_light_1.webp" alt="" fill sizes="70vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
 
@@ -254,53 +260,13 @@ export default function HeroSection() {
 
         {/* COUCHE 10 — Premier plan */}
         <div ref={treeFrontRef} style={{ ...figmaToCSS(HERO_LAYERS.treeFront), zIndex: 10 }}>
-          <Image src="/assets/hero/tree_front.svg" alt="" fill />
+          <div className="tree-sway-c" style={{ position: "absolute", inset: 0 }}>
+            <Image src="/assets/hero/tree_front.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
+          </div>
         </div>
-
 
       </div>
 
-      {/* Bouton scroll vers section suivante */}
-      <button
-        onClick={() => {
-          const target = document.getElementById("about");
-          if (!target) return;
-          const startY = window.scrollY;
-          const endY = target.getBoundingClientRect().top + startY;
-          const duration = 3500;
-          let startTime: number;
-          function step(timestamp: number) {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / duration, 1);
-            const ease = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
-            window.scrollTo(0, startY + (endY - startY) * ease);
-            if (progress < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
-        }}
-        style={{
-          position: "fixed",
-          bottom: "2rem",
-          right: "2rem",
-          zIndex: 100,
-          background: "rgba(255,255,255,0.08)",
-          border: "1px solid rgba(255,255,255,0.25)",
-          borderRadius: "50%",
-          width: "48px",
-          height: "48px",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backdropFilter: "blur(6px)",
-          color: "#fff",
-          fontSize: "1.2rem",
-          transition: "background 0.2s",
-        }}
-        aria-label="Scroll vers la section suivante"
-      >
-        ↓
-      </button>
     </section>
   );
 }

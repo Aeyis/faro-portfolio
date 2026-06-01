@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-interface Props { variant?: 'blue' | 'green' | 'violet' }
+interface Props { variant?: 'blue' | 'green' | 'violet' | 'amber' }
 
 export default function UnderwaterBackground({ variant = 'blue' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -16,6 +16,7 @@ export default function UnderwaterBackground({ variant = 'blue' }: Props) {
     const particleColor =
       variant === 'green'  ? (a: number) => `rgba(220, 190, 255, ${a})` :
       variant === 'violet' ? (a: number) => `rgba(195, 150, 255, ${a})` :
+      variant === 'amber'  ? (a: number) => `rgba(255, 200, 100, ${a})` :
                              (a: number) => `rgba(180, 230, 255, ${a})`
 
     function resize() {
@@ -32,14 +33,14 @@ export default function UnderwaterBackground({ variant = 'blue' }: Props) {
       vx: number; vy: number
       alpha: number; phase: number; pSpeed: number
     }
-    const NUM_P = 110
+    const NUM_P = 80
     const particles: Particle[] = Array.from({ length: NUM_P }, () => ({
       x:      Math.random() * canvas.width,
       y:      Math.random() * canvas.height,
-      r:      0.5 + Math.random() * 1.5,
-      vx:     (Math.random() - 0.5) * 0.25,
-      vy:     (Math.random() - 0.5) * 0.15,
-      alpha:  0.40 + Math.random() * 0.3,
+      r:      0.4 + Math.random() * 2.5,
+      vx:     (Math.random() - 0.5) * 0.30,
+      vy:     (Math.random() - 0.5) * 0.18,
+      alpha:  0.55 + Math.random() * 0.40,
       phase:  Math.random() * Math.PI * 2,
       pSpeed: 0.008 + Math.random() * 0.018,
     }))

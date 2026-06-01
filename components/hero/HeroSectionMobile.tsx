@@ -53,44 +53,11 @@ export default function HeroSectionMobile() {
 
     /* ---- Parallaxe scroll ---- */
     useGSAP(() => {
-        let autoScrolling = false;
         const trigger = {
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom bottom",
             scrub: 1,
-            onUpdate: (self: ScrollTrigger) => {
-                if (self.progress > 0.95) window.dispatchEvent(new Event('hero-bubble-start'));
-                if (self.progress < 0.90) window.dispatchEvent(new Event('hero-bubble-stop'));
-                if (self.progress >= 1 && !autoScrolling) {
-                    autoScrolling = true;
-                    const target = document.getElementById("about");
-                    if (!target) { autoScrolling = false; return; }
-                    const block = (e: Event) => { e.preventDefault(); e.stopImmediatePropagation(); };
-                    const blockKey = (e: KeyboardEvent) => {
-                        if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", " "].includes(e.key))
-                            e.preventDefault();
-                    };
-                    window.addEventListener("wheel", block, { passive: false, capture: true });
-                    window.addEventListener("touchmove", block, { passive: false, capture: true });
-                    window.addEventListener("keydown", blockKey, { capture: true });
-                    let cleaned = false;
-                    const cleanup = () => {
-                        if (cleaned) return;
-                        cleaned = true;
-                        autoScrolling = false;
-                        window.removeEventListener("wheel", block, { capture: true });
-                        window.removeEventListener("touchmove", block, { capture: true });
-                        window.removeEventListener("keydown", blockKey, { capture: true });
-                    };
-                    window.lenisInstance?.scrollTo(target, {
-                        duration: 2.2,
-                        easing: (t) => Math.sin((t * Math.PI) / 2),
-                        onComplete: cleanup,
-                    });
-                    setTimeout(cleanup, 4000);
-                }
-            },
         };
 
         const move = (ref: React.RefObject<HTMLDivElement | null>, speed: number) => {
@@ -134,7 +101,7 @@ export default function HeroSectionMobile() {
                     height: "595px",
                     zIndex: 6,
                 }}>
-                    <Image src="/assets/hero/faro.svg" alt="" fill />
+                    <Image src="/assets/hero/faro.webp" alt="" fill style={{ objectFit: "contain", objectPosition: "bottom" }} />
                 </div>
 
                 {/* Mer */}
@@ -229,7 +196,7 @@ export default function HeroSectionMobile() {
                     zIndex: 8,
                 }}>
                     <div className="tree-sway" style={{ position: "absolute", inset: 0 }}>
-                        <Image src="/assets/hero/tree_front_mobile.svg" alt="" fill />
+                        <Image src="/assets/hero/tree_front_mobile.webp" alt="" fill style={{ objectFit: "contain" }} />
                     </div>
                 </div>
                 <BubbleCanvas wave maxSize={18} speed={4} maxCount={150} spread={200} throttle={2} />
