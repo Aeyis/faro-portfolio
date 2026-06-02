@@ -38,8 +38,9 @@ export default function HeroSection() {
     racineRef,
   } = useHeroParallax();
 
-  const stickyRef = useRef<HTMLDivElement>(null);
-  const ctaRef    = useRef<HTMLDivElement>(null);
+  const stickyRef   = useRef<HTMLDivElement>(null);
+  const ctaRef      = useRef<HTMLDivElement>(null);
+  const scrollHint  = useRef<HTMLDivElement>(null);
 
 
   useEffect(() => {
@@ -52,6 +53,39 @@ export default function HeroSection() {
     };
     window.addEventListener("intro-done", hide, { once: true });
     return () => window.removeEventListener("intro-done", hide);
+  }, []);
+
+  useEffect(() => {
+    const hint = scrollHint.current;
+    if (!hint) return;
+
+    let scrolled = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const onScroll = () => {
+      if (scrolled) return;
+      scrolled = true;
+      gsap.to(hint, { opacity: 0, y: 10, duration: 0.5, ease: "power2.in" });
+    };
+
+    const onIntroDone = () => {
+      timer = setTimeout(() => {
+        if (!scrolled) {
+          gsap.fromTo(hint,
+            { opacity: 0, y: -6 },
+            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+          );
+        }
+      }, 5000);
+    };
+
+    window.addEventListener("intro-done", onIntroDone, { once: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("intro-done", onIntroDone);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -256,6 +290,21 @@ export default function HeroSection() {
           whiteSpace: "nowrap",
         }}>
           Appuyer pour commencer
+        </div>
+
+        {/* Scroll hint */}
+        <div ref={scrollHint} style={{
+          position: "absolute", bottom: "4.5rem", left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 20, pointerEvents: "none", opacity: 0,
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+        }}>
+          <span style={{ fontFamily: "var(--font-inter-tight)", fontSize: 16, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 8 }}>Scroll</span>
+          {[2, 1, 0].map((i, idx) => (
+            <svg key={i} width="22" height="14" viewBox="0 0 16 10" fill="none" style={{ animation: `heroScrollArrow 1.4s ease-in-out ${idx * 0.18}s infinite`, opacity: 0.3 + i * 0.28 }}>
+              <polyline points="1,1 8,8 15,1" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          ))}
         </div>
 
         {/* COUCHE 10 — Premier plan */}

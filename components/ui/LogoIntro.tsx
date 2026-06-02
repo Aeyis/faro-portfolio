@@ -117,13 +117,23 @@ export default function LogoIntro() {
                         gsap.to(menuLabel,                   { opacity: 0, duration: 0.2, ease: "power2.out"    });
                     });
 
+                    let menuIsOpen = false;
+                    window.addEventListener("menu-toggle", () => {
+                        menuIsOpen = !menuIsOpen;
+                        gsap.to(menuLabel, { opacity: menuIsOpen ? 0 : 1, duration: 0.2 });
+                    });
+                    window.addEventListener("menu-close", () => {
+                        menuIsOpen = false;
+                        gsap.to(menuLabel, { opacity: 1, duration: 0.3 });
+                    });
+
                     hz.addEventListener("mouseleave", () => {
                         updateSection();
                         gsap.to(el, { scale: targetScale, filter: baseFilter(), duration: 0.5, ease: "power2.inOut" });
                         gsap.to(ham,                         { opacity: 0, duration: 0.3 });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" });
                         gsap.to(logoWrapperRef.current,      { opacity: 1, duration: 0.4, ease: "power2.inOut" });
-                        gsap.to(menuLabel,                   { opacity: 1, duration: 0.3, delay: 0.1, ease: "power2.out" });
+                        if (!menuIsOpen) gsap.to(menuLabel,  { opacity: 1, duration: 0.3, delay: 0.1, ease: "power2.out" });
                     });
 
                     // ── Show/hide selon direction de scroll ──
@@ -159,7 +169,9 @@ export default function LogoIntro() {
             window.dispatchEvent(new Event("intro-done"));
         };
 
-        const onMenuClose = () => hamBtnRef.current?.classList.remove("active");
+        const onMenuClose = () => {
+            hamBtnRef.current?.classList.remove("active");
+        };
         window.addEventListener("menu-close", onMenuClose);
 
         window.addEventListener("click",      trigger, { once: true });

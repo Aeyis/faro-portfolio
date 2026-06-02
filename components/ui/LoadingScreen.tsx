@@ -35,11 +35,17 @@ export default function LoadingScreen() {
             yPercent: -100,
             duration: 0.9,
             ease: "power3.inOut",
-            onComplete: () => setGone(true),
+            onComplete: () => {
+                document.documentElement.style.overflow = "";
+                setGone(true);
+            },
         });
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.style.overflow = "hidden";
+
         const bar = barRef.current;
         if (bar) {
             gsap.fromTo(bar, { scaleX: 0 }, {

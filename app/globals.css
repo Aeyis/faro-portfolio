@@ -68,6 +68,11 @@ body.bottle-modal-open .logo-nav-container {
   transition: opacity 0.2s;
 }
 
+@keyframes heroScrollArrow {
+  0%, 100% { transform: translateY(0);    opacity: 0.8; }
+  50%       { transform: translateY(-5px); opacity: 0.3; }
+}
+
 @keyframes stackShake {
   0%,100% { transform: rotate(0deg) translateX(0); }
   15%     { transform: rotate(-8deg) translateX(-3px); }

@@ -118,6 +118,8 @@ function BottleModal({ bottle, onClose }: {
     bottle: (typeof BOTTLES)[0];
     onClose: () => void;
 }) {
+    const { lang } = useLang();
+    const t = T[lang].stack;
     const cardRef   = useRef<HTMLDivElement>(null);
     const bottleRef = useRef<HTMLDivElement>(null);
     const pieceRefs = useRef<(HTMLDivElement | null)[]>([]);

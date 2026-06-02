@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import { useLang } from "@/lib/LanguageContext";
 import { T } from "@/lib/translations";
+import emailjs from "@emailjs/browser";
 
 const EMAIL   = "raf045@hotmail.com";
 const GITHUB  = "https://github.com/Aeyis";
@@ -54,11 +55,18 @@ export default function ContactSection() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const subject = encodeURIComponent("Nouveau message" + (nom ? " de " + nom : ""));
-        const body    = encodeURIComponent(`Nom : ${nom}\nE-mail : ${email}\n\n${demande}`);
-        window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
-        setToast(true);
-        setTimeout(() => setToast(false), 3200);
+        emailjs.send(
+            "service_0o3y10k",
+            "template_xerxx7f",
+            { from_name: nom, reply_email: email, message: demande, time: new Date().toLocaleString("fr-FR") },
+            { publicKey: "Yp9d-EU_ge2KsLfiT" }
+        ).then(() => {
+            setToast(true);
+            setTimeout(() => setToast(false), 3200);
+            setNom(""); setEmail(""); setDemande("");
+        }).catch(() => {
+            alert("Erreur d'envoi. Réessayez.");
+        });
     };
 
     const fieldInput: React.CSSProperties = {
@@ -133,9 +141,9 @@ export default function ContactSection() {
                                     </div>
                                 ))}
                             </div>
-                            <div className="contact-field" style={{ display: "flex", flexDirection: "column", gap: "clamp(6px,1vh,12px)" }}>
+                            <div className="contact-field" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(6px,1vh,12px)" }}>
                                 <label style={{ fontFamily: INTER, fontSize: 10, letterSpacing: "0.10em", textTransform: "uppercase", color: "oklch(0.6 0.09 52)", marginBottom: 4, flexShrink: 0 }}>{t.labelMsg}</label>
-                                <textarea placeholder={t.placeholderMsg} value={demande} onChange={e => setDemande(e.target.value)} style={{ ...fieldInput, height: "350px", lineHeight: 1.5 }} />
+                                <textarea placeholder={t.placeholderMsg} value={demande} onChange={e => setDemande(e.target.value)} style={{ ...fieldInput, flex: 1, lineHeight: 1.5, minHeight: "80px" }} />
                                 <button type="submit" className="contact-submit" style={{
                                     flexShrink: 0, alignSelf: "flex-start",
                                     display: "inline-flex", alignItems: "center", gap: 8,
