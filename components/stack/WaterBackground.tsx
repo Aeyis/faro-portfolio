@@ -19,6 +19,7 @@ uniform float u_scale;
 uniform float u_illumination;
 uniform float u_surface_distortion;
 uniform float u_water_distortion;
+uniform vec3 u_tint;
 
 vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
 vec2 mod289(vec2 x){return x-floor(x*(1./289.))*289.;}
@@ -70,11 +71,11 @@ void main(){
     vec4 img=texture2D(u_image_texture,img_uv);
     img*=(1.+u_illumination*sn);
     vec3 color=img.rgb;
-    color+=u_illumination*vec3(0.2,1.0,0.5)*sn;
+    color+=u_illumination*u_tint*sn;
     gl_FragColor=vec4(color,1.0);
 }`;
 
-export default function WaterBackground({ width, height }: { width: number; height: number }) {
+export default function WaterBackground({ width, height, tint = [0.2, 1.0, 0.5], bgColors = ["#112918","#071a0e","#030e07"] }: { width: number; height: number; tint?: [number,number,number]; bgColors?: [string,string,string] }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -105,6 +106,7 @@ export default function WaterBackground({ width, height }: { width: number; heig
         gl.uniform1f(u("u_surface_distortion"), 0.07);
         gl.uniform1f(u("u_water_distortion"),   0.04);
         gl.uniform1i(u("u_image_texture"),      0);
+        gl.uniform3f(u("u_tint"),               tint[0], tint[1], tint[2]);
         gl.uniform1f(uRatio, width / height);
 
         const buf = gl.createBuffer();
@@ -118,9 +120,9 @@ export default function WaterBackground({ width, height }: { width: number; heig
         off.width = 256; off.height = 256;
         const ctx = off.getContext("2d")!;
         const grad = ctx.createRadialGradient(128, 100, 0, 128, 128, 220);
-        grad.addColorStop(0,   "#112918");
-        grad.addColorStop(0.5, "#071a0e");
-        grad.addColorStop(1,   "#030e07");
+        grad.addColorStop(0,   bgColors[0]);
+        grad.addColorStop(0.5, bgColors[1]);
+        grad.addColorStop(1,   bgColors[2]);
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 256, 256);
 

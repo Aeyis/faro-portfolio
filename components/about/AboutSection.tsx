@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
+import { useLang } from "@/lib/LanguageContext";
+import { T } from "@/lib/translations";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,19 +10,62 @@ import SplitType from "split-type";
 import { useAboutParallax } from "@/hooks/useAboutParallax";
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
-import dynamic from "next/dynamic";
-const FluidCursor = dynamic(() => import("@/components/about/FluidCursor"), { ssr: false, loading: () => null });
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HN  = "bio-roboto"; // DM Sans
+const HN  = "bio-roboto";
 const DID = "bio-meie";
 
+function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"]; sectionRef: React.RefObject<HTMLElement | null> }) {
+    const bioRef = useRef<HTMLParagraphElement>(null);
+
+    useEffect(() => {
+        const bio = bioRef.current;
+        const sectionEl = sectionRef.current;
+        if (!bio || !sectionEl) return;
+        const split = new SplitType(bio, { types: "chars,words" });
+        split.chars?.forEach(char => {
+            let el: HTMLElement | null = char.parentElement;
+            while (el && el !== bio) {
+                if (el.classList.contains("bio-roboto")) { char.classList.add("bio-roboto"); break; }
+                if (el.classList.contains("bio-meie"))   { char.classList.add("bio-meie");   break; }
+                el = el.parentElement;
+            }
+        });
+        const st = ScrollTrigger.create({
+            trigger: sectionEl,
+            start: "top+=420 top",
+            end: () => `+=${window.innerHeight * 3.5}`,
+            scrub: true,
+            animation: gsap.from(split.chars, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
+        });
+        return () => { st.kill(); split.revert(); };
+    }, []);
+
+    return (
+        <p ref={bioRef} style={{ margin: 0 }}>
+            <span className="bio-line-block" style={{ textAlign: "right" }}>
+                <span className={`${HN} bio-bold`} style={{ textAlign: "right" }}>Rafael Solis Ramos, </span>
+                <span className={DID} style={{ fontSize: "0.95em", marginLeft: "0.3em" }}>{t.role}</span>
+            </span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>{t.line1} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word1}</span></span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line2} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word2}</span></span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line3} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word3}</span></span>
+            <span className={`${DID} block`} style={{ paddingLeft:"5%"}}>{t.line4}</span>
+            <span className={`${HN} block bio-bold`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>{t.motor}</span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line5} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word5}</span> {t.line5b}</span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line6} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word6}</span></span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line7} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word7}</span></span>
+        </p>
+    );
+}
+
 export default function AboutSection() {
+    const { lang } = useLang();
+    const t = T[lang].about;
     const { sectionRef } = useAboutParallax();
     const titleRef = useRef<HTMLHeadingElement>(null);
     const floatRef = useRef<HTMLDivElement>(null);
-    const bioRef   = useRef<HTMLParagraphElement>(null);
     const lineRef     = useRef<HTMLDivElement>(null);
     const linesRef    = useRef<(HTMLDivElement | null)[]>([]);
     const svgLinesRef = useRef<(SVGPathElement | SVGLineElement | null)[]>([]);
@@ -30,8 +75,7 @@ export default function AboutSection() {
 
     useGSAP(() => {
         const el  = titleRef.current;
-        const bio = bioRef.current;
-        if (!el || !bio) return;
+        if (!el) return;
 
         // ── Gradient parallax sur le titre ──
         gsap.fromTo(el,
@@ -73,31 +117,6 @@ export default function AboutSection() {
             ease: "sine.inOut",
             repeat: -1,
             yoyo: true,
-        });
-
-        // ── Reveal bio lettre par lettre ──
-        const split = new SplitType(bio, { types: "chars,words" });
-
-        split.chars?.forEach(char => {
-            let el: HTMLElement | null = char.parentElement;
-            while (el && el !== bio) {
-                if (el.classList.contains("bio-roboto")) { char.classList.add("bio-roboto"); break; }
-                if (el.classList.contains("bio-meie"))   { char.classList.add("bio-meie");   break; }
-                el = el.parentElement;
-            }
-        });
-
-        gsap.from(split.chars, {
-            opacity: 0,
-            filter: "blur(12px)",
-            ease: "power2.out",
-            stagger: 0.015,
-            scrollTrigger: {
-                trigger: sectionRef.current,
-                start: "top+=420 top",
-                end: () => `+=${window.innerHeight * 3.5}`,
-                scrub: true,
-            },
         });
 
         /* SVG lignes — effet tracé strokeDashoffset */
@@ -194,14 +213,12 @@ export default function AboutSection() {
             }} />
 
             <div className="about-sticky" style={{ position: "sticky", top: 0, height: "100vh", padding: "80px 40px" }}>
-                <FluidCursor />
-
                 {/* Photo droite */}
                 <div
                     ref={photoWrapRef}
                     style={{
                         position: "absolute",
-                        right: "5vw",
+                        right: "16vw",
                         top: "50%",
                         transform: "translateY(-50%)",
                         width: "clamp(200px, 30vw, 420px)",
@@ -215,21 +232,21 @@ export default function AboutSection() {
                         boxShadow: "0 24px 64px oklch(0 0 0 / 0.5)",
                     }}
                 >
-                    {/* Photo 1 — placeholder */}
-                    <div style={{
-                        position: "absolute", inset: 0,
-                        background: "linear-gradient(135deg, oklch(0.25 0.12 210) 0%, oklch(0.15 0.18 240) 100%)",
-                    }} />
-                    {/* Photo 2 — hover placeholder */}
+                    {/* Photo 1 */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/assets/about/moi.webp" alt="Rafael" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+                    {/* Photo 2 — hover */}
                     <div
                         ref={photo2Ref}
                         style={{
                             position: "absolute", inset: 0,
                             clipPath: "inset(100% 0 0% 0)",
                             zIndex: 1,
-                            background: "linear-gradient(135deg, oklch(0.30 0.18 50) 0%, oklch(0.18 0.14 30) 100%)",
                         }}
-                    />
+                    >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="/assets/about/moi2.webp" alt="Rafael" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "63% center" }} />
+                    </div>
                     {/* Hint */}
                     <p className="font-fraunces" style={{
                         position: "absolute", bottom: 14, right: 16, zIndex: 2,
@@ -261,26 +278,13 @@ export default function AboutSection() {
                             filter: "drop-shadow(0 0 30px oklch(0.7 0.25 220 / 0.15))",
                         } as React.CSSProperties}
                     >
-                        À propos
+                        {t.title}
                     </h2>
                 </div>
 
                 {/* Bio reveal */}
                 <div className="about-bio" style={{ userSelect: "none", zIndex: 1 }}>
-                <p ref={bioRef} style={{ margin: 0 }}>
-                    <span className="bio-line-block" style={{ textAlign: "right" }}>
-                        <span className={DID} style={{ textAlign: "right" }} >Rafael Solis Ramos, </span>
-                        <span className={HN} style={{ fontSize: "0.75em" }}>développeur FullStack.</span>
-                    </span>
-                    <span className={`${HN} block`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>Je fusionne la logique <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>technique</span></span>
-                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>et la sensibilité <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>visuelle</span></span>
-                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>pour créer des <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>interfaces</span></span>
-                    <span className={`${DID} block`} style={{ paddingLeft:"5%"}}>qui ont quelque chose à dire.</span>
-                    <span className={`${HN} block bio-bold`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>Mon moteur ?</span>
-                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>Une <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>curiosité</span> insatiable</span>
-                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>et une obsessions pour <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>les détails</span></span>
-                    <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>qui font la <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>différence</span></span>
-                </p>
+                <BioParagraph key={lang} t={t} sectionRef={sectionRef} />
                 <div ref={lineRef} style={{
                     marginTop: 18,
                     height: 1,

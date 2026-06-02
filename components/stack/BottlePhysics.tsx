@@ -53,6 +53,7 @@ interface Props {
   disabled?: boolean;
   sticker?: { src: string; top: number; left: number; width: number };
   itemRadius?: number;
+  cursorOverride?: string;
 }
 
 const W = 552;
@@ -63,7 +64,7 @@ export default function BottlePhysics({
   bl = 120, br = 340, bt = 300, bb = 840,
   onShake, shakeThreshold = 6,
   clearAll = false, disabled = false,
-  sticker, itemRadius = 20,
+  sticker, itemRadius = 20, cursorOverride,
 }: Props) {
   const CW = br - bl;
   const CH = bb - bt;
@@ -266,7 +267,7 @@ export default function BottlePhysics({
         position:        'relative',
         width:            W,
         height:           H,
-        cursor:          'grab',
+        cursor:          cursorOverride ?? 'grab',
         userSelect:      'none',
         transformOrigin: 'center 72%',
         willChange:      'transform',

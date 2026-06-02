@@ -85,6 +85,7 @@ export default function LogoIntro() {
                             ham?.style.removeProperty("--ham-color");
                         }
                         if (menuLabel) menuLabel.style.color = labelColor();
+                        gsap.to(el, { filter: baseFilter(), duration: 0.4, ease: "power2.out" });
                     };
 
                     const labelColor = () => {
@@ -117,6 +118,7 @@ export default function LogoIntro() {
                     });
 
                     hz.addEventListener("mouseleave", () => {
+                        updateSection();
                         gsap.to(el, { scale: targetScale, filter: baseFilter(), duration: 0.5, ease: "power2.inOut" });
                         gsap.to(ham,                         { opacity: 0, duration: 0.3 });
                         gsap.to(hamburgerOverlayRef.current, { opacity: 0, duration: 0.4, ease: "power2.inOut" });
@@ -140,7 +142,11 @@ export default function LogoIntro() {
                             if (hz) hz.style.pointerEvents = "all";
                         }
                     };
-                    window.addEventListener("wheel", onWheel, { passive: true });
+                    window.addEventListener("wheel",  onWheel,        { passive: true });
+                    window.addEventListener("scroll", updateSection, { passive: true });
+                    window.addEventListener("section-navigate", () => {
+                        setTimeout(() => { updateSection(); }, 1100);
+                    });
                 },
             });
 
@@ -170,6 +176,7 @@ export default function LogoIntro() {
         <>
         <div
             ref={containerRef}
+            className="logo-nav-container"
             style={{
                 position:      "fixed",
                 top:           -80,
@@ -228,6 +235,7 @@ export default function LogoIntro() {
         {/* Zone de hover transparente */}
         <div
             ref={hoverZoneRef}
+            className="logo-nav-trigger"
             style={{
                 position: "fixed",
                 zIndex:   101,
@@ -244,7 +252,7 @@ export default function LogoIntro() {
         {/* Label Menu */}
         <span
             ref={menuLabelRef}
-            className="font-inter-tight"
+            className="font-inter-tight logo-nav-label"
             style={{
                 position:      "fixed",
                 zIndex:        101,

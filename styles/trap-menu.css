@@ -91,15 +91,17 @@
   top: 0;
   right: 0;
   width: 290px;
+  height: 100dvh;
   z-index: 50;
   clip-path: polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%);
   background: rgba(4, 10, 18, 0.90);
   backdrop-filter: blur(32px) saturate(1.5);
   -webkit-backdrop-filter: blur(32px) saturate(1.5);
-  border-bottom-left-radius: 14px;
   transform: translateY(-105%);
   transition: transform 0.44s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+  display: flex;
+  flex-direction: column;
 }
 .trap-panel.open {
   transform: translateY(0);
@@ -110,6 +112,8 @@
   padding: 150px 22px 28px 46px;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  justify-content: center;
 }
 
 /* ── Liens ── */
@@ -117,7 +121,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 0;
+  flex: 1;
+  padding: 0 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   text-decoration: none;
   opacity: 0;
@@ -142,12 +147,17 @@
   color: rgba(255, 255, 255, 0.75);
   transition: color 0.3s ease, filter 0.3s ease;
 }
+.tp-link:nth-child(5) .tp-name {
+  font-size: 24px;
+  color: oklch(0.88 0.18 55);
+  filter: drop-shadow(0 0 16px oklch(0.70 0.22 55 / 0.55));
+}
 /* Teinte par item */
 .tp-link:nth-child(1) { --h: 45;  }   /* Accueil  — orange    */
 .tp-link:nth-child(2) { --h: 205; }   /* À propos — cyan      */
 .tp-link:nth-child(3) { --h: 155; }   /* Stack    — vert      */
 .tp-link:nth-child(4) { --h: 285; }   /* Projets  — violet    */
-.tp-link:nth-child(5) { --h: 240; }   /* Contact  — bleu      */
+.tp-link:nth-child(5) { --h: 55; }   /* Contact  — ambre     */
 
 .tp-link:hover .tp-name {
   background-image: radial-gradient(
@@ -187,4 +197,67 @@
 .tp-link:hover .tp-arrow {
   color: rgba(255, 255, 255, 0.55);
   transform: translateX(2px);
+}
+
+/* ── Toggle langue ── */
+.tp-lang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 46px 16px;
+  opacity: 0;
+  transition: opacity 0.3s 0.58s;
+}
+.trap-panel.open .tp-lang { opacity: 1; }
+
+.tp-lang-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-inter-tight), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.28);
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.tp-lang-btn.active {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.08);
+}
+.tp-lang-btn:hover:not(.active) { color: rgba(255, 255, 255, 0.5); }
+.tp-lang-sep { color: rgba(255,255,255,0.15); font-size: 10px; }
+
+/* ── Boutons sociaux ── */
+.tp-socials {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 46px 32px;
+  opacity: 0;
+  transition: opacity 0.3s 0.6s;
+}
+.trap-panel.open .tp-socials { opacity: 1; }
+
+.tp-social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.5);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.tp-social-btn svg { width: 15px; height: 15px; }
+.tp-social-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  transform: translateY(-2px);
 }

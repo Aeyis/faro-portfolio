@@ -5,9 +5,9 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SECTION_HEIGHTS } from "@/lib/constants";
+import { useLang } from "@/lib/LanguageContext";
+import { T } from "@/lib/translations";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
-import dynamic from "next/dynamic";
-const FluidCursor = dynamic(() => import("@/components/about/FluidCursor"), { ssr: false, loading: () => null });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,13 +15,11 @@ const BG = "oklch(0.06 0.07 280)";
 
 const CHECKMATE_STACK = ["Angular 21", "TypeScript", "RxJS", "Express 5", "PostgreSQL", "Sequelize", "Docker"];
 
-const COMING_SOON = [
-    { label: "Application mobile" },
-    { label: "Dashboard analytics" },
-    { label: "API REST"            },
-];
+const COMING_SOON_KEYS = [0, 1, 2] as const;
 
 export default function ProjectsSection() {
+    const { lang } = useLang();
+    const t = T[lang].projects;
     const sectionRef    = useRef<HTMLElement>(null);
     const titleRef      = useRef<HTMLHeadingElement>(null);
     const floatRef      = useRef<HTMLDivElement>(null);
@@ -166,9 +164,7 @@ export default function ProjectsSection() {
         >
             <UnderwaterBackground variant="violet" />
 
-            <div style={{ position: "sticky", top: 0, height: "100vh", marginBottom: "-100vh", zIndex: 1 }}>
-                <FluidCursor variant="violet" />
-            </div>
+
 
             <div style={{
                 position: "absolute", top: 0, left: 0, right: 0, height: "28vh",
@@ -287,7 +283,7 @@ export default function ProjectsSection() {
                                     fontSize: 14, fontWeight: 300, fontStyle: "italic",
                                     color: "oklch(0.60 0.10 285)", margin: "7px 0 0",
                                 }}>
-                                    Gestion de tournois d'échecs — inscription, matchs, classements
+                                    {t.checkmateDesc}
                                 </p>
                             </div>
 
@@ -297,7 +293,7 @@ export default function ProjectsSection() {
                                 textTransform: "uppercase",
                                 color: "oklch(0.78 0.18 285)",
                             }}>
-                                Voir le projet →
+                                {t.seeProject}
                             </span>
                             <a
                                 href="https://github.com/Aeyis/Checkmate-labo-angular"
@@ -349,46 +345,46 @@ export default function ProjectsSection() {
 
             {/* ── Cartes À venir ── */}
             <div style={{
-                position: "absolute", top: 1400,
+                position: "absolute", top: 1380,
                 left: "50%", transform: "translateX(-50%)",
-                width: "min(920px, 88vw)",
-                display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18,
+                width: "min(1080px, 92vw)",
+                display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24,
                 zIndex: 5,
             }}>
-                {COMING_SOON.map((item, i) => (
+                {COMING_SOON_KEYS.map((_, i) => (
                     <div
                         key={i}
                         ref={el => { comingRefs.current[i] = el; }}
                         style={{
-                            borderRadius: 16,
-                            border:       "1px solid oklch(0.48 0.14 285 / 0.45)",
-                            background:   "oklch(0.09 0.07 280 / 0.90)",
-                            padding:      "36px 24px 32px",
-                            boxShadow:    "0 8px 32px oklch(0 0 0 / 0.4)",
+                            borderRadius: 20,
+                            border:       "1px solid oklch(0.52 0.18 285 / 0.55)",
+                            background:   "oklch(0.09 0.07 280 / 0.95)",
+                            padding:      "60px 32px 56px",
+                            boxShadow:    "0 12px 48px oklch(0 0 0 / 0.55), 0 0 40px oklch(0.4 0.18 285 / 0.08)",
                             display: "flex", flexDirection: "column",
-                            alignItems: "center", gap: 12, textAlign: "center",
+                            alignItems: "center", gap: 18, textAlign: "center",
                         }}
                     >
                         <div style={{
-                            width: 38, height: 38, borderRadius: "50%",
-                            border: "1px solid oklch(0.38 0.10 285 / 0.30)",
-                            background: "oklch(0.09 0.05 280)",
+                            width: 56, height: 56, borderRadius: "50%",
+                            border: "1px solid oklch(0.45 0.13 285 / 0.40)",
+                            background: "oklch(0.11 0.06 280)",
                             display: "flex", alignItems: "center", justifyContent: "center",
-                            color: "oklch(0.42 0.10 285)", fontSize: 16, letterSpacing: 2,
+                            color: "oklch(0.50 0.12 285)", fontSize: 20, letterSpacing: 3,
                         }}>
                             ···
                         </div>
                         <span className="font-inter-tight" style={{
-                            color: "oklch(0.50 0.09 285)", fontSize: 11,
-                            fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase",
+                            color: "oklch(0.58 0.12 285)", fontSize: 12,
+                            fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
                         }}>
-                            À venir
+                            {t.comingSoon}
                         </span>
                         <span className="font-fraunces" style={{
-                            color: "oklch(0.35 0.07 285)", fontSize: 14,
+                            color: "oklch(0.50 0.10 285)", fontSize: 18,
                             fontStyle: "italic", fontWeight: 300, lineHeight: 1.4,
                         }}>
-                            {item.label}
+                            {t.items[i]}
                         </span>
                     </div>
                 ))}

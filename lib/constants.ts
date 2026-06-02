@@ -16,9 +16,9 @@ export const SECTION_HEIGHTS = {
     hero: 2600,
     transition: 200,
     about: 4500,
-    stack: 3500,
-    projects: 2500,
-    contact: 900,
+    stack: 2800,
+    projects: 2000,
+    contact: 600,
 } as const;
 // --------------------------------------------------------- //
 // ----- VITESSE PARALLAX (0=fixe, 1= vitesse scroll) ------- //

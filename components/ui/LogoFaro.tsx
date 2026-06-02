@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
-export default function LogoFaro({ size = 140 }: { size?: number }) {
+export default function LogoFaro({ size = 140, onReady }: { size?: number; onReady?: () => void }) {
     const svgRef = useRef<SVGSVGElement>(null);
 
     useGSAP(() => {
@@ -30,6 +30,7 @@ export default function LogoFaro({ size = 140 }: { size?: number }) {
             duration: 0.7,
             ease: "back.out(5)",
             stagger: 0.14,
+            onComplete: () => onReady?.(),
         }, "-=0.4");
     }, { scope: svgRef });
 

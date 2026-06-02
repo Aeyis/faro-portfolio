@@ -5,8 +5,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SECTION_HEIGHTS } from "@/lib/constants";
-import dynamic from "next/dynamic";
-const FluidCursor = dynamic(() => import("@/components/about/FluidCursor"), { ssr: false, loading: () => null });
+import { useLang } from "@/lib/LanguageContext";
+import { T } from "@/lib/translations";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
 import Matter from "matter-js";
 import BottlePhysics, { getLogoFilter } from "@/components/stack/BottlePhysics";
@@ -52,7 +52,7 @@ const BOTTLES = [
         label:  "Frontend",
         items:  ["react","javascript","typescript","html5","css3","scss","angular","next_js","vite"].map(n => `${S}${n}.webp`),
         sticker: { src: "/assets/stickers/frontendStick.webp", top: 200, left: 195, width: 165 },
-        left:   "15%", right: "auto", top: 400, rotate: -22,
+        left:   "15%", right: "auto", top: 650, rotate: -22,
         bl: 198, br: 354, bt: 180, bb: 492,
     },
     {
@@ -60,7 +60,7 @@ const BOTTLES = [
         label:  "Backend",
         items:  ["node_js","express","nest_js","python","php","mongodb","mysql","postgresql"].map(n => `${S}${n}.webp`),
         sticker: { src: "/assets/stickers/backendSticker.webp", top: 230, left: 195, width: 165 },
-        left:   "auto", right: "15%", top: 850, rotate: 18,
+        left:   "auto", right: "15%", top: 1100, rotate: 18,
         bl: 198, br: 345, bt: 250, bb: 470,
     },
     {
@@ -68,7 +68,7 @@ const BOTTLES = [
         label:  "UI / UX",
         items:  ["figma","adobe_xd","illustrator","photoshop"].map(n => `${S}${n}.webp`),
         sticker: { src: "/assets/stickers/uiuxSticker.webp", top: 250, left: 199, width: 165 },
-        left:   "18%", right: "auto", top: 650, rotate: -28,
+        left:   "18%", right: "auto", top: 900, rotate: -28,
         bl: 186, br: 365, bt: 240, bb: 480,
     },
     {
@@ -76,7 +76,7 @@ const BOTTLES = [
         label:  "Autres",
         items:  ["github","wordpress","3ds_max"].map(n => `${S}${n}.webp`),
         sticker: { src: "/assets/stickers/other.webp", top: 200, left: 195, width: 165 },
-        left:   "auto", right: "12%", top: 1450, rotate: 15,
+        left:   "auto", right: "12%", top: 1700, rotate: 15,
         bl: 198, br: 354, bt: 192, bb: 504,
     },
 ];
@@ -226,8 +226,30 @@ function BottleModal({ bottle, onClose }: {
                     zIndex:         98,
                     background:     "oklch(0.03 0.04 155 / 0.90)",
                     backdropFilter: "blur(6px)",
+                    cursor:         `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='24'>🔨</text></svg>") 4 26, auto`,
                 }}
             />
+
+            {/* Bouton fermer */}
+            <button
+                onClick={onClose}
+                style={{
+                    position: "fixed",
+                    top: `calc(50vh - ${MODAL_H / 2}px + 64px)`,
+                    right: `calc(50vw - ${MODAL_W / 2}px + 16px)`,
+                    zIndex: 101,
+                    width: 36, height: 36, borderRadius: "50%",
+                    background: "oklch(0.12 0.06 155 / 0.8)",
+                    border: "1px solid oklch(0.45 0.14 155 / 0.4)",
+                    color: "oklch(0.75 0.18 155)", fontSize: 18, lineHeight: 1,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: "pointer", transition: "background 0.2s, color 0.2s",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.20 0.10 155 / 0.9)"; (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.12 0.06 155 / 0.8)"; (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.75 0.18 155)"; }}
+            >
+                ✕
+            </button>
 
             {/* Fenêtre */}
             <div
@@ -244,6 +266,7 @@ function BottleModal({ bottle, onClose }: {
                     borderRadius: 20,
                     overflow:     "hidden",
                     boxShadow:    "0 28px 72px oklch(0 0 0 / 0.55)",
+                    cursor:       `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='24'>🔨</text></svg>") 4 26, auto`,
                     display:      "flex",
                 }}
             >
@@ -331,6 +354,7 @@ function BottleModal({ bottle, onClose }: {
                             onShake={onClose}
                             clearAll={poured}
                             disabled={poured}
+                            cursorOverride={`url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='24'>🔨</text></svg>") 4 26, auto`}
                         />
                     </div>
 
@@ -348,7 +372,7 @@ function BottleModal({ bottle, onClose }: {
                             fontStyle:     "italic",
                             pointerEvents: "none",
                         }}>
-                            Touche la bouteille
+                            {t.touchBottle}
                         </p>
                     )}
                 </div>
@@ -366,6 +390,21 @@ function BottleModal({ bottle, onClose }: {
                     gap:                 "16px 10px",
                     alignContent:        "center",
                 }}>
+                    {!poured && (
+                        <div style={{
+                            gridColumn: "1 / -1",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            pointerEvents: "none",
+                        }}>
+                            <span className="font-fraunces" style={{
+                                fontStyle: "italic", fontWeight: 300,
+                                fontSize: 22, color: "oklch(0.55 0.14 155 / 0.7)",
+                                textAlign: "center", lineHeight: 1.4,
+                            }}>
+                                {t.breakIce}
+                            </span>
+                        </div>
+                    )}
                     {bottle.items.map((item, idx) => (
                         <div
                             key={idx}
@@ -456,12 +495,23 @@ function BottleModal({ bottle, onClose }: {
 gsap.registerPlugin(ScrollTrigger);
 
 export default function StackSection() {
+    const { lang } = useLang();
+    const t = T[lang].stack;
     const sectionRef     = useRef<HTMLElement>(null);
     const titleRef       = useRef<HTMLHeadingElement>(null);
     const floatRef       = useRef<HTMLDivElement>(null);
     const bottleRefs     = useRef<(HTMLDivElement | null)[]>([]);
     const floatInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [focusedBottle, setFocusedBottle] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (focusedBottle !== null) {
+            document.body.classList.add("bottle-modal-open");
+        } else {
+            document.body.classList.remove("bottle-modal-open");
+        }
+        return () => document.body.classList.remove("bottle-modal-open");
+    }, [focusedBottle]);
 
     useGSAP(() => {
         const el = titleRef.current;
@@ -563,9 +613,6 @@ export default function StackSection() {
         >
             <UnderwaterBackground variant="green" />
 
-            <div style={{ position: "sticky", top: 0, height: "100vh", marginBottom: "-100vh", zIndex: 1 }}>
-                <FluidCursor variant="green" />
-            </div>
 
             <div style={{ position: "sticky", top: 0, height: "100vh", zIndex: 10, pointerEvents: "none" }}>
                 <div ref={floatRef} style={{ position: "absolute", top: "80px", left: "40px", right: "40px" }}>
@@ -595,6 +642,20 @@ export default function StackSection() {
                         Stacks
                     </h2>
                 </div>
+            </div>
+
+            <div style={{
+                position: "absolute", top: 1500, left: "50%", transform: "translateX(-50%)",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+                zIndex: 3, pointerEvents: "none",
+            }}>
+                <span className="stack-shake-hint" style={{ fontSize: 48 }}>🫙</span>
+                <span className="font-inter-tight" style={{
+                    fontSize: 22, fontWeight: 900, letterSpacing: "0.22em", textTransform: "uppercase",
+                    backgroundImage: "radial-gradient(in oklch circle at 50% 50%, oklch(0.95 0.15 155) 0%, oklch(0.75 0.28 155) 50%, oklch(0.40 0.22 155) 100%)",
+                    backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent",
+                    filter: "drop-shadow(0 0 18px oklch(0.7 0.28 155 / 0.35))",
+                }}>{t.shake}</span>
             </div>
 
             {BOTTLES.map((b, i) => (
