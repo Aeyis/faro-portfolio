@@ -87,7 +87,7 @@ export const T = {
         },
         stack: {
             shake:       "Shake",
-            breakIce:    "Break the ice",
+            breakIce:    "Break the glass",
             touchBottle: "Touch the bottle",
         },
         projects: {

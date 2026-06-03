@@ -243,7 +243,6 @@ export default function ProjectsSection() {
                             <video
                                 autoPlay muted loop playsInline
                                 disablePictureInPicture
-                                // @ts-expect-error disableRemotePlayback not in types
                                 disableRemotePlayback
                                 controlsList="nodownload nofullscreen noremoteplayback"
                                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}

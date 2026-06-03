@@ -4,6 +4,7 @@ import "./globals.css";
 import LenisProvider from "@/components/ui/LenisProvider";
 import LogoIntro from "@/components/ui/LogoIntro";
 import TrapMenu from "@/components/ui/TrapMenu";
+import MobileMenu from "@/components/ui/MobileMenu";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import { Syne, Inter_Tight, Fraunces, Cormorant_Garamond, DM_Sans, JetBrains_Mono } from "next/font/google";
@@ -27,8 +28,12 @@ export default function RootLayout(
 }>) {
     return (
         <html lang="fr" className={`${syne.variable} ${interTight.variable} ${fraunces.variable} ${cormorantGaramond.variable} ${blacksword.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
+        <head>
+            <link rel="preload" as="image" href="/assets/hero/faro.webp" type="image/webp" />
+        </head>
         <body>
             <LoadingScreen />
+            <MobileMenu />
             <LanguageProvider>
                 <LogoIntro />
                 <TrapMenu />

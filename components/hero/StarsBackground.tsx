@@ -18,9 +18,11 @@ export default function StarsBackground() {
     canvas.width  = W;
     canvas.height = H;
 
+    const ZONE = H * 0.72;
+
     const stars: Star[] = Array.from({ length: 700 }, () => ({
       x:     Math.random() * W,
-      y:     Math.random() * H,
+      y:     Math.random() * ZONE,
       r:     Math.random() * 1.2 + 0.5,
       alpha: Math.random() * 0.4 + 0.4,
       phase: Math.random() * Math.PI * 2,
@@ -39,7 +41,7 @@ export default function StarsBackground() {
 
       ctx.clearRect(0, 0, W, H);
       for (const s of stars) {
-        const y       = ((s.y - offset) % H + H) % H;
+        const y       = ((s.y - offset) % ZONE + ZONE) % ZONE;
         const twinkle = s.alpha + Math.sin(now * 0.001 * s.speed + s.phase) * 0.25;
         ctx.beginPath();
         ctx.arc(s.x, y, s.r, 0, Math.PI * 2);

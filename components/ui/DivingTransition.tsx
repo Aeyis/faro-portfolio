@@ -146,7 +146,7 @@ function loop() {
             lastScrollY = scrollY;
             scrollVel   = scrollVel * 0.75 + dy * 0.25;
 
-            const rect     = section.getBoundingClientRect();
+            const rect     = section!.getBoundingClientRect();
             const progress = Math.max(0, Math.min(1, -rect.top / (rect.height || 1)));
 
             ctx.clearRect(0, 0, W, H);

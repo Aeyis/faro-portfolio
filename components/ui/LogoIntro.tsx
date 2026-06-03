@@ -188,7 +188,7 @@ export default function LogoIntro() {
         <>
         <div
             ref={containerRef}
-            className="logo-nav-container"
+            className="logo-nav-container hidden md:block"
             style={{
                 position:      "fixed",
                 top:           -80,
@@ -244,10 +244,10 @@ export default function LogoIntro() {
             </p>
         </div>
 
-        {/* Zone de hover transparente */}
+        {/* Zone de hover transparente — desktop uniquement */}
         <div
             ref={hoverZoneRef}
-            className="logo-nav-trigger"
+            className="logo-nav-trigger hidden md:block"
             style={{
                 position: "fixed",
                 zIndex:   101,
@@ -261,10 +261,10 @@ export default function LogoIntro() {
             }}
         />
 
-        {/* Label Menu */}
+        {/* Label Menu — desktop uniquement */}
         <span
             ref={menuLabelRef}
-            className="font-inter-tight logo-nav-label"
+            className="font-inter-tight logo-nav-label hidden md:block"
             style={{
                 position:      "fixed",
                 zIndex:        101,
@@ -282,10 +282,10 @@ export default function LogoIntro() {
             Menu
         </span>
 
-        {/* Ham4 */}
+        {/* Ham4 — desktop uniquement */}
         <svg
             ref={hamBtnRef}
-            className="ham-btn ham4"
+            className="ham-btn ham4 hidden md:block"
             viewBox="0 0 100 100"
             width={47}
             height={47}

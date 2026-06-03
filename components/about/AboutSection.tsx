@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 const HN  = "bio-roboto";
 const DID = "bio-meie";
 
-function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"]; sectionRef: React.RefObject<HTMLElement | null> }) {
+function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T["en"]["about"]; sectionRef: React.RefObject<HTMLElement | null> }) {
     const bioRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {

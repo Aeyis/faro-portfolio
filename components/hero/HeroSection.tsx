@@ -152,7 +152,7 @@ export default function HeroSection() {
         {/* COUCHE 2 — Nuages de fond */}
         <div ref={bgCloud1Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud1), left: 0, zIndex: -2 }}>
           <div className="cloud-drift-1" style={{ position: "absolute", inset: 0 }}>
-            <Image src="/assets/hero/background_cloud_1.webp" alt="" fill sizes="100vw" style={{ objectFit: "contain" }} />
+            <Image src="/assets/hero/background_cloud_1.webp" alt="" fill priority sizes="100vw" style={{ objectFit: "contain" }} />
           </div>
         </div>
         <div ref={bgCloud2Ref} style={{ ...figmaToCSS(HERO_LAYERS.backgroundCloud2), left: 0, zIndex: -3 }}>

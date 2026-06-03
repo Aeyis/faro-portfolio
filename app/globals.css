@@ -191,6 +191,10 @@ CONTACT — hover boutons
 /*---------------------------------------------------------
 VARIABLES
 ---------------------------------------------------------*/
+/* ── Menu mobile ── */
+.mobile-menu-btn { display: block; }
+@media (min-width: 768px) { .mobile-menu-btn { display: none !important; } }
+
 :root {
   --sky-top: #0a072d;
   --sky-horizon: #c45c1a;
