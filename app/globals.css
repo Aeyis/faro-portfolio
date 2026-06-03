@@ -192,8 +192,9 @@ CONTACT — hover boutons
 VARIABLES
 ---------------------------------------------------------*/
 /* ── Menu mobile ── */
-.mobile-menu-btn { display: block; }
+.mobile-menu-btn { display: flex !important; flex-direction: column; align-items: center; gap: 4px; }
 @media (min-width: 768px) { .mobile-menu-btn { display: none !important; } }
+
 
 :root {
   --sky-top: #0a072d;
@@ -337,6 +338,14 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: clip;
   width: 100vw;
+}
+
+/* Bloque le scroll horizontal uniquement sur mobile (n'affecte pas le desktop) */
+@media (max-width: 767px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
 }
 
 /*---------------------------------------------------------

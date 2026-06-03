@@ -326,7 +326,7 @@ export default function BubbleCanvas({
 
       if (!wave) autoEmit()
 
-      /* Dépiler 20 bulles max par frame depuis la queue */
+      /* 20 bulles max par frame depuis la queue */
       let spawned = 0
       while (spawnQueue.length > 0 && spawned < 20) {
         spawnQueue.shift()!()

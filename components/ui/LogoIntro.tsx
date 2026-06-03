@@ -276,7 +276,6 @@ export default function LogoIntro() {
                 color:         "oklch(0.85 0.18 155)",
                 textAlign:     "center",
                 textTransform: "uppercase",
-                display:       "block",
             }}
         >
             Menu

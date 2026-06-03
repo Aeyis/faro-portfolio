@@ -83,7 +83,7 @@ export default function HeroSectionMobile() {
         <section
             ref={sectionRef}
             id="hero"
-            style={{ height: SECTION_HEIGHTS.hero, position: "relative" }}
+            style={{ height: SECTION_HEIGHTS.hero, position: "relative", overflow: "hidden", maxWidth: "100vw" }}
         >
             <div className="sticky top-0 w-full h-screen overflow-hidden" style={{ zIndex: 0, background: `
                 radial-gradient(ellipse 40% 80% at 0% 40%, rgba(10, 15, 30, 0.6) 0%, transparent 100%),
