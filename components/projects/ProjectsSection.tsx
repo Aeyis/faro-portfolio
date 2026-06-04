@@ -15,7 +15,7 @@ const BG = "oklch(0.06 0.07 280)";
 
 const CHECKMATE_STACK = ["Angular 21", "TypeScript", "RxJS", "Express 5", "PostgreSQL", "Sequelize", "Docker"];
 
-const COMING_SOON_KEYS = [0, 1, 2] as const;
+const COMING_SOON_KEYS = [0] as const;
 
 export default function ProjectsSection() {
     const { lang } = useLang();
@@ -88,11 +88,12 @@ export default function ProjectsSection() {
             }
         );
 
+        if (window.innerWidth < 768) gsap.set(el, { transformOrigin: "top center" });
         gsap.to(el, {
             scale:           () => window.innerWidth < 768 ? 0.55 : 0.40,
-            x:               () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
-            y:               () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
-            transformOrigin: "top left",
+            x: () => window.innerWidth < 768 ? 0 : 40 - el.offsetLeft,
+            y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
+            transformOrigin: window.innerWidth < 768 ? "top center" : "top left",
             ease:            "none",
             scrollTrigger: {
                 trigger: sectionRef.current, start: "top top", end: "+=400",
@@ -206,6 +207,7 @@ export default function ProjectsSection() {
             {/* ── Carte Checkmate ── */}
             <div
                 ref={cardWrapRef}
+                className="checkmate-wrap"
                 style={{
                     position: "absolute", top: 780,
                     left: "50%", transform: "translateX(-50%)",
@@ -232,7 +234,7 @@ export default function ProjectsSection() {
                     }} />
 
                     {/* Screenshot */}
-                    <div style={{ height: 340, overflow: "hidden", position: "relative", background: "oklch(0.08 0.06 280)" }}>
+                    <div className="checkmate-video" style={{ height: 340, overflow: "hidden", position: "relative", background: "oklch(0.08 0.06 280)" }}>
                         <div
                             ref={screenshotRef}
                             style={{
@@ -269,8 +271,8 @@ export default function ProjectsSection() {
                     </div>
 
                     {/* Infos */}
-                    <div style={{ background: "oklch(0.08 0.07 280)", padding: "28px 36px 32px" }}>
-                        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
+                    <div className="checkmate-info" style={{ background: "oklch(0.08 0.07 280)", padding: "28px 36px 32px" }}>
+                        <div className="checkmate-header" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
                             <div>
                                 <h3 className="font-inter-tight" style={{
                                     fontSize: 34, fontWeight: 900, letterSpacing: "-0.04em",
@@ -286,8 +288,8 @@ export default function ProjectsSection() {
                                 </p>
                             </div>
 
-                            <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end" }}>
-                            <span className="font-inter-tight" style={{
+                            <div className="checkmate-cta" style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end" }}>
+                            <span className="checkmate-see font-inter-tight" style={{
                                 fontSize: 12, fontWeight: 700, letterSpacing: "0.06em",
                                 textTransform: "uppercase",
                                 color: "oklch(0.78 0.18 285)",
@@ -298,7 +300,7 @@ export default function ProjectsSection() {
                                 href="https://github.com/Aeyis/Checkmate-labo-angular"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-inter-tight"
+                                className="checkmate-github font-inter-tight"
                                 style={{
                                     display: "flex", alignItems: "center", gap: 7,
                                     padding: "9px 18px", borderRadius: 10,
@@ -325,7 +327,7 @@ export default function ProjectsSection() {
                             </div>
                         </div>
 
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                        <div className="checkmate-tags" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                             {CHECKMATE_STACK.map(tech => (
                                 <span key={tech} className="font-inter-tight" style={{
                                     padding: "4px 12px", borderRadius: 100,
@@ -343,7 +345,7 @@ export default function ProjectsSection() {
             </div>
 
             {/* ── Cartes À venir ── */}
-            <div style={{
+            <div className="checkmate-coming" style={{
                 position: "absolute", top: 1380,
                 left: "50%", transform: "translateX(-50%)",
                 width: "min(1080px, 92vw)",
@@ -379,12 +381,7 @@ export default function ProjectsSection() {
                         }}>
                             {t.comingSoon}
                         </span>
-                        <span className="font-fraunces" style={{
-                            color: "oklch(0.50 0.10 285)", fontSize: 18,
-                            fontStyle: "italic", fontWeight: 300, lineHeight: 1.4,
-                        }}>
-                            {t.items[i]}
-                        </span>
+                        {/* Nom du projet masqué — carte générique "À venir" */}
                     </div>
                 ))}
             </div>

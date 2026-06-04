@@ -23,6 +23,7 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
         const bio = bioRef.current;
         const sectionEl = sectionRef.current;
         if (!bio || !sectionEl) return;
+
         const split = new SplitType(bio, { types: "chars,words" });
         split.chars?.forEach(char => {
             let el: HTMLElement | null = char.parentElement;
@@ -34,7 +35,7 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
         });
         const st = ScrollTrigger.create({
             trigger: sectionEl,
-            start: "top+=420 top",
+            start: window.innerWidth < 768 ? "top+=900 top" : "top+=420 top",
             end: () => `+=${window.innerHeight * 3.5}`,
             scrub: true,
             animation: gsap.from(split.chars, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
@@ -44,7 +45,7 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
 
     return (
         <p ref={bioRef} style={{ margin: 0 }}>
-            <span className="bio-line-block" style={{ textAlign: "right" }}>
+            <span className="bio-line-block about-name-line" style={{ textAlign: "right" }}>
                 <span className={`${HN} bio-bold`} style={{ textAlign: "right" }}>Rafael Solis Ramos, </span>
                 <span className={DID} style={{ fontSize: "0.95em", marginLeft: "0.3em" }}>{t.role}</span>
             </span>
@@ -95,14 +96,14 @@ export default function AboutSection() {
         // ── Titre → coin haut-gauche ──
         gsap.to(el, {
             scale: () => window.innerWidth < 768 ? 0.55 : 0.40,
-            x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
+            x: () => window.innerWidth < 768 ? 0 : 40 - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
-            transformOrigin: "top left",
+            transformOrigin: window.innerWidth < 768 ? "top center" : "top left",
             ease: "none",
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top top",
-                end: "+=400",
+                end: () => window.innerWidth < 768 ? "+=800" : "+=400",
                 scrub: 0.4,
                 invalidateOnRefresh: true,
                 onLeave:     () => window.dispatchEvent(new Event("about-stuck")),
@@ -216,6 +217,7 @@ export default function AboutSection() {
                 {/* Photo droite */}
                 <div
                     ref={photoWrapRef}
+                    className="about-photo-wrap"
                     style={{
                         position: "absolute",
                         right: "16vw",
@@ -245,7 +247,7 @@ export default function AboutSection() {
                         }}
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/assets/about/moi2.webp" alt="Rafael" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "63% center" }} />
+                        <img src="/assets/about/moi2.webp" alt="Rafael" className="about-photo2" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "63% center" }} />
                     </div>
                     {/* Hint */}
                     <p className="font-fraunces" style={{

@@ -71,8 +71,9 @@ export default function BottlePhysics({
 
   const sceneRef    = useRef<HTMLDivElement>(null);
   const canvasRef   = useRef<HTMLCanvasElement>(null);
-  const grabbed     = useRef(false);
-  const prevPos     = useRef({ x: 0, y: 0 });
+  const grabbed       = useRef(false);
+  const prevPos       = useRef({ x: 0, y: 0 });
+  const touchStartPos = useRef({ x: 0, y: 0 });
   const curTilt     = useRef(0);
   const curTiltY    = useRef(0);
   const rafId       = useRef<number | null>(null);
@@ -172,11 +173,11 @@ export default function BottlePhysics({
       if (disabledRef.current) return;
       grabbed.current    = true;
       prevPos.current    = getPos(e);
+      if ('touches' in e) touchStartPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
       lastDir.current    = 0;
       shakeCount.current = 0;
       lastShakeT.current = Date.now();
       if (rafId.current) { cancelAnimationFrame(rafId.current); rafId.current = null; }
-      e.preventDefault();
     };
 
     const onMove = (e: MouseEvent | TouchEvent) => {
@@ -214,7 +215,8 @@ export default function BottlePhysics({
       curTiltY.current = curTiltY.current * 0.6 + Math.max(-30, Math.min(30, dy * 1.2)) * 0.4;
       scene.style.rotate    = `${curTilt.current}deg`;
       scene.style.transform = `translateY(${curTiltY.current}px)`;
-      e.preventDefault();
+      /* Bloquer le default seulement si mouvement horizontal dominant (secousse) */
+      if (Math.abs(dx) > Math.abs(dy)) e.preventDefault();
     };
 
     const onEnd = () => {
@@ -238,12 +240,22 @@ export default function BottlePhysics({
       rafId.current = requestAnimationFrame(spring);
     };
 
+    /* Détection tap mobile : si le doigt n'a pas bougé → ouvre directement */
+    const onTouchEnd = (e: TouchEvent) => {
+      if (grabbed.current && window.innerWidth < 768) {
+        const dx = Math.abs(e.changedTouches[0].clientX - touchStartPos.current.x);
+        const dy = Math.abs(e.changedTouches[0].clientY - touchStartPos.current.y);
+        if (dx < 12 && dy < 12) { onShakeRef.current?.(); }
+      }
+      onEnd();
+    };
+
     scene.addEventListener('mousedown',  onStart as EventListener);
     window.addEventListener('mousemove', onMove  as EventListener);
     window.addEventListener('mouseup',   onEnd);
-    scene.addEventListener('touchstart', onStart as EventListener, { passive: false });
+    scene.addEventListener('touchstart', onStart as EventListener, { passive: true });
     window.addEventListener('touchmove', onMove  as EventListener, { passive: false });
-    window.addEventListener('touchend',  onEnd);
+    window.addEventListener('touchend',  onTouchEnd as EventListener);
 
     return () => {
       scene.removeEventListener('mousedown',  onStart as EventListener);
@@ -251,7 +263,7 @@ export default function BottlePhysics({
       window.removeEventListener('mouseup',   onEnd);
       scene.removeEventListener('touchstart', onStart as EventListener);
       window.removeEventListener('touchmove', onMove  as EventListener);
-      window.removeEventListener('touchend',  onEnd);
+      window.removeEventListener('touchend',  onTouchEnd as EventListener);
       if (rafId.current) cancelAnimationFrame(rafId.current);
       World.clear(engine.world, false);
       Engine.clear(engine);

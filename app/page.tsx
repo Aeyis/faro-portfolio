@@ -9,7 +9,7 @@ export default function Home() {
     return (
         <main>
             <HeroSectionResponsive />
-            <section id="transition" style={{ height: SECTION_HEIGHTS.transition, marginTop: "-10vh" }} />
+            <section id="transition" className="hero-transition" style={{ height: SECTION_HEIGHTS.transition }} />
 
             <AboutSection />
             <StackSection />

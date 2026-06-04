@@ -30,6 +30,12 @@ export default function RootLayout(
         <html lang="fr" className={`${syne.variable} ${interTight.variable} ${fraunces.variable} ${cormorantGaramond.variable} ${blacksword.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
         <head>
             <link rel="preload" as="image" href="/assets/hero/faro.webp" type="image/webp" />
+            {/* Force scroll=0 avant tout rendu — empêche la restauration du navigateur */}
+            <script dangerouslySetInnerHTML={{ __html: `
+                if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+            `}} />
         </head>
         <body>
             <LoadingScreen />

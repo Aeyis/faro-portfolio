@@ -33,7 +33,7 @@ export const T = {
         },
         projects: {
             comingSoon: "À venir",
-            items: ["Application mobile", "Dashboard analytics", "API REST"],
+            items: ["API REST"],
             checkmateDesc: "Gestion de tournois d'échecs — inscription, matchs, classements",
             seeProject: "Voir le projet →",
         },
@@ -92,7 +92,7 @@ export const T = {
         },
         projects: {
             comingSoon: "Coming soon",
-            items: ["Mobile app", "Analytics dashboard", "REST API"],
+            items: ["REST API"],
             checkmateDesc: "Chess tournament manager — registration, matches, rankings",
             seeProject: "View project →",
         },

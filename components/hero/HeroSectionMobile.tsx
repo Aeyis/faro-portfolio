@@ -83,9 +83,9 @@ export default function HeroSectionMobile() {
         <section
             ref={sectionRef}
             id="hero"
-            style={{ height: SECTION_HEIGHTS.hero, position: "relative", overflow: "hidden", maxWidth: "100vw" }}
+            style={{ height: SECTION_HEIGHTS.hero, position: "relative" }}
         >
-            <div className="sticky top-0 w-full h-screen overflow-hidden" style={{ zIndex: 0, background: `
+            <div className="sticky top-0 w-full overflow-hidden" style={{ height: "115vh", zIndex: 20, background: `
                 radial-gradient(ellipse 40% 80% at 0% 40%, rgba(10, 15, 30, 0.6) 0%, transparent 100%),
                 radial-gradient(ellipse 60% 20% at 18% 72%, rgba(220, 140, 40, 0.5) 0%, transparent 70%),
                 radial-gradient(ellipse 90% 30% at 50% 76%, rgba(196, 92, 26, 0.6) 0%, transparent 65%),
@@ -104,7 +104,7 @@ export default function HeroSectionMobile() {
                 <div ref={faroRef} style={{
                     position: "absolute",
                     left: "2.5vw",
-                    top: "21vh",
+                    top: "5vh",
                     width: "49vw",
                     height: "71vh",
                     zIndex: 6,
@@ -116,9 +116,9 @@ export default function HeroSectionMobile() {
                 <div ref={seaRef} style={{
                     position: "absolute",
                     left: "-320vw",
-                    top: "0vh",
+                    top: "22vh",
                     width: "652vw",
-                    height: "100vh",
+                    height: "65vh",
                     zIndex: 5,
                 }}>
                     <div className="sea-sway" style={{ position: "absolute", inset: 0 }}>
@@ -130,7 +130,7 @@ export default function HeroSectionMobile() {
                 <div ref={groundRef} style={{
                     position: "absolute",
                     left: 0,
-                    top: "27vh",
+                    top: "11vh",
                     width: "282vw",
                     height: "83vh",
                     zIndex: 7,
@@ -142,7 +142,7 @@ export default function HeroSectionMobile() {
                 <div ref={cloud1Ref} style={{
                     position: "absolute",
                     left: "-190vw",
-                    top: "-56vh",
+                    top: "-60vh",
                     width: "550vw",
                     height: "174vh",
                     zIndex: 4,
@@ -156,8 +156,8 @@ export default function HeroSectionMobile() {
                 <div ref={cloud2Ref} style={{
                     position: "absolute",
                     left: "-160vw",
-                    top: "-29vh",
-                    width: "460vw",
+                    top: "-35vh",
+                    width: "450vw",
                     height: "140vh",
                     zIndex: 3,
                 }}>
@@ -169,8 +169,8 @@ export default function HeroSectionMobile() {
                 {/* Cloud 3 */}
                 <div ref={cloud3Ref} style={{
                     position: "absolute",
-                    left: "-160vw",
-                    top: "-32vh",
+                    left: "-140vw",
+                    top: "-39vh",
                     width: "460vw",
                     height: "140vh",
                     zIndex: 2,
@@ -183,8 +183,8 @@ export default function HeroSectionMobile() {
                 {/* Cloud 4 */}
                 <div ref={cloud4Ref} style={{
                     position: "absolute",
-                    left: "-135vw",
-                    top: "-38vh",
+                    left: "-80vw",
+                    top: "-45vh",
                     width: "550vw",
                     height: "174vh",
                     zIndex: 1,
@@ -198,7 +198,7 @@ export default function HeroSectionMobile() {
                 <div ref={treesRef} style={{
                     position: "absolute",
                     left: "-179vw",
-                    top: "105vh",
+                    top: "83vh",
                     width: "513vw",
                     height: "83vh",
                     zIndex: 8,

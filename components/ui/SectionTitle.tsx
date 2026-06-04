@@ -39,9 +39,9 @@ export default function SectionTitle({ sectionRef, hue, eventPrefix, children }:
 
         gsap.to(el, {
             scale: () => window.innerWidth < 768 ? 0.55 : 0.40,
-            x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
+            x: () => window.innerWidth < 768 ? 0 : 40 - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
-            transformOrigin: "top left",
+            transformOrigin: window.innerWidth < 768 ? "top center" : "top left",
             ease: "none",
             scrollTrigger: {
                 trigger: sectionRef.current,

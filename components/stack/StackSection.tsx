@@ -120,12 +120,34 @@ function BottleModal({ bottle, onClose }: {
 }) {
     const { lang } = useLang();
     const t = T[lang].stack;
-    const cardRef   = useRef<HTMLDivElement>(null);
-    const bottleRef = useRef<HTMLDivElement>(null);
-    const pieceRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const iconImgRefs = useRef<(HTMLImageElement | null)[]>([]);
-    const nameRefs   = useRef<(HTMLSpanElement | null)[]>([]);
+    const cardRef      = useRef<HTMLDivElement>(null);
+    const bottleRef    = useRef<HTMLDivElement>(null);
+    const closeRef     = useRef<HTMLButtonElement>(null);
+    const pieceRefs    = useRef<(HTMLDivElement | null)[]>([]);
+    const iconImgRefs  = useRef<(HTMLImageElement | null)[]>([]);
+    const nameRefs     = useRef<(HTMLSpanElement | null)[]>([]);
+    const [isMobileModal, setIsMobileModal] = useState(false);
     const [poured, setPoured] = useState(false);
+
+    useEffect(() => {
+        const mob = window.innerWidth < 768;
+        setIsMobileModal(mob);
+        if (mob) setPoured(true);
+
+        /* Force la position du bouton fermer sur mobile */
+        if (mob && closeRef.current) {
+            const btn = closeRef.current;
+            btn.style.setProperty('top',       'auto',              'important');
+            btn.style.setProperty('bottom',    '24px',              'important');
+            btn.style.setProperty('right',     '50%',               'important');
+            btn.style.setProperty('transform', 'translateX(50%)',   'important');
+            btn.style.setProperty('width',     '60px',              'important');
+            btn.style.setProperty('height',    '60px',              'important');
+            btn.style.setProperty('font-size', '26px',              'important');
+            btn.style.setProperty('background','oklch(0.22 0.12 155 / 0.98)', 'important');
+            btn.style.setProperty('border',    '2px solid oklch(0.60 0.20 155 / 0.8)', 'important');
+        }
+    }, []);
 
     /* animation d'entrée de la carte */
     useEffect(() => {
@@ -137,9 +159,38 @@ function BottleModal({ bottle, onClose }: {
         }
     }, []);
 
+    /* swipe vertical pour fermer sur mobile */
+    useEffect(() => {
+        if (window.innerWidth >= 768) return;
+        let startY = 0;
+        const onTS = (e: TouchEvent) => { startY = e.touches[0].clientY; };
+        const onTE = (e: TouchEvent) => {
+            const dy = Math.abs(e.changedTouches[0].clientY - startY);
+            if (dy > 80) onClose();
+        };
+        window.addEventListener('touchstart', onTS, { passive: true });
+        window.addEventListener('touchend',   onTE, { passive: true });
+        return () => {
+            window.removeEventListener('touchstart', onTS);
+            window.removeEventListener('touchend',   onTE);
+        };
+    }, []);
+
     /* quand on touche la bouteille : bris de verre + logos qui sortent */
     useEffect(() => {
         if (!poured) return;
+
+        /* Sur mobile : pas de bris de verre, logos apparaissent directement */
+        if (window.innerWidth < 768) {
+            if (bottleRef.current) bottleRef.current.style.opacity = '0';
+            bottle.items.forEach((_, idx) => {
+                const img  = iconImgRefs.current[idx];
+                const name = nameRefs.current[idx];
+                if (img)  gsap.set(img,  { opacity: 1, x: 0, scale: 1 });
+                if (name) gsap.set(name, { opacity: 1, y: 0 });
+            });
+            return;
+        }
 
         /* 1 — bouteille disparaît instantanément (aucun flash) */
         if (bottleRef.current) bottleRef.current.style.opacity = '0';
@@ -232,23 +283,31 @@ function BottleModal({ bottle, onClose }: {
                 }}
             />
 
-            {/* Bouton fermer */}
+            {/* Bouton fermer — mobile-first : bas centre, desktop override via CSS */}
             <button
+                ref={closeRef}
                 onClick={onClose}
+                className="bottle-modal-close"
                 style={{
-                    position: "fixed",
-                    top: `calc(50vh - ${MODAL_H / 2}px + 64px)`,
-                    right: `calc(50vw - ${MODAL_W / 2}px + 16px)`,
-                    zIndex: 101,
-                    width: 36, height: 36, borderRadius: "50%",
-                    background: "oklch(0.12 0.06 155 / 0.8)",
-                    border: "1px solid oklch(0.45 0.14 155 / 0.4)",
-                    color: "oklch(0.75 0.18 155)", fontSize: 18, lineHeight: 1,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: "pointer", transition: "background 0.2s, color 0.2s",
+                    position:     "fixed",
+                    bottom:       24,
+                    left:         "50%",
+                    transform:    "translateX(-50%)",
+                    zIndex:       101,
+                    width:        60,
+                    height:       60,
+                    borderRadius: "50%",
+                    background:   "oklch(0.22 0.12 155 / 0.98)",
+                    border:       "2px solid oklch(0.60 0.20 155 / 0.8)",
+                    boxShadow:    "0 4px 24px oklch(0 0 0 / 0.4)",
+                    color:        "oklch(0.90 0.18 155)",
+                    fontSize:     26,
+                    lineHeight:   1,
+                    display:      "flex", alignItems: "center", justifyContent: "center",
+                    cursor:       "pointer", transition: "background 0.2s, color 0.2s",
                 }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.20 0.10 155 / 0.9)"; (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.12 0.06 155 / 0.8)"; (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.75 0.18 155)"; }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.30 0.14 155 / 0.98)"; (e.currentTarget as HTMLButtonElement).style.color = "#fff"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = isMobileModal ? "oklch(0.22 0.12 155 / 0.98)" : "oklch(0.12 0.06 155 / 0.8)"; (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.90 0.18 155)"; }}
             >
                 ✕
             </button>
@@ -256,6 +315,7 @@ function BottleModal({ bottle, onClose }: {
             {/* Fenêtre */}
             <div
                 ref={cardRef}
+                className="bottle-modal-card"
                 style={{
                     position:     "fixed",
                     inset:        0,
@@ -327,6 +387,7 @@ function BottleModal({ bottle, onClose }: {
                 {/* ── Colonne gauche : bouteille cliquable ── */}
                 <div
                     onClick={handlePour}
+                    className="bottle-modal-left"
                     style={{
                         position:  "relative",
                         width:      BOTTLE_COL_W,
@@ -380,7 +441,7 @@ function BottleModal({ bottle, onClose }: {
                 </div>
 
                 {/* ── Colonne droite ── */}
-                <div style={{
+                <div className="bottle-modal-right" style={{
                     flex:                1,
                     position:            "relative",
                     zIndex:              1,
@@ -533,11 +594,12 @@ export default function StackSection() {
             }
         );
 
+        if (window.innerWidth < 768) gsap.set(el, { transformOrigin: "top center" });
         gsap.to(el, {
             scale: () => window.innerWidth < 768 ? 0.55 : 0.40,
-            x: () => (window.innerWidth < 768 ? 24 : 40) - el.offsetLeft,
+            x: () => window.innerWidth < 768 ? 0 : 40 - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
-            transformOrigin: "top left",
+            transformOrigin: window.innerWidth < 768 ? "top center" : "top left",
             ease: "none",
             scrollTrigger: {
                 trigger: sectionRef.current,
@@ -646,7 +708,8 @@ export default function StackSection() {
                 </div>
             </div>
 
-            <div style={{
+
+            <div className="stack-shake-block" style={{
                 position: "absolute", top: 1500, left: "50%", transform: "translateX(-50%)",
                 display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
                 zIndex: 3, pointerEvents: "none",
@@ -664,6 +727,7 @@ export default function StackSection() {
                 <div
                     key={i}
                     ref={el => { bottleRefs.current[i] = el; }}
+                    className={`bottle-wrap bottle-wrap-${i}`}
                     style={{
                         position: "absolute",
                         left:     b.left,

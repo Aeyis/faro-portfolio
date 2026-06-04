@@ -31,20 +31,28 @@ export default function LoadingScreen() {
         exitRef.current = true;
         const overlay = overlayRef.current;
         if (!overlay) return;
+        const isMob = window.innerWidth < 768;
         gsap.to(overlay, {
-            yPercent: -100,
+            yPercent: isMob ? 100 : -100,
             duration: 0.9,
             ease: "power3.inOut",
             onComplete: () => {
                 document.documentElement.style.overflow = "";
+                document.body.classList.remove("is-loading");
+                window.scrollTo(0, 0);
                 setGone(true);
             },
         });
     };
 
     useEffect(() => {
+        /* Désactive la restauration de scroll du navigateur */
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
         document.documentElement.style.overflow = "hidden";
+        document.body.classList.add("is-loading");
 
         const bar = barRef.current;
         if (bar) {

@@ -38,7 +38,7 @@ export default function MobileMenu() {
             {/* Demi-cercle indépendant — ajuste bottom pour le décaler */}
             <div style={{
                 position:             "absolute",
-                bottom:               -60,
+                bottom:               -20,
                 left:                 0,
                 right:                0,
                 height:               "100%",
