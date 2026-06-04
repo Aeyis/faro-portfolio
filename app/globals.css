@@ -203,6 +203,11 @@ VARIABLES
 /* Boutons sociaux contact — cachés sur desktop (mobile uniquement) */
 .contact-mobile-links { display: none !important; }
 
+/* Footer — espace pour le bouton menu mobile en bas */
+@media (max-width: 767px) {
+  footer { padding-bottom: 220px !important; }
+}
+
 /* Bouton fermer modal — desktop : coin haut-droit */
 @media (min-width: 768px) {
   .bottle-modal-close {
@@ -366,42 +371,9 @@ VARIABLES
     overflow-y: auto !important;
   }
 
-  /* Liens : position absolute au bas du contact-section */
-  .contact-aside {
-    position:       fixed    !important;
-    bottom:         0        !important;
-    left:           0        !important;
-    right:          0        !important;
-    z-index:        10       !important;
-    border-left:    none     !important;
-    border-top:     1px solid rgba(255,222,185,0.15) !important;
-    flex-direction: row      !important;
-    align-items:    stretch  !important;
-    height:         72px     !important;
-    background:     oklch(0.065 0.045 46 / 0.98) !important;
-    backdrop-filter: blur(12px) !important;
-    grid-row:       2        !important;
-    display:        none     !important;
-  }
-  /* N'affiche les boutons que dans la section contact */
-  #contact .contact-aside {
-    display:  flex     !important;
-    position: absolute !important;
-  }
-  .contact-aside > div:first-child { display: none !important; }
-  .contact-aside .dive-link {
-    flex:            1    !important;
-    max-height:      none !important;
-    border-top:      none !important;
-    border-left:     1px solid rgba(255,222,185,0.12) !important;
-    justify-content: center !important;
-    padding:         0 4px !important;
-  }
-  .contact-aside .dive-link:first-child { border-left: none !important; }
-  .contact-aside .dl-body  { padding: 0 4px !important; flex-direction: column !important; align-items: center !important; gap: 4px !important; }
-  .contact-aside .dl-zone  { display: none !important; }
-  .contact-aside .dl-name  { font-size: 10px !important; text-align: center !important; }
-  .contact-aside .dl-ico   { width: 32px !important; height: 32px !important; }
+  /* Aside contact caché sur mobile — liens disponibles via les boutons isMobile */
+  .contact-aside,
+  #contact .contact-aside { display: none !important; }
 
   /* Bouteilles : centrées + réduites (552px → ~248px visible) */
   .bottle-wrap {

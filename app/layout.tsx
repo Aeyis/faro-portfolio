@@ -5,6 +5,7 @@ import LenisProvider from "@/components/ui/LenisProvider";
 import LogoIntro from "@/components/ui/LogoIntro";
 import TrapMenu from "@/components/ui/TrapMenu";
 import MobileMenu from "@/components/ui/MobileMenu";
+import Footer from "@/components/ui/Footer";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import { Syne, Inter_Tight, Fraunces, Cormorant_Garamond, DM_Sans, JetBrains_Mono } from "next/font/google";
@@ -43,7 +44,7 @@ export default function RootLayout(
             <LanguageProvider>
                 <LogoIntro />
                 <TrapMenu />
-                <LenisProvider>{children}</LenisProvider>
+                <LenisProvider>{children}<Footer /></LenisProvider>
             </LanguageProvider>
         </body>
         </html>

@@ -191,7 +191,7 @@ export default function ContactSection() {
                     </section>
 
                     {/* Liens */}
-                    <aside className="contact-aside" style={{ display: "flex", flexDirection: "column", background: "oklch(0.065 0.045 46/0.55)", borderLeft: `1px solid ${HAIR}` }}>
+                    {!isMobile && <aside className="contact-aside" style={{ display: "flex", flexDirection: "column", background: "oklch(0.065 0.045 46/0.55)", borderLeft: `1px solid ${HAIR}` }}>
                         <div style={{ padding: "clamp(12px,1.8vh,22px) 20px 8px", fontFamily: INTER, fontSize: 10, letterSpacing: "0.10em", textTransform: "uppercase", color: "oklch(0.52 0.08 52)", display: "flex", justifyContent: "space-between" }}>
                             <span>{t.linksTitle}</span>
                         </div>
@@ -219,7 +219,7 @@ export default function ContactSection() {
                             </a>
                             );
                         })}
-                    </aside>
+                    </aside>}
                 </main>
             </div>
 
