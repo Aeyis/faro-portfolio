@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "../styles/animations.css";
+@import "../styles/contact.css";
+@import "../styles/responsive-mobile.css";
 
 /*---------------------------------------------------------
 BULLES PARALLAX — animations
@@ -14,7 +16,7 @@ BULLES PARALLAX — animations
 }
 
 /*---------------------------------------------------------
-CONTACT v2 — design console
+CONTACT v2 — keyframes
 ----------------------------------------------------------*/
 @keyframes floatOrb {
   0%,100% { transform: translate(0,0); }
@@ -24,39 +26,6 @@ CONTACT v2 — design console
   0%,100% { opacity: 1; }
   50%      { opacity: 0.25; }
 }
-.contact-orb {
-  position: absolute; border-radius: 50%; filter: blur(80px);
-  animation: floatOrb ease-in-out infinite;
-}
-.contact-orb-1 { width:460px; height:460px; top:-140px; left:-90px; background:oklch(0.55 0.18 52/0.16); --dx:34px; --dy:44px; animation-duration:14s; }
-.contact-orb-2 { width:360px; height:360px; bottom:-130px; right:-70px; background:oklch(0.5 0.16 38/0.15); --dx:-28px; --dy:-34px; animation-duration:17s; animation-delay:-4s; }
-
-.contact-eyebrow-dot { width:6px; height:6px; border-radius:50%; background:oklch(0.83 0.16 60); box-shadow:0 0 12px oklch(0.83 0.16 60); animation:blinkDot 2.4s ease-in-out infinite; }
-
-.contact-console {
-  backdrop-filter: blur(28px) saturate(1.3);
-  -webkit-backdrop-filter: blur(28px) saturate(1.3);
-}
-
-.contact-field input, .contact-field textarea {
-  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
-}
-.contact-field input::placeholder, .contact-field textarea::placeholder {
-  font-family: var(--font-fraunces, 'Fraunces', Georgia, serif);
-  font-style: italic;
-  font-weight: 300;
-  opacity: 0.7;
-}
-.contact-field input:focus, .contact-field textarea:focus {
-  border-color: oklch(0.62 0.16 54 / 0.7) !important;
-  background: oklch(0.1 0.06 50 / 0.7) !important;
-  box-shadow: 0 0 0 3px oklch(0.5 0.16 52 / 0.13), 0 0 28px oklch(0.5 0.16 52 / 0.13) !important;
-  outline: none;
-}
-
-.contact-submit { transition: transform 0.2s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.25s, filter 0.2s; }
-.contact-submit:hover { transform: translateY(-2px); filter: brightness(1.07); box-shadow: 0 18px 44px oklch(0.55 0.17 48 / 0.5) !important; }
-.contact-submit:active { transform: translateY(0) scale(0.98); }
 
 body.bottle-modal-open .trap-overlay,
 body.bottle-modal-open .ham-btn,
@@ -109,104 +78,10 @@ CONTACT — bulles flottantes
 }
 
 /*---------------------------------------------------------
-CONTACT — hover boutons
-----------------------------------------------------------*/
-.contact-link {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Fond qui glisse */
-.contact-link::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, oklch(0.16 0.12 50) 0%, oklch(0.10 0.06 48) 100%);
-  transform: translateX(-100%);
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 0;
-}
-.contact-link:hover::before {
-  transform: translateX(0);
-}
-
-/* Reflet qui traverse */
-.contact-link::after {
-  content: "";
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 80px;
-  background: linear-gradient(90deg, transparent, oklch(0.85 0.20 56 / 0.12), transparent);
-  transform: translateX(-200px) skewX(-15deg);
-  transition: none;
-  z-index: 2;
-  pointer-events: none;
-}
-.contact-link:hover::after {
-  transform: translateX(600px) skewX(-15deg);
-  transition: transform 0.7s ease 0.2s;
-}
-
-/* Texte */
-.contact-link .link-content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1), color 0.3s ease, text-shadow 0.4s ease;
-}
-.contact-link:hover .link-content {
-  transform: translateX(14px) skewX(-2deg);
-  color: oklch(0.96 0.20 60);
-  text-shadow: 0 0 30px oklch(0.7 0.22 54 / 0.5), 0 0 80px oklch(0.6 0.18 50 / 0.25);
-}
-
-/* Icône */
-.contact-link .link-content svg,
-.contact-link .link-content span:first-child {
-  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
-}
-.contact-link:hover .link-content span:first-child {
-  transform: scale(1.25) rotate(-8deg);
-}
-
-/* Flèche */
-.contact-link .link-arrow {
-  position: absolute;
-  right: 28px;
-  top: 50%;
-  transform: translateY(-50%) translateX(12px);
-  opacity: 0;
-  font-size: 1em;
-  color: oklch(0.80 0.16 56);
-  transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
-  z-index: 1;
-}
-.contact-link:hover .link-arrow {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
-}
-
-/*---------------------------------------------------------
 VARIABLES
 ---------------------------------------------------------*/
 /* ── Transition hero → about ── */
 .hero-transition { margin-top: 10vh; }
-@media (max-width: 767px) {
-  .hero-transition {
-    height: 0 !important;   /* supprime la zone de transition sur mobile */
-    margin-top: 0;
-  }
-}
-
-/* Boutons sociaux contact — cachés sur desktop (mobile uniquement) */
-.contact-mobile-links { display: none !important; }
-
-/* Footer — espace pour le bouton menu mobile en bas */
-@media (max-width: 767px) {
-  footer { padding-bottom: 220px !important; }
-}
 
 /* Bouton fermer modal — desktop : coin haut-droit */
 @media (min-width: 768px) {
@@ -225,196 +100,6 @@ VARIABLES
   }
 }
 
-/* ── Bouteilles Stack — responsive ── */
-@media (max-width: 767px) {
-  #stack { overflow-x: clip !important; }
-  .stack-shake-block { display: none !important; }
-
-  /* ── Carte Checkmate ── */
-  .checkmate-wrap {
-    top:   650px !important;
-    width: 92vw  !important;
-  }
-  /* Fenêtre plus grande, vidéo dézoomée */
-  .checkmate-video {
-    height: clamp(280px, 72vw, 400px) !important;
-  }
-  .checkmate-video-inner video {
-    object-fit: contain !important;
-    transform:  scale(1.1) !important;
-  }
-  .checkmate-info {
-    padding: 18px 18px 22px !important;
-  }
-  .checkmate-header {
-    flex-direction: column !important;
-    gap:            14px    !important;
-    align-items:    flex-start !important;
-  }
-  .checkmate-header h3 {
-    font-size: 24px !important;
-  }
-  .checkmate-header p {
-    font-size: 18px !important;
-  }
-  .checkmate-tags span {
-    font-size: 14px !important;
-    padding:   6px 16px !important;
-  }
-
-  /* "Voir le projet" + bouton GitHub côte à côte, bouton plus grand */
-  .checkmate-cta {
-    flex-direction: row !important;
-    align-items:    center !important;
-    gap:            12px   !important;
-  }
-  .checkmate-see {
-    font-size: 14px !important;
-  }
-  .checkmate-github {
-    padding:   12px 22px !important;
-    font-size: 15px      !important;
-    border-radius: 12px  !important;
-  }
-  .checkmate-github svg {
-    width:  18px !important;
-    height: 18px !important;
-  }
-
-  /* Carte À venir remontée, pleine largeur */
-  .checkmate-coming {
-    top:                   1380px !important;
-    width:                 92vw   !important;
-    grid-template-columns: 1fr    !important;
-  }
-
-  /* ── Contact — plein écran responsive ── */
-  .contact-section {
-    min-height: 100dvh !important;
-    height:     auto   !important;
-    overflow:   visible !important;
-  }
-
-  /* Boutons sociaux : grille 2×2 sur mobile */
-  .contact-mobile-links { display: grid !important; grid-template-columns: 1fr 1fr !important; }
-  /* Cache l'aside desktop sur mobile */
-  .contact-aside { display: none !important; }
-
-  /* Titre Contact centré en haut */
-  .contact-section header {
-    justify-content: center !important;
-  }
-  .contact-section header h2 {
-    text-align: center !important;
-  }
-
-  /* Grille : colonne unique */
-  .contact-grid {
-    grid-template-columns: 1fr !important;
-    grid-template-rows:    1fr !important;
-    overflow:              visible !important;
-  }
-
-  /* Formulaire compact, laisse 80px pour les boutons du bas */
-  .contact-grid > section {
-    padding:        12px 16px 88px !important;
-    overflow-y:     hidden !important;
-    grid-row:       1 !important;
-    grid-column:    1 !important;
-  }
-
-  /* Texte lead (italique au dessus du formulaire) */
-  .contact-grid > section > form > p,
-  .contact-grid > section > p {
-    font-size: 19px !important;
-    line-height: 1.45 !important;
-  }
-
-  /* Labels des champs (Votre nom, Email, Votre demande) */
-  .contact-grid > section label,
-  .contact-field label {
-    font-size: 14px !important;
-    letter-spacing: 0.08em !important;
-  }
-
-  /* Texte dans les champs input/textarea */
-  .contact-grid > section input,
-  .contact-grid > section textarea {
-    font-size: 15px !important;
-  }
-
-  /* Bouton submit — centré et agrandi */
-  .contact-submit {
-    align-self:      center  !important;
-    width:           100%    !important;
-    justify-content: center  !important;
-    padding:         14px 24px !important;
-    font-size:       11px    !important;
-  }
-
-  /* Textarea */
-  .contact-grid > section textarea {
-    min-height: 70px !important;
-    max-height: 80px !important;
-    flex:       none !important;
-    height:     75px !important;
-    transition: height 0.3s ease !important;
-  }
-  /* Agrandit la textarea au focus (clavier ouvert) */
-  .contact-grid > section textarea:focus {
-    height:     160px !important;
-    max-height: 160px !important;
-  }
-
-  /* Formulaire scrollable quand clavier ouvert */
-  .contact-grid > section {
-    overflow-y: auto !important;
-  }
-
-  /* Aside contact caché sur mobile — liens disponibles via les boutons isMobile */
-  .contact-aside,
-  #contact .contact-aside { display: none !important; }
-
-  /* Bouteilles : centrées + réduites (552px → ~248px visible) */
-  .bottle-wrap {
-    left:             50% !important;
-    right:            auto !important;
-    transform:        translateX(-50%) scale(0.72) !important;
-    transform-origin: top center !important;
-  }
-
-  /* Positions verticales adaptées mobile */
-  .bottle-wrap-0 { top: 500px  !important; left: 80% !important; }
-  .bottle-wrap-1 { top: 880px  !important; left: 25% !important; }
-  .bottle-wrap-2 { top: 1260px !important; left: 90% !important; }
-  .bottle-wrap-3 { top: 1640px !important; left: 40% !important; }
-
-
-  /* Modal plein écran */
-  .bottle-modal-card {
-    width:          100vw !important;
-    height:         100dvh !important;
-    border-radius:  0 !important;
-    flex-direction: column !important;
-    inset:          0 !important;
-    margin:         0 !important;
-  }
-
-  /* Colonne bouteille : moitié haute */
-  .bottle-modal-left {
-    width:  100% !important;
-    height: 45dvh !important;
-  }
-
-  /* Colonne icônes : moitié basse, 4 colonnes */
-  .bottle-modal-right {
-    height:              55dvh !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    padding:             12px 16px !important;
-    align-content:       start !important;
-  }
-}
-
 /* ── Menu mobile ── */
 .mobile-menu-btn { display: flex !important; flex-direction: column; align-items: center; gap: 4px; }
 @media (min-width: 768px) { .mobile-menu-btn { display: none !important; } }
@@ -424,6 +109,10 @@ body.is-loading .mobile-menu-btn { display: none !important; }
 
 
 :root {
+  /* ── Breakpoint ── */
+  --bp-mobile: 768px;
+
+  /* ── Couleurs sky/hero ── */
   --sky-top: #0a072d;
   --sky-horizon: #c45c1a;
   --sky-mid: #1a2a4a;
@@ -431,6 +120,22 @@ body.is-loading .mobile-menu-btn { display: none !important; }
   --ground: #0a0f0a;
   --cloud-start: 110vw;
   --cloud-end: -110vw;
+
+  /* ── Couleurs contact ── */
+  --contact-amber:  oklch(0.83 0.16 60);
+  --contact-hair:   rgba(255, 222, 185, 0.12);
+  --contact-glass:  oklch(0.11 0.055 50 / 0.5);
+  --contact-inks:   oklch(0.93 0.04 75);
+  --contact-bg:     oklch(0.05 0.045 48);
+
+  /* ── Couleurs about ── */
+  --about-text:     oklch(0.82 0.14 210);
+
+  /* ── Couleurs stack ── */
+  --stack-accent:   oklch(0.75 0.28 155);
+
+  /* ── Couleurs projets ── */
+  --projets-accent: oklch(0.75 0.24 285);
 }
 
 /*---------------------------------------------------------
@@ -539,73 +244,10 @@ ABOUT — bio reveal
 .bio-bold .char  { font-weight: 900 !important; }
 
 /*---------------------------------------------------------
-ABOUT — responsive mobile
+ABOUT — title size
 ---------------------------------------------------------*/
 .about-title {
   font-size: clamp(72px, 16vw, 260px);
-}
-
-@media (max-width: 768px) {
-  #about { height: 5800px !important; }
-
-  .about-sticky {
-    padding-top: 160px !important;
-  }
-  .about-title {
-    font-size:  clamp(56px, 18vw, 160px) !important;
-    text-align: center !important;
-  }
-
-  /* ── Photo : à droite, plus grande, forme ovale ── */
-  .about-photo-wrap {
-    width:         auto !important;
-    height:        220px !important;
-    aspect-ratio:  unset !important;
-    left:          20px !important;
-    right:         20px !important;
-    top:           75px !important;
-    transform:     none !important;
-    border-radius: 0 0 24px 24px !important;
-    box-shadow:    0 12px 40px oklch(0 0 0 / 0.5) !important;
-  }
-
-  /* ── Bio : pleine largeur SOUS la photo ── */
-  .about-bio {
-    top:         315px !important;
-    left:        20px !important;
-    right:       20px !important;
-    width:       auto !important;
-    line-height: 1.6 !important;
-  }
-
-  /* Nom/rôle : en bas de la photo, aligné à droite */
-  .about-bio .about-name-line {
-    position:   absolute !important;
-    top:        -18px !important;
-    left:       0 !important;
-    right:      0 !important;
-    width:      auto !important;
-    text-align: left !important;
-    line-height: 1.4 !important;
-  }
-  .about-photo2 {
-    object-position: 20% -15% !important;
-    transform: scale(1.45) translateX(-26px) !important;
-  }
-
-  .about-bio .about-name-line > span {
-    display:    inline !important;
-    text-align: left !important;
-    font-size:  clamp(0.8rem, 3.2vw, 1rem) !important;
-  }
-
-  .bio-roboto.block,
-  .bio-line-block {
-    font-size: clamp(1.1rem, 4.2vw, 1.6rem) !important;
-  }
-  .bio-meie.block {
-    font-size: clamp(1.3rem, 5vw, 1.9rem) !important;
-  }
 }
 
 .sky-gradient > div,
@@ -620,16 +262,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: clip;
   width: 100vw;
-}
-
-/* Bloque le scroll horizontal uniquement sur mobile (n'affecte pas le desktop) */
-@media (max-width: 767px) {
-  html, body {
-    overflow-x:   hidden;  /* fallback universel */
-    overflow-x:   clip;    /* clip ne crée pas de scroll container → sticky fonctionne */
-    max-width:    100%;
-    touch-action: pan-y;   /* interdit le swipe horizontal sur écran tactile */
-  }
 }
 
 /*---------------------------------------------------------

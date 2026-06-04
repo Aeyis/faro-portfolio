@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import { useLang } from "@/lib/LanguageContext";
 import { T } from "@/lib/translations";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import emailjs from "@emailjs/browser";
 
 const EMAIL   = "raf045@hotmail.com";
@@ -30,10 +31,8 @@ export default function ContactSection() {
     const { lang } = useLang();
     const t = T[lang].contact;
     const bubblesRef = useRef<HTMLDivElement>(null);
-    const [isMobile, setIsMobile] = useState(false);
+    const isMobile   = useIsMobile();
     const [toast, setToast] = useState(false);
-
-    useEffect(() => { setIsMobile(window.innerWidth < 768); }, []);
     const [nom, setNom]         = useState("");
     const [email, setEmail]     = useState("");
     const [demande, setDemande] = useState("");
