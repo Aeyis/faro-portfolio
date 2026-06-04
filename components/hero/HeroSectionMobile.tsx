@@ -109,7 +109,7 @@ export default function HeroSectionMobile() {
                     height: "71vh",
                     zIndex: 6,
                 }}>
-                    <Image src="/assets/hero/faro.webp" alt="" fill priority style={{ objectFit: "contain", objectPosition: "bottom" }} />
+                    <Image src="/assets/hero/faro.webp" alt="" fill priority fetchPriority="high" style={{ objectFit: "contain", objectPosition: "bottom" }} />
                 </div>
 
                 {/* Mer */}

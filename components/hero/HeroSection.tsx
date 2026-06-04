@@ -204,7 +204,7 @@ export default function HeroSection() {
 
         {/* COUCHE 6 — Phare */}
         <div ref={faroRef} style={{ ...figmaToCSS(HERO_LAYERS.faro), zIndex: 6, top: "15%" }}>
-          <Image src="/assets/hero/faro.webp" alt="" fill priority sizes="15vw" style={{ objectFit: "contain", objectPosition: "bottom" }} />
+          <Image src="/assets/hero/faro.webp" alt="" fill priority fetchPriority="high" sizes="15vw" style={{ objectFit: "contain", objectPosition: "bottom" }} />
         </div>
 
         {/* COUCHE 7 — Végétation gauche */}

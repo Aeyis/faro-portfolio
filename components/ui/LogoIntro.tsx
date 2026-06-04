@@ -193,8 +193,10 @@ export default function LogoIntro() {
                 position:      "fixed",
                 top:           -80,
                 left:          "50%",
+                transform:     "translateX(-50%)",
                 zIndex:        100,
                 pointerEvents: "none",
+                willChange:    "transform",
             }}
         >
             <div ref={logoWrapperRef}>

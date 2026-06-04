@@ -62,7 +62,7 @@ const H = 1380;
 export default function BottlePhysics({
   bottleSrc, items,
   bl = 120, br = 340, bt = 300, bb = 840,
-  onShake, shakeThreshold = 6,
+  onShake, shakeThreshold = 3,
   clearAll = false, disabled = false,
   sticker, itemRadius = 20, cursorOverride,
 }: Props) {
@@ -193,7 +193,7 @@ export default function BottlePhysics({
           Body.setAngularVelocity(b, b.angularVelocity + (Math.random() - 0.5) * 0.07);
       });
 
-      if (Math.abs(dx) > 6) {
+      if (Math.abs(dx) > 3) {
         const dir = dx > 0 ? 1 : -1;
         const now = Date.now();
         if (now - lastShakeT.current > 1000) {

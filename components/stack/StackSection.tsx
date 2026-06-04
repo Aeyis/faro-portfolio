@@ -8,9 +8,12 @@ import { SECTION_HEIGHTS } from "@/lib/constants";
 import { useLang } from "@/lib/LanguageContext";
 import { T } from "@/lib/translations";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
-import Matter from "matter-js";
-import BottlePhysics, { getLogoFilter } from "@/components/stack/BottlePhysics";
-import WaterBackground from "@/components/stack/WaterBackground";
+import dynamic from "next/dynamic";
+import { getLogoFilter } from "@/components/stack/BottlePhysics";
+
+/* Lazy-load Three.js et Matter.js — non nécessaires au premier rendu */
+const WaterBackground = dynamic(() => import("@/components/stack/WaterBackground"), { ssr: false, loading: () => null });
+const BottlePhysics   = dynamic(() => import("@/components/stack/BottlePhysics"), { ssr: false, loading: () => null });
 
 const S = "/assets/stacks/";
 
@@ -179,6 +182,7 @@ function BottleModal({ bottle, onClose }: {
     /* quand on touche la bouteille : bris de verre + logos qui sortent */
     useEffect(() => {
         if (!poured) return;
+        void (async () => {
 
         /* Sur mobile : pas de bris de verre, logos apparaissent directement */
         if (window.innerWidth < 768) {
@@ -198,13 +202,14 @@ function BottleModal({ bottle, onClose }: {
         /* 2 — fragments visibles */
         pieceRefs.current.forEach(p => { if (p) p.style.opacity = '1'; });
 
-        /* 3 — physique Matter.js pour les fragments */
+        /* 3 — physique Matter.js pour les fragments (import dynamique) */
+        const Matter = await import("matter-js");
         const { Engine, Runner, Bodies, Body, World } = Matter;
         const fragEngine = Engine.create({ gravity: { x: 0, y: 2.8 } });
         const fragRunner = Runner.create();
         Runner.run(fragRunner, fragEngine);
 
-        const fragBodies: Matter.Body[] = [];
+        const fragBodies: import("matter-js").Body[] = [];
         pieceRefs.current.forEach((_, i) => {
             const col = i % S_COLS;
             const row = Math.floor(i / S_COLS);
@@ -259,11 +264,7 @@ function BottleModal({ bottle, onClose }: {
                 );
         });
 
-        return () => {
-            cancelAnimationFrame(rafId);
-            Runner.stop(fragRunner);
-            Engine.clear(fragEngine);
-        };
+        })();
     }, [poured]);
 
     const handlePour = () => { if (!poured) setPoured(true); };

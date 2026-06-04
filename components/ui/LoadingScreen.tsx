@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import LogoFaro from "./LogoFaro";
-import WaterBackground from "@/components/stack/WaterBackground";
+
+const WaterBackground = dynamic(() => import("@/components/stack/WaterBackground"), { ssr: false, loading: () => null });
 
 function WaterBackgroundFill() {
     const [size, setSize] = useState({ w: 1920, h: 1080 });
