@@ -36,10 +36,9 @@ export default function LoadingScreen() {
         const isMob = window.innerWidth < 768;
         gsap.to(overlay, {
             yPercent: isMob ? 100 : -100,
-            duration: 0.9,
+            duration: 0.6,
             ease: "power3.inOut",
             onComplete: () => {
-                document.documentElement.style.overflow = "";
                 document.body.classList.remove("is-loading");
                 window.scrollTo(0, 0);
                 setGone(true);
@@ -51,16 +50,15 @@ export default function LoadingScreen() {
         /* Désactive la restauration de scroll du navigateur */
         if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        document.documentElement.style.overflow = "hidden";
+        /* Pas de overflow:hidden sur html — provoque un CLS de 1.0 (scrollbar shift).
+           Lenis est déjà stoppé, le scroll est bloqué sans toucher au layout. */
         document.body.classList.add("is-loading");
 
         const bar = barRef.current;
         if (bar) {
             gsap.fromTo(bar, { scaleX: 0 }, {
                 scaleX: 1,
-                duration: 1.8,
+                duration: 1.2,
                 ease: "power2.inOut",
                 transformOrigin: "left center",
             });

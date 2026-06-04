@@ -30,8 +30,12 @@ export default function RootLayout(
     return (
         <html lang="fr" className={`${syne.variable} ${interTight.variable} ${fraunces.variable} ${cormorantGaramond.variable} ${blacksword.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
         <head>
+            {/* Preconnect Google Fonts pour éviter le FOUT */}
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             {/* eslint-disable-next-line @next/next/no-page-custom-font */}
             <link rel="preload" as="image" href="/assets/hero/faro.webp" type="image/webp" fetchPriority="high" />
+            <link rel="preload" as="image" href="/assets/hero/ground_1.webp" type="image/webp" fetchPriority="high" />
             {/* Force scroll=0 avant tout rendu — empêche la restauration du navigateur */}
             <script dangerouslySetInnerHTML={{ __html: `
                 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';

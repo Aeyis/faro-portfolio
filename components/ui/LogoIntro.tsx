@@ -193,7 +193,7 @@ export default function LogoIntro() {
                 position:      "fixed",
                 top:           -80,
                 left:          "50%",
-                transform:     "translateX(-50%)",
+                transform:     "translate(-50%, 0%)",
                 zIndex:        100,
                 pointerEvents: "none",
                 willChange:    "transform",

@@ -122,7 +122,7 @@ export default function HeroSectionMobile() {
                     zIndex: 5,
                 }}>
                     <div className="sea-sway" style={{ position: "absolute", inset: 0 }}>
-                        <Image src="/assets/hero/sea.webp" alt="" fill />
+                        <Image src="/assets/hero/sea.webp" alt="" fill priority fetchPriority="high" sizes="200vw" />
                     </div>
                 </div>
 
@@ -135,7 +135,7 @@ export default function HeroSectionMobile() {
                     height: "83vh",
                     zIndex: 7,
                 }}>
-                    <Image src="/assets/hero/ground_1.webp" alt="" fill />
+                    <Image src="/assets/hero/ground_1.webp" alt="" fill priority fetchPriority="high" sizes="100vw" />
                 </div>
 
                 {/* Cloud 1 */}
@@ -148,7 +148,7 @@ export default function HeroSectionMobile() {
                     zIndex: 4,
                 }}>
                     <div className="cloud-morph-1" style={{ position: "absolute", inset: 0 }}>
-                        <Image src="/assets/hero/cloud_1.webp" alt="" fill />
+                        <Image src="/assets/hero/cloud_1.webp" alt="" fill priority sizes="200vw" />
                     </div>
                 </div>
 
@@ -162,7 +162,7 @@ export default function HeroSectionMobile() {
                     zIndex: 3,
                 }}>
                     <div className="cloud-morph-2" style={{ position: "absolute", inset: 0 }}>
-                        <Image src="/assets/hero/cloud_2.webp" alt="" fill />
+                        <Image src="/assets/hero/cloud_2.webp" alt="" fill priority sizes="200vw" />
                     </div>
                 </div>
 
@@ -176,7 +176,7 @@ export default function HeroSectionMobile() {
                     zIndex: 2,
                 }}>
                     <div className="cloud-morph-3" style={{ position: "absolute", inset: 0 }}>
-                        <Image src="/assets/hero/cloud_3.webp" alt="" fill />
+                        <Image src="/assets/hero/cloud_3.webp" alt="" fill priority sizes="200vw" />
                     </div>
                 </div>
 
@@ -190,7 +190,7 @@ export default function HeroSectionMobile() {
                     zIndex: 1,
                 }}>
                     <div className="cloud-morph-4" style={{ position: "absolute", inset: 0 }}>
-                        <Image src="/assets/hero/cloud_4.webp" alt="" fill />
+                        <Image src="/assets/hero/cloud_4.webp" alt="" fill priority sizes="200vw" />
                     </div>
                 </div>
 

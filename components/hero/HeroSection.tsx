@@ -199,7 +199,7 @@ export default function HeroSection() {
           height: "55vw",
           zIndex: 5,
         }}>
-          <Image src="/assets/hero/ground_1.webp" alt="" fill priority sizes="100vw" style={{ objectFit: "fill" }} />
+          <Image src="/assets/hero/ground_1.webp" alt="" fill priority fetchPriority="high" sizes="100vw" style={{ objectFit: "fill" }} />
         </div>
 
         {/* COUCHE 6 — Phare */}

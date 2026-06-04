@@ -168,6 +168,7 @@ video::-internal-skip-ad-button {
 
 html {
   scroll-behavior: auto;
+  scrollbar-gutter: stable;   /* réserve l'espace scrollbar → évite le CLS au toggle */
 }
 
 .font-syne {
@@ -261,7 +262,7 @@ body {
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: clip;
-  width: 100vw;
+  max-width: 100%;   /* remplace width:100vw qui inclut la scrollbar et cause CLS */
 }
 
 /*---------------------------------------------------------

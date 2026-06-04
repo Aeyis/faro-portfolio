@@ -12,6 +12,8 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function LenisProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
+        /* Defer Lenis+ScrollTrigger init hors du critical path → réduit TBT */
+        const init = () => {
         ScrollTrigger.config({
             autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
             ignoreMobileResize: true,
@@ -38,6 +40,13 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
             lenis.off('scroll', ScrollTrigger.update)
             window.removeEventListener('intro-done', onIntroDone)
             lenis.destroy()
+        }
+        }; // end init
+        /* requestIdleCallback : s'exécute quand le thread est libre → ne bloque pas le LCP */
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(init, { timeout: 500 });
+        } else {
+            setTimeout(init, 0);
         }
     }, [])
     return <>{children}</>
