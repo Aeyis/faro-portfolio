@@ -34,8 +34,12 @@ export default function RootLayout(
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+            {/* LCP desktop */}
             <link rel="preload" as="image" href="/assets/hero/faro.webp" type="image/webp" fetchPriority="high" />
             <link rel="preload" as="image" href="/assets/hero/ground_1.webp" type="image/webp" fetchPriority="high" />
+            {/* LCP mobile */}
+            <link rel="preload" as="image" href="/assets/hero/sea.webp" type="image/webp" fetchPriority="high" />
+            <link rel="preload" as="image" href="/assets/hero/cloud_1.webp" type="image/webp" fetchPriority="high" />
             {/* Force scroll=0 avant tout rendu — empêche la restauration du navigateur */}
             <script dangerouslySetInnerHTML={{ __html: `
                 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';

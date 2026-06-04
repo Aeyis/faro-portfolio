@@ -5,7 +5,10 @@ import HeroSection from "./HeroSection";
 import HeroSectionMobile from "./HeroSectionMobile";
 
 export default function HeroSectionResponsive() {
-  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  /* Démarre sur false (desktop) pour éviter le null → 2600px CLS.
+     Sur mobile réel, useEffect switche immédiatement sans shift visible
+     car les deux versions ont la même hauteur (SECTION_HEIGHTS.hero). */
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -16,11 +19,8 @@ export default function HeroSectionResponsive() {
   }, []);
 
   useEffect(() => {
-    if (isMobile === null) return;
-    // Hero vient de monter — recalcule toutes les positions ScrollTrigger
     ScrollTrigger.refresh();
   }, [isMobile]);
 
-  if (isMobile === null) return null;
   return isMobile ? <HeroSectionMobile /> : <HeroSection />;
 }

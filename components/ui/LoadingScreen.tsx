@@ -36,7 +36,7 @@ export default function LoadingScreen() {
         const isMob = window.innerWidth < 768;
         gsap.to(overlay, {
             yPercent: isMob ? 100 : -100,
-            duration: 0.6,
+            duration: 0.5,
             ease: "power3.inOut",
             onComplete: () => {
                 document.body.classList.remove("is-loading");
@@ -58,7 +58,7 @@ export default function LoadingScreen() {
         if (bar) {
             gsap.fromTo(bar, { scaleX: 0 }, {
                 scaleX: 1,
-                duration: 1.2,
+                duration: 0.9,
                 ease: "power2.inOut",
                 transformOrigin: "left center",
             });
