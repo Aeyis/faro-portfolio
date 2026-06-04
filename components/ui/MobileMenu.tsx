@@ -2,8 +2,41 @@
 
 import { useState, useEffect } from "react";
 
+/* Couleur sombre du ham4 — mêmes valeurs que LogoIntro desktop */
+const SECTION_COLORS: Record<string, string> = {
+    hero:    "#c43a08",
+    about:   "#020818",
+    stack:   "#021a06",
+    projets: "#150820",
+    contact: "#1a0a04",
+};
+
+/* Filtre CSS sur l'image SVG — mêmes valeurs que LogoIntro desktop */
+const SECTION_FILTERS: Record<string, string> = {
+    hero:    "none",
+    about:   "hue-rotate(160deg) saturate(1.5) brightness(1.1)",
+    stack:   "hue-rotate(100deg) saturate(3.5) brightness(1.0)",
+    projets: "hue-rotate(255deg) saturate(2.5) brightness(1.05)",
+    contact: "hue-rotate(10deg)  saturate(1.2) brightness(1.1)",
+};
+
+function getCurrentSection(): string {
+    if (window.scrollY < 100) return "hero";
+    const mid = window.innerHeight / 2;
+    const ids = ["contact", "projets", "stack", "about", "hero"];
+    for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        if (r.top <= mid && r.bottom >= 0) return id;
+    }
+    return "hero";
+}
+
 export default function MobileMenu() {
-    const [open, setOpen] = useState(false);
+    const [open,      setOpen]      = useState(false);
+    const [hamColor,  setHamColor]  = useState("#c43a08");
+    const [imgFilter, setImgFilter] = useState("none");
 
     useEffect(() => {
         const onClose = () => setOpen(false);
@@ -11,8 +44,19 @@ export default function MobileMenu() {
         return () => window.removeEventListener("menu-close", onClose);
     }, []);
 
+    /* Tracking de la section visible → couleur du hamburger */
+    useEffect(() => {
+        const update = () => {
+            const section = getCurrentSection();
+            setHamColor(SECTION_COLORS[section]  ?? "#c43a08");
+            setImgFilter(SECTION_FILTERS[section] ?? "none");
+        };
+        update();
+        window.addEventListener("scroll", update, { passive: true });
+        return () => window.removeEventListener("scroll", update);
+    }, []);
+
     return (
-        /* Pleine largeur, collé en bas — le border-radius crée le demi-cercle */
         <button
             aria-label="Menu"
             className="mobile-menu-btn"
@@ -35,10 +79,10 @@ export default function MobileMenu() {
                 justifyContent: "center",
             }}
         >
-            {/* Demi-cercle indépendant — ajuste bottom pour le décaler */}
+            {/* Demi-cercle */}
             <div style={{
                 position:             "absolute",
-                bottom:               -20,
+                bottom:               -40,
                 left:                 0,
                 right:                0,
                 height:               "100%",
@@ -52,20 +96,16 @@ export default function MobileMenu() {
                 transition:           "opacity 0.3s ease",
             }} />
 
-            {/* Conteneur superposé : image hamburger Faro + SVG ham4 animé par-dessus */}
             <div style={{ position: "relative", width: 140, height: 140 }}>
-
-                {/* Couche 1 : l'image hamburger Faro — toujours visible */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src="/assets/hero/LOGO_Faro_hamburger.svg"
                     alt=""
                     width={140}
                     height={140}
-                    style={{ objectFit: "contain", display: "block" }}
+                    style={{ objectFit: "contain", display: "block", filter: imgFilter, transition: "filter 0.4s ease" }}
                 />
 
-                {/* Couche 2 : le ham4 animé centré par-dessus */}
                 <svg
                     className={`ham-btn ham4${open ? " active" : ""}`}
                     viewBox="0 0 100 100"
@@ -78,7 +118,8 @@ export default function MobileMenu() {
                         transform: open
                             ? "translate(-50%, calc(-50% + 25px)) rotate(45deg)"
                             : "translate(-50%, calc(-50% + 25px))",
-                        "--ham-color": "#c43a08",
+                        "--ham-color": hamColor,
+                        transition: "all 0.4s ease",
                     } as React.CSSProperties}
                 >
                     <path className="line top"    d="m 70,33 h -40 c 0,0 -8.5,-0.149796 -8.5,8.5 0,8.649796 8.5,8.5 8.5,8.5 h 20 v -20" />

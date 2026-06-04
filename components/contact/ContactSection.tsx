@@ -30,7 +30,10 @@ export default function ContactSection() {
     const { lang } = useLang();
     const t = T[lang].contact;
     const bubblesRef = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
     const [toast, setToast] = useState(false);
+
+    useEffect(() => { setIsMobile(window.innerWidth < 768); }, []);
     const [nom, setNom]         = useState("");
     const [email, setEmail]     = useState("");
     const [demande, setDemande] = useState("");
@@ -79,6 +82,7 @@ export default function ContactSection() {
     return (
         <section
             id="contact"
+            className="contact-section"
             style={{ height: SECTION_HEIGHTS.contact, position: "relative", backgroundColor: "oklch(0.05 0.045 48)", overflow: "clip" }}
         >
             {/* Décor */}
@@ -117,7 +121,7 @@ export default function ContactSection() {
                 </header>
 
                 {/* Console */}
-                <main className="contact-console" style={{
+                <main className="contact-console contact-grid" style={{
                     flex: 1, minHeight: 0,
                     display: "grid", gridTemplateColumns: "1.3fr 0.85fr",
                     borderRadius: 26, overflow: "hidden",
@@ -155,12 +159,39 @@ export default function ContactSection() {
                                 }}>
                                     {t.send}
                                 </button>
+
+                                {/* ── Liens sociaux — uniquement sur mobile ── */}
+                                {isMobile && <div style={{
+                                    display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10,
+                                    marginTop: 14, flexShrink: 0,
+                                }}>
+                                    {LINKS_BASE.map((link, idx) => {
+                                        const label = link.labelKey ? t[link.labelKey] : (link as {staticLabel?: string}).staticLabel ?? "";
+                                        return (
+                                            <a key={idx} href={link.href}
+                                                target={!link.download && link.href.startsWith("http") ? "_blank" : undefined}
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    display: "flex", flexDirection: "column",
+                                                    alignItems: "center", justifyContent: "center", gap: 8,
+                                                    padding: "16px 8px", borderRadius: 14, textDecoration: "none",
+                                                    background: "oklch(0.10 0.055 48/0.7)",
+                                                    border: `1px solid ${HAIR}`,
+                                                    color: AMBER,
+                                                }}
+                                            >
+                                                <span style={{ width: 28, height: 28, display: "flex" }}>{link.icon}</span>
+                                                <span style={{ fontFamily: INTER, fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "oklch(0.80 0.10 60)" }}>{label}</span>
+                                            </a>
+                                        );
+                                    })}
+                                </div>}
                             </div>
                         </form>
                     </section>
 
                     {/* Liens */}
-                    <aside style={{ display: "flex", flexDirection: "column", background: "oklch(0.065 0.045 46/0.55)", borderLeft: `1px solid ${HAIR}` }}>
+                    <aside className="contact-aside" style={{ display: "flex", flexDirection: "column", background: "oklch(0.065 0.045 46/0.55)", borderLeft: `1px solid ${HAIR}` }}>
                         <div style={{ padding: "clamp(12px,1.8vh,22px) 20px 8px", fontFamily: INTER, fontSize: 10, letterSpacing: "0.10em", textTransform: "uppercase", color: "oklch(0.52 0.08 52)", display: "flex", justifyContent: "space-between" }}>
                             <span>{t.linksTitle}</span>
                         </div>

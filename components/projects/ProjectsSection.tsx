@@ -237,6 +237,7 @@ export default function ProjectsSection() {
                     <div className="checkmate-video" style={{ height: 340, overflow: "hidden", position: "relative", background: "oklch(0.08 0.06 280)" }}>
                         <div
                             ref={screenshotRef}
+                            className="checkmate-video-inner"
                             style={{
                                 position: "absolute", top: "-15%", left: 0, right: 0, bottom: "-15%",
                                 transformOrigin: "center center",

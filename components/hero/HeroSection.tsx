@@ -13,7 +13,7 @@ import { useHeroParallax } from "@/hooks/useHeroParallax";
 import StarsBackground from "./StarsBackground";
 
 const LERP  = 0.06;
-const AMP_X = 20;
+const AMP_X = 10;
 
 export default function HeroSection() {
   const {
@@ -118,7 +118,7 @@ export default function HeroSection() {
 
       layers.forEach(({ ref, i }) => {
         if (!ref.current) return;
-        gsap.set(ref.current, { x: Math.max(-5, Math.min(5, cX * AMP_X * i)) });
+        gsap.set(ref.current, { x: Math.max(-3, Math.min(3, cX * AMP_X * i)) });
       });
     };
 
@@ -236,7 +236,7 @@ export default function HeroSection() {
         </div>
         <div ref={treeShadow2Ref} style={{
           position: "absolute",
-          bottom: "-6vw",
+          bottom: "-4vw",
           right: "-18vw",
           width: "92vw",
           height: "45vw",
