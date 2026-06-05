@@ -80,7 +80,7 @@ export default function MobileMenu() {
             }}
         >
             {/* Demi-cercle */}
-            <div style={{
+            <div className="mobile-menu-demi" style={{
                 position:             "absolute",
                 bottom:               -40,
                 left:                 0,
@@ -96,7 +96,7 @@ export default function MobileMenu() {
                 transition:           "opacity 0.3s ease",
             }} />
 
-            <div style={{ position: "relative", width: 140, height: 140 }}>
+            <div className="mobile-menu-logo" style={{ position: "relative", width: 140, height: 140 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src="/assets/hero/LOGO_Faro_hamburger.svg"

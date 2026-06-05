@@ -19,7 +19,7 @@
   pointer-events: all;
 }
 
-/* ── Bouton trapèze ── */
+/* ── Bouton ── */
 .trap-trigger {
   position: fixed;
   top: 0;
@@ -283,19 +283,21 @@
 }
 .tp-lang-toggle:hover { background: rgba(255,255,255,0.16); color: #fff; }
 
-/* ── Mobile responsive (< 768px) — panel plein écran depuis le bas ── */
+/* ── Mobile responsive (< 768px) ── */
 @media (max-width: 767px) {
-  /* Panel : plein écran, glisse du bas vers le haut */
+  /* Panel : plein écran */
   .trap-panel {
-    width:     100%;
-    left:      0;
-    right:     0;
-    clip-path: none;
-    transform: translateY(105%);
+    width:              100%;
+    left:               0;
+    right:              0;
+    clip-path:          none;
+    transform:          translateY(105%);
+    backdrop-filter:         blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   .trap-panel.open { transform: translateY(0); }
 
-  /* En-tête mobile : socials à gauche, lang toggle à droite */
+  /* En-tête mobile  */
   .tp-mobile-header {
     display:         flex;
     align-items:     center;
@@ -305,7 +307,7 @@
     flex-shrink:     0;
   }
 
-  /* Socials dans l'en-tête : plus grands pour les doigts */
+  /* Socials dans l'en-tête  */
   .tp-mobile-header .tp-social-btn {
     width:  52px;
     height: 52px;

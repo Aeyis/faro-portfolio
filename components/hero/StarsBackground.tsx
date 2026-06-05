@@ -20,7 +20,7 @@ export default function StarsBackground() {
 
     const ZONE = H * 0.72;
 
-    const stars: Star[] = Array.from({ length: 700 }, () => ({
+    const stars: Star[] = Array.from({ length: window.innerWidth < 768 ? 250 : 700 }, () => ({
       x:     Math.random() * W,
       y:     Math.random() * ZONE,
       r:     Math.random() * 1.2 + 0.5,

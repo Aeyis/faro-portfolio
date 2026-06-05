@@ -160,7 +160,7 @@ export default function ContactSection() {
                                 </button>
 
                                 {/* ── Liens sociaux — uniquement sur mobile ── */}
-                                {isMobile && <div style={{
+                                {isMobile && <div className="contact-mobile-links" style={{
                                     display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10,
                                     marginTop: 14, flexShrink: 0,
                                 }}>

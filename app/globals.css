@@ -172,7 +172,7 @@ video::-internal-skip-ad-button {
 html {
   scroll-behavior: auto;
   scrollbar-gutter: stable;   /* réserve l'espace scrollbar → évite le CLS au toggle */
-  overscroll-behavior-y: none; /* empêche le rubber band scroll en haut → corrige le clignotement des images */
+  overscroll-behavior-y: none; /* empêche le rubber band scroll en haut → corrige le clignotement images*/
 }
 
 .font-syne {
@@ -323,7 +323,7 @@ ANIMATIONS
   animation: sea-sway 22s linear infinite;
 }
 
-/* Vent arbres — rafales irrégulières */
+/* Vent arbres */
 @keyframes wind-a {
   0%   { transform: skewX(0deg) rotate(0deg); }
   15%  { transform: skewX(0.6deg) rotate(0.35deg); }

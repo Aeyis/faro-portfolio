@@ -49,13 +49,13 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
                 <span className={`${HN} bio-bold`} style={{ textAlign: "right" }}>Rafael Solis Ramos, </span>
                 <span className={DID} style={{ fontSize: "0.95em", marginLeft: "0.3em" }}>{t.role}</span>
             </span>
-            <span className={`${HN} block`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>{t.line1} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word1}</span></span>
-            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line2} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word2}</span></span>
-            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line3} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word3}</span></span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%", marginTop: "1.2em", whiteSpace: "nowrap" }}>{t.line1} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word1}</span></span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%", whiteSpace: "nowrap" }}>{t.line2} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word2}</span></span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%", whiteSpace: "nowrap" }}>{t.line3} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word3}</span></span>
             <span className={`${DID} block`} style={{ paddingLeft:"5%"}}>{t.line4}</span>
             <span className={`${HN} block bio-bold`} style={{ paddingLeft:"5%", marginTop: "1.2em" }}>{t.motor}</span>
             <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line5} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word5}</span> {t.line5b}</span>
-            <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line6} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word6}</span></span>
+            <span className={`${HN} block`} style={{ paddingLeft:"5%", whiteSpace: "nowrap" }}>{t.line6} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word6}</span></span>
             <span className={`${HN} block`} style={{ paddingLeft:"5%" }}>{t.line7} <span className={DID} style={{ fontStyle: "italic", fontSize: "1.2em" }}>{t.word7}</span></span>
         </p>
     );

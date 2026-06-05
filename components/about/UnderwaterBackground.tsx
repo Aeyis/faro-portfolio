@@ -33,7 +33,7 @@ export default function UnderwaterBackground({ variant = 'blue' }: Props) {
       vx: number; vy: number
       alpha: number; phase: number; pSpeed: number
     }
-    const NUM_P = 80
+    const NUM_P = window.innerWidth < 768 ? 35 : 80
     const particles: Particle[] = Array.from({ length: NUM_P }, () => ({
       x:      Math.random() * canvas.width,
       y:      Math.random() * canvas.height,
@@ -46,8 +46,10 @@ export default function UnderwaterBackground({ variant = 'blue' }: Props) {
     }))
 
     let rafId: number
+    let visible = false
 
     function loop() {
+      if (!visible) return
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height)
 
       particles.forEach(p => {
@@ -80,9 +82,27 @@ export default function UnderwaterBackground({ variant = 'blue' }: Props) {
       rafId = requestAnimationFrame(loop)
     }
 
-    loop()
+    function start() {
+      if (visible) return
+      visible = true
+      loop()
+    }
+
+    function stop() {
+      visible = false
+      cancelAnimationFrame(rafId)
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting ? start() : stop(),
+      { rootMargin: '200px' }
+    )
+    observer.observe(canvas)
+
+    start()
 
     return () => {
+      observer.disconnect()
       cancelAnimationFrame(rafId)
       window.removeEventListener('resize', resize)
     }

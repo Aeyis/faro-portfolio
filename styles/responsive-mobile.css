@@ -22,7 +22,7 @@
     top:   650px !important;
     width: 92vw  !important;
   }
-  /* Fenêtre plus grande, vidéo dézoomée */
+  /* Fenêtre avec video */
   .checkmate-video {
     height: clamp(280px, 72vw, 400px) !important;
   }
@@ -49,7 +49,7 @@
     padding:   6px 16px !important;
   }
 
-  /* "Voir le projet" + bouton GitHub côte à côte, bouton plus grand */
+  /* "Voir le projet" + bouton GitHub */
   .checkmate-cta {
     flex-direction: row !important;
     align-items:    center !important;
@@ -68,7 +68,6 @@
     height: 18px !important;
   }
 
-  /* Carte À venir remontée, pleine largeur */
   .checkmate-coming {
     top:                   1380px !important;
     width:                 92vw   !important;
@@ -82,12 +81,12 @@
     overflow:   visible !important;
   }
 
-  /* Boutons sociaux : grille 2×2 sur mobile */
+  /* Boutons sociaux : */
   .contact-mobile-links { display: grid !important; grid-template-columns: 1fr 1fr !important; }
   /* Cache l'aside desktop sur mobile */
   .contact-aside { display: none !important; }
 
-  /* Titre Contact centré en haut */
+  /* Titre Contact */
   .contact-section header {
     justify-content: center !important;
   }
@@ -102,7 +101,7 @@
     overflow:              visible !important;
   }
 
-  /* Formulaire compact, laisse 80px pour les boutons du bas */
+  /* Formulaire, espace de 80px pour les boutons du bas */
   .contact-grid > section {
     padding:        12px 16px 88px !important;
     overflow-y:     hidden !important;
@@ -162,7 +161,7 @@
   .contact-aside,
   #contact .contact-aside { display: none !important; }
 
-  /* Bouteilles : centrées + réduites (552px → ~248px visible) */
+  /* Bouteilles : centrées + réduites */
   .bottle-wrap {
     left:             50% !important;
     right:            auto !important;
@@ -170,7 +169,7 @@
     transform-origin: top center !important;
   }
 
-  /* Positions verticales adaptées mobile */
+  /* Positions verticales mobile */
   .bottle-wrap-0 { top: 500px  !important; left: 80% !important; }
   .bottle-wrap-1 { top: 880px  !important; left: 25% !important; }
   .bottle-wrap-2 { top: 1260px !important; left: 90% !important; }
@@ -187,18 +186,22 @@
     margin:         0 !important;
   }
 
-  /* Colonne bouteille : moitié haute */
+  /* Colonne bouteille : cachée sur mobile */
   .bottle-modal-left {
-    width:  100% !important;
-    height: 45dvh !important;
+    display: none !important;
   }
 
-  /* Colonne icônes : moitié basse, 4 colonnes */
+  /* Colonne icônes : plein écran centré */
   .bottle-modal-right {
-    height:              55dvh !important;
+    height:                100% !important;
     grid-template-columns: repeat(4, 1fr) !important;
-    padding:             12px 16px !important;
-    align-content:       start !important;
+    padding:               24px 16px !important;
+    align-content:         center !important;
+  }
+
+  /* Bouton fermer vert en bas : caché sur mobile (swipe pour fermer) */
+  .bottle-modal-close {
+    display: none !important;
   }
 }
 
@@ -216,7 +219,7 @@ ABOUT — responsive mobile
     text-align: center !important;
   }
 
-  /* ── Photo : à droite, plus grande, forme ovale ── */
+  /* ── Photo Moi: ── */
   .about-photo-wrap {
     width:         auto !important;
     height:        220px !important;
@@ -229,7 +232,7 @@ ABOUT — responsive mobile
     box-shadow:    0 12px 40px oklch(0 0 0 / 0.5) !important;
   }
 
-  /* ── Bio : pleine largeur SOUS la photo ── */
+  /* ── Bio : ── */
   .about-bio {
     top:         315px !important;
     left:        20px !important;
@@ -238,7 +241,7 @@ ABOUT — responsive mobile
     line-height: 1.6 !important;
   }
 
-  /* Nom/rôle : en bas de la photo, aligné à droite */
+  /* Nom/rôle : */
   .about-bio .about-name-line {
     position:   absolute !important;
     top:        -18px !important;
@@ -268,7 +271,74 @@ ABOUT — responsive mobile
   }
 }
 
-/* Bloque le scroll horizontal uniquement sur mobile (n'affecte pas le desktop) */
+/* ── Petits écrans courts (320×568, 320×640) ── */
+@media (max-width: 380px) and (max-height: 700px) {
+  .hero-m-faro   { top: 16vh  !important; }
+  .hero-m-ground { top: 22vh  !important; }
+  .hero-m-sea    { top: 33vh  !important; }
+  .hero-m-cloud1 { top: -49vh !important; }
+  .hero-m-cloud2 { top: -24vh !important; }
+  .hero-m-cloud3 { top: -28vh !important; }
+  .hero-m-cloud4 { top: -34vh !important; }
+  .hero-m-trees  { top: 98vh  !important; }
+
+  .about-photo-wrap {
+    height: 150px !important;
+    top:    70px  !important;
+  }
+  .about-photo2 {
+    object-position: 20% 0% !important;
+    transform: scale(1.35) translateX(-10px) !important;
+  }
+  .about-bio {
+    top: 252px !important;
+  }
+  .about-bio .about-name-line {
+    white-space: nowrap !important;
+  }
+  .bio-roboto.block,
+  .bio-line-block {
+    font-size: clamp(0.82rem, 3.3vw, 1.1rem) !important;
+  }
+  .bio-meie.block {
+    font-size: clamp(0.95rem, 3.8vw, 1.25rem) !important;
+  }
+  .about-bio .about-name-line > span {
+    font-size: clamp(0.7rem, 2.8vw, 0.9rem) !important;
+  }
+
+  /* Bouton menu + hamburger réduits — scale() conserve le positionnement relatif du SVG */
+  .mobile-menu-logo {
+    transform: scale(0.88) !important;
+    transform-origin: bottom center !important;
+  }
+
+  /* Demi-cercle réduit */
+  .mobile-menu-demi {
+    height: 72% !important;
+  }
+
+  /* Contact — contenu depuis le haut */
+  .contact-grid > section {
+    justify-content: flex-start !important;
+  }
+
+  /* Contact — boutons sociaux compacts */
+  .contact-mobile-links {
+    margin-top: 8px  !important;
+    gap:        6px  !important;
+  }
+  .contact-mobile-links a {
+    padding:   8px 4px !important;
+    gap:       4px     !important;
+  }
+  .contact-mobile-links a svg {
+    width:  18px !important;
+    height: 18px !important;
+  }
+}
+
+/* Bloque le scroll horizontal sur mobile */
 @media (max-width: 767px) {
   html, body {
     overflow-x:   hidden;  /* fallback universel */
@@ -276,4 +346,16 @@ ABOUT — responsive mobile
     max-width:    100%;
     touch-action: pan-y;   /* interdit le swipe horizontal sur écran tactile */
   }
+}
+
+/* Bouton menu — descendu sur très petits écrans */
+@media (max-width: 380px) {
+  .mobile-menu-btn {
+    bottom: 4px !important;
+  }
+}
+
+/* Modale bouteille ouverte : cache le bouton menu entier */
+body.bottle-modal-open .mobile-menu-btn {
+  display: none !important;
 }

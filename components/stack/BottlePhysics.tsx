@@ -113,10 +113,11 @@ export default function BottlePhysics({
 
     const { Engine, Render, Runner, Bodies, Body, World, Events } = Matter;
 
+    const isMobile = window.innerWidth < 768;
     const engine = Engine.create({
       gravity:            { x: 0, y: 1.2 },
-      positionIterations: 12,
-      velocityIterations: 10,
+      positionIterations: isMobile ? 6 : 12,
+      velocityIterations: isMobile ? 6 : 10,
     });
     engineRef.current = engine;
 

@@ -82,73 +82,87 @@ export default function WaterBackground({ width, height, tint = [0.2, 1.0, 0.5],
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const gl = (canvas.getContext("webgl") ?? canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
-        if (!gl) return;
-
-        const compile = (src: string, type: number) => {
-            const s = gl.createShader(type)!;
-            gl.shaderSource(s, src);
-            gl.compileShader(s);
-            return s;
-        };
-        const program = gl.createProgram()!;
-        gl.attachShader(program, compile(VERT, gl.VERTEX_SHADER));
-        gl.attachShader(program, compile(FRAG, gl.FRAGMENT_SHADER));
-        gl.linkProgram(program);
-        gl.useProgram(program);
-
-        const u = (n: string) => gl.getUniformLocation(program, n);
-        const uTime  = u("u_time");
-        const uRatio = u("u_ratio");
-
-        gl.uniform1f(u("u_scale"),             7);
-        gl.uniform1f(u("u_illumination"),       0.22);
-        gl.uniform1f(u("u_surface_distortion"), 0.07);
-        gl.uniform1f(u("u_water_distortion"),   0.04);
-        gl.uniform1i(u("u_image_texture"),      0);
-        gl.uniform3f(u("u_tint"),               tint[0], tint[1], tint[2]);
-        gl.uniform1f(uRatio, width / height);
-
-        const buf = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-        const loc = gl.getAttribLocation(program, "a_position");
-        gl.enableVertexAttribArray(loc);
-        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-        const off = document.createElement("canvas");
-        off.width = 256; off.height = 256;
-        const ctx = off.getContext("2d")!;
-        const grad = ctx.createRadialGradient(128, 100, 0, 128, 128, 220);
-        grad.addColorStop(0,   bgColors[0]);
-        grad.addColorStop(0.5, bgColors[1]);
-        grad.addColorStop(1,   bgColors[2]);
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 256, 256);
-
-        const tex = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, tex);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, off);
-
-        gl.viewport(0, 0, width, height);
-
         let rafId: number;
+        let glCtx: WebGLRenderingContext | null = null;
+        let uTimeRef: WebGLUniformLocation | null = null;
+
+        const setup = (): boolean => {
+            const gl = (canvas.getContext("webgl", { powerPreference: "low-power" })
+                     ?? canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+            if (!gl) return false;
+            glCtx = gl;
+
+            const compile = (src: string, type: number) => {
+                const s = gl.createShader(type)!;
+                gl.shaderSource(s, src); gl.compileShader(s); return s;
+            };
+            const program = gl.createProgram()!;
+            gl.attachShader(program, compile(VERT, gl.VERTEX_SHADER));
+            gl.attachShader(program, compile(FRAG, gl.FRAGMENT_SHADER));
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            const u = (n: string) => gl.getUniformLocation(program, n);
+            uTimeRef = u("u_time");
+
+            gl.uniform1f(u("u_scale"),             7);
+            gl.uniform1f(u("u_illumination"),       0.22);
+            gl.uniform1f(u("u_surface_distortion"), 0.07);
+            gl.uniform1f(u("u_water_distortion"),   0.04);
+            gl.uniform1i(u("u_image_texture"),      0);
+            gl.uniform3f(u("u_tint"),               tint[0], tint[1], tint[2]);
+            gl.uniform1f(u("u_ratio"),              width / height);
+
+            const buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+            const loc = gl.getAttribLocation(program, "a_position");
+            gl.enableVertexAttribArray(loc);
+            gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+            const off = document.createElement("canvas");
+            off.width = 256; off.height = 256;
+            const ctx = off.getContext("2d")!;
+            const grad = ctx.createRadialGradient(128, 100, 0, 128, 128, 220);
+            grad.addColorStop(0, bgColors[0]); grad.addColorStop(0.5, bgColors[1]); grad.addColorStop(1, bgColors[2]);
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, 256, 256);
+
+            const tex = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, tex);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, off);
+            gl.viewport(0, 0, width, height);
+            return true;
+        };
+
         const render = () => {
-            gl.uniform1f(uTime, performance.now());
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            if (!glCtx || !uTimeRef) return;
+            glCtx.uniform1f(uTimeRef, performance.now());
+            glCtx.drawArrays(glCtx.TRIANGLE_STRIP, 0, 4);
             rafId = requestAnimationFrame(render);
         };
-        rafId = requestAnimationFrame(render);
+
+        const onContextLost = (e: Event) => {
+            e.preventDefault();
+            cancelAnimationFrame(rafId);
+        };
+
+        const onContextRestored = () => {
+            if (setup()) rafId = requestAnimationFrame(render);
+        };
+
+        canvas.addEventListener("webglcontextlost",     onContextLost);
+        canvas.addEventListener("webglcontextrestored", onContextRestored);
+
+        if (setup()) rafId = requestAnimationFrame(render);
 
         return () => {
             cancelAnimationFrame(rafId);
-            gl.deleteTexture(tex);
-            gl.deleteBuffer(buf);
-            gl.deleteProgram(program);
+            canvas.removeEventListener("webglcontextlost",     onContextLost);
+            canvas.removeEventListener("webglcontextrestored", onContextRestored);
         };
     }, [width, height]);
 

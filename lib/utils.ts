@@ -4,7 +4,7 @@ import { CANVAS } from "./constants";
 type Layer = { x: number; y: number; w: number; h: number };
 
 // Convertit les coordonnées Figma (px) en positions CSS (%)
-// relatives au canvas de référence 1920x1258
+// Coordonnées relatives au canvas de référence FIgma1920x1258
 export function figmaToCSS(layer: Layer): CSSProperties {
   return {
     position: "absolute",

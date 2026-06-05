@@ -33,14 +33,17 @@ export default function HeroSectionMobile() {
         };
         const tick = () => {
             current += (target - current) * 0.05;
-            if (cloud1Ref.current) gsap.set(cloud1Ref.current, { x: current * 0.08 });
-            if (cloud2Ref.current) gsap.set(cloud2Ref.current, { x: current * 0.07 });
-            if (cloud3Ref.current) gsap.set(cloud3Ref.current, { x: current * 0.06 });
-            if (cloud4Ref.current) gsap.set(cloud4Ref.current, { x: current * 0.05 });
-            if (seaRef.current)    gsap.set(seaRef.current,    { x: current * 0.1 });
-            if (groundRef.current) gsap.set(groundRef.current, { x: current * 0.25 });
-            if (faroRef.current)   gsap.set(faroRef.current,   { x: current * 0.15 });
-            if (treesRef.current)  gsap.set(treesRef.current,  { x: current * 0.8 });
+            const settled = Math.abs(target - current) < 0.05;
+            if (!settled) {
+                if (cloud1Ref.current) gsap.set(cloud1Ref.current, { x: current * 0.08 });
+                if (cloud2Ref.current) gsap.set(cloud2Ref.current, { x: current * 0.07 });
+                if (cloud3Ref.current) gsap.set(cloud3Ref.current, { x: current * 0.06 });
+                if (cloud4Ref.current) gsap.set(cloud4Ref.current, { x: current * 0.05 });
+                if (seaRef.current)    gsap.set(seaRef.current,    { x: current * 0.1 });
+                if (groundRef.current) gsap.set(groundRef.current, { x: current * 0.25 });
+                if (faroRef.current)   gsap.set(faroRef.current,   { x: current * 0.15 });
+                if (treesRef.current)  gsap.set(treesRef.current,  { x: current * 0.8 });
+            }
             raf = requestAnimationFrame(tick);
         };
         window.addEventListener("deviceorientation", onTilt);
@@ -101,7 +104,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Phare */}
-                <div ref={faroRef} style={{
+                <div ref={faroRef} className="hero-m-faro" style={{
                     position: "absolute",
                     left: "2.5vw",
                     top: "5vh",
@@ -113,7 +116,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Mer */}
-                <div ref={seaRef} style={{
+                <div ref={seaRef} className="hero-m-sea" style={{
                     position: "absolute",
                     left: "-320vw",
                     top: "22vh",
@@ -127,7 +130,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Sol Sous le phare */}
-                <div ref={groundRef} style={{
+                <div ref={groundRef} className="hero-m-ground" style={{
                     position: "absolute",
                     left: 0,
                     top: "11vh",
@@ -139,7 +142,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Cloud 1 */}
-                <div ref={cloud1Ref} style={{
+                <div ref={cloud1Ref} className="hero-m-cloud1" style={{
                     position: "absolute",
                     left: "-190vw",
                     top: "-60vh",
@@ -153,7 +156,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Cloud 2 */}
-                <div ref={cloud2Ref} style={{
+                <div ref={cloud2Ref} className="hero-m-cloud2" style={{
                     position: "absolute",
                     left: "-160vw",
                     top: "-35vh",
@@ -167,7 +170,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Cloud 3 */}
-                <div ref={cloud3Ref} style={{
+                <div ref={cloud3Ref} className="hero-m-cloud3" style={{
                     position: "absolute",
                     left: "-140vw",
                     top: "-39vh",
@@ -181,7 +184,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Cloud 4 */}
-                <div ref={cloud4Ref} style={{
+                <div ref={cloud4Ref} className="hero-m-cloud4" style={{
                     position: "absolute",
                     left: "-80vw",
                     top: "-45vh",
@@ -195,7 +198,7 @@ export default function HeroSectionMobile() {
                 </div>
 
                 {/* Tree Front */}
-                <div ref={treesRef} style={{
+                <div ref={treesRef} className="hero-m-trees" style={{
                     position: "absolute",
                     left: "-179vw",
                     top: "83vh",
