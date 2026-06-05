@@ -101,7 +101,7 @@ VARIABLES
 }
 
 /* ── Hint touch bouteilles — desktop caché, mobile visible ── */
-.stack-touch-block { display: none !important; }
+@media (min-width: 768px) { .stack-touch-block { display: none !important; } }
 
 /* ── Menu mobile ── */
 .mobile-menu-btn { display: flex !important; flex-direction: column; align-items: center; gap: 4px; }
