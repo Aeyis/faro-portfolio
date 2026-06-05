@@ -24,11 +24,8 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
         const sectionEl = sectionRef.current;
         if (!bio || !sectionEl) return;
 
-        const isMob = window.innerWidth < 768;
-
-        /* Sur mobile : pas de SplitType → pas de wrapping de spans → pas de CLS */
-        const split = isMob ? null : new SplitType(bio, { types: "chars,words" });
-        split?.chars?.forEach(char => {
+        const split = new SplitType(bio, { types: "chars,words" });
+        split.chars?.forEach(char => {
             let el: HTMLElement | null = char.parentElement;
             while (el && el !== bio) {
                 if (el.classList.contains("bio-roboto")) { char.classList.add("bio-roboto"); break; }
@@ -38,14 +35,12 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
         });
         const st = ScrollTrigger.create({
             trigger: sectionEl,
-            start: isMob ? "top+=900 top" : "top+=420 top",
+            start: window.innerWidth < 768 ? "top+=900 top" : "top+=420 top",
             end: () => `+=${window.innerHeight * 3.5}`,
             scrub: true,
-            animation: isMob
-                ? gsap.from(bio, { opacity: 0, ease: "power2.out", paused: true })
-                : gsap.from(split!.chars!, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
+            animation: gsap.from(split.chars, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
         });
-        return () => { st.kill(); split?.revert(); };
+        return () => { st.kill(); split.revert(); };
     }, []);
 
     return (

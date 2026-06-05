@@ -21,7 +21,7 @@ export const SECTION_HEIGHTS = {
     hero: 2600,
     transition: 200,
     about: 4500,
-    stack: 2800,
+    stack: 2350,
     projects: 2000,
     contact: 600,
 } as const;
@@ -69,6 +69,6 @@ export const HERO_LAYERS = {
     treeShadow2:      { x: 582,    y: 590,    w: 1346,    h: 650     },
     treeShadow3:      { x: 684,    y: 569,    w: 1247.76, h: 689.43  },
     treeLight1:       { x: 357,    y: 10,     w: 1564,    h: 880     },
-    treeFront:        { x: -5100,   y: -210,    w: 12000,   h: 2500     },
+    treeFront:        { x: -5040,   y: -210,    w: 12000,   h: 2500     },
     racine:           { x: -6500, y: 1100, w: 15000, h: 1500 },
 } as const;

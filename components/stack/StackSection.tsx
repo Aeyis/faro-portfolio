@@ -221,6 +221,29 @@ export default function StackSection() {
                 }}>{t.shake}</span>
             </div>
 
+            {/* Hint mobile — visible uniquement sur mobile */}
+            <div className="stack-touch-block" style={{
+                position: "absolute", top: 400, left: "50%", transform: "translateX(-50%)",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+                zIndex: 3, pointerEvents: "none",
+            }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    src="/assets/bouteilles/bouteille1.webp"
+                    alt=""
+                    style={{ width: 60, height: 90, objectFit: "contain",
+                        filter: "drop-shadow(0 0 14px oklch(0.7 0.28 155 / 0.5))",
+                        animation: "bubbleFloat 2s ease-in-out infinite alternate",
+                    }}
+                />
+                <span className="font-inter-tight" style={{
+                    fontSize: 18, fontWeight: 900, letterSpacing: "0.22em", textTransform: "uppercase",
+                    backgroundImage: "radial-gradient(in oklch circle at 50% 50%, oklch(0.95 0.15 155) 0%, oklch(0.75 0.28 155) 50%, oklch(0.40 0.22 155) 100%)",
+                    backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent",
+                    filter: "drop-shadow(0 0 14px oklch(0.7 0.28 155 / 0.35))",
+                }}>{t.touch}</span>
+            </div>
+
             {BOTTLES.map((b, i) => (
                 <div
                     key={i}

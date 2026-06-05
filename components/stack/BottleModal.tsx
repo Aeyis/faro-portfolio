@@ -108,12 +108,16 @@ export default function BottleModal({ bottle, onClose }: {
     const iconImgRefs  = useRef<(HTMLImageElement | null)[]>([]);
     const nameRefs     = useRef<(HTMLSpanElement | null)[]>([]);
     const [isMobileModal, setIsMobileModal] = useState(false);
+    const [modalSize, setModalSize]         = useState({ w: MODAL_W, h: MODAL_H });
     const [poured, setPoured] = useState(false);
 
     useEffect(() => {
         const mob = window.innerWidth < 768;
         setIsMobileModal(mob);
-        if (mob) setPoured(true);
+        if (mob) {
+            setPoured(true);
+            setModalSize({ w: window.innerWidth, h: window.innerHeight });
+        }
 
         /* Force la position du bouton fermer sur mobile */
         if (mob && closeRef.current) {
@@ -311,7 +315,7 @@ export default function BottleModal({ bottle, onClose }: {
                     display:      "flex",
                 }}
             >
-                <WaterBackground width={MODAL_W} height={MODAL_H} />
+                <WaterBackground width={modalSize.w} height={modalSize.h} />
 
                 {/* fragments de bris — au niveau du modal pour passer devant tout */}
                 {Array.from({ length: S_COLS * S_ROWS }, (_, i) => {

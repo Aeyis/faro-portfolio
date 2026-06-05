@@ -15,6 +15,7 @@
 @media (max-width: 767px) {
   #stack { overflow-x: clip !important; }
   .stack-shake-block { display: none !important; }
+  .stack-touch-block { display: flex !important; }
 
   /* ── Carte Checkmate ── */
   .checkmate-wrap {

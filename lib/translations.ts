@@ -28,6 +28,7 @@ export const T = {
         },
         stack: {
             shake:      "Secouez",
+            touch:      "Touchez",
             breakIce:   "Brisez la glace",
             touchBottle:"Touche la bouteille",
         },
@@ -87,6 +88,7 @@ export const T = {
         },
         stack: {
             shake:       "Shake",
+            touch:       "Touch",
             breakIce:    "Break the glass",
             touchBottle: "Touch the bottle",
         },

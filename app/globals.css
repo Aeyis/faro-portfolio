@@ -100,6 +100,9 @@ VARIABLES
   }
 }
 
+/* ── Hint touch bouteilles — desktop caché, mobile visible ── */
+.stack-touch-block { display: none !important; }
+
 /* ── Menu mobile ── */
 .mobile-menu-btn { display: flex !important; flex-direction: column; align-items: center; gap: 4px; }
 @media (min-width: 768px) { .mobile-menu-btn { display: none !important; } }
@@ -169,6 +172,7 @@ video::-internal-skip-ad-button {
 html {
   scroll-behavior: auto;
   scrollbar-gutter: stable;   /* réserve l'espace scrollbar → évite le CLS au toggle */
+  overscroll-behavior-y: none; /* empêche le rubber band scroll en haut → corrige le clignotement des images */
 }
 
 .font-syne {
