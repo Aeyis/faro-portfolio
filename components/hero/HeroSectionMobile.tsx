@@ -137,6 +137,8 @@ export default function HeroSectionMobile() {
                     width: "282vw",
                     height: "83vh",
                     zIndex: 7,
+                    willChange: "transform",
+                    backfaceVisibility: "hidden",
                 }}>
                     <Image src="/assets/hero/ground_1.webp" alt="" fill priority fetchPriority="high" sizes="100vw" />
                 </div>

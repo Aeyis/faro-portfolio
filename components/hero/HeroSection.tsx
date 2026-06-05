@@ -198,6 +198,8 @@ export default function HeroSection() {
           width: "100vw",
           height: "55vw",
           zIndex: 5,
+          willChange: "transform",
+          backfaceVisibility: "hidden",
         }}>
           <Image src="/assets/hero/ground_1.webp" alt="" fill priority fetchPriority="high" sizes="100vw" style={{ objectFit: "fill" }} />
         </div>

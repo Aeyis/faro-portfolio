@@ -32,10 +32,21 @@ export default function ContactSection() {
     const t = T[lang].contact;
     const bubblesRef = useRef<HTMLDivElement>(null);
     const isMobile   = useIsMobile();
-    const [toast, setToast] = useState(false);
+    const [toast, setToast]     = useState(false);
     const [nom, setNom]         = useState("");
     const [email, setEmail]     = useState("");
     const [demande, setDemande] = useState("");
+    const [touched, setTouched] = useState({ nom: false, email: false, demande: false });
+
+    const getErrors = () => ({
+        nom:     !nom.trim()    ? t.errRequired : null,
+        email:   !email.trim()  ? t.errRequired
+                 : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? t.errEmail : null,
+        demande: !demande.trim() ? t.errRequired : null,
+    });
+
+    const touch = (field: "nom" | "email" | "demande") =>
+        setTouched(p => ({ ...p, [field]: true }));
 
     useEffect(() => {
         const wrap = bubblesRef.current;
@@ -57,6 +68,9 @@ export default function ContactSection() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setTouched({ nom: true, email: true, demande: true });
+        const errs = getErrors();
+        if (errs.nom || errs.email || errs.demande) return;
         emailjs.send(
             "service_0o3y10k",
             "template_xerxx7f",
@@ -133,20 +147,39 @@ export default function ContactSection() {
                             {t.lead}
                         </p>
                         <form onSubmit={handleSubmit} style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(6px,1vh,12px)", overflow: "hidden" }}>
+                            {(() => { const errs = getErrors(); return (
                             <div style={{ display: "flex", gap: 12, flexShrink: 0 }}>
-                                {[
-                                    { id: "nom",   label: t.labelName,  type: "text",  placeholder: t.placeholderName,  val: nom,   set: setNom   },
-                                    { id: "email", label: t.labelEmail, type: "email", placeholder: t.placeholderEmail, val: email, set: setEmail },
-                                ].map(f => (
+                                {([
+                                    { id: "nom"   as const, label: t.labelName,  type: "text",  placeholder: t.placeholderName,  val: nom,   set: setNom   },
+                                    { id: "email" as const, label: t.labelEmail, type: "email", placeholder: t.placeholderEmail, val: email, set: setEmail },
+                                ]).map(f => (
                                     <div key={f.id} className="contact-field" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                                         <label style={{ fontFamily: INTER, fontSize: 10, letterSpacing: "0.10em", textTransform: "uppercase", color: "oklch(0.6 0.09 52)", marginBottom: 4 }}>{f.label}</label>
-                                        <input type={f.type} placeholder={f.placeholder} value={f.val} onChange={e => f.set(e.target.value)} style={fieldInput} />
+                                        <input
+                                            type={f.type} placeholder={f.placeholder} value={f.val}
+                                            onChange={e => f.set(e.target.value)}
+                                            onBlur={() => touch(f.id)}
+                                            style={{ ...fieldInput, borderColor: touched[f.id] && errs[f.id] ? "oklch(0.62 0.22 25/0.8)" : undefined }}
+                                        />
+                                        {touched[f.id] && errs[f.id] && (
+                                            <span style={{ color: "oklch(0.68 0.20 25)", fontSize: 10, marginTop: 3, fontFamily: INTER }}>{errs[f.id]}</span>
+                                        )}
                                     </div>
                                 ))}
                             </div>
+                            ); })()}
+                            {(() => { const errs = getErrors(); return (
                             <div className="contact-field" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", gap: "clamp(6px,1vh,12px)" }}>
                                 <label style={{ fontFamily: INTER, fontSize: 10, letterSpacing: "0.10em", textTransform: "uppercase", color: "oklch(0.6 0.09 52)", marginBottom: 4, flexShrink: 0 }}>{t.labelMsg}</label>
-                                <textarea placeholder={t.placeholderMsg} value={demande} onChange={e => setDemande(e.target.value)} style={{ ...fieldInput, flex: 1, lineHeight: 1.5, minHeight: "80px" }} />
+                                <textarea
+                                    placeholder={t.placeholderMsg} value={demande}
+                                    onChange={e => setDemande(e.target.value)}
+                                    onBlur={() => touch("demande")}
+                                    style={{ ...fieldInput, flex: 1, lineHeight: 1.5, minHeight: "80px", borderColor: touched.demande && errs.demande ? "oklch(0.62 0.22 25/0.8)" : undefined }}
+                                />
+                                {touched.demande && errs.demande && (
+                                    <span style={{ color: "oklch(0.68 0.20 25)", fontSize: 10, marginTop: -6, fontFamily: INTER, flexShrink: 0 }}>{errs.demande}</span>
+                                )}
                                 <button type="submit" className="contact-submit" style={{
                                     flexShrink: 0, alignSelf: "flex-start",
                                     display: "inline-flex", alignItems: "center", gap: 8,
@@ -186,6 +219,7 @@ export default function ContactSection() {
                                     })}
                                 </div>}
                             </div>
+                            ); })()}
                         </form>
                     </section>
 

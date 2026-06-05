@@ -57,6 +57,8 @@ export const T = {
             emailZone:   "Message direct",
             linkedinZone:"Réseau pro",
             toast:       "Signal prêt — votre client mail s'ouvre ✦",
+            errRequired: "Ce champ est obligatoire",
+            errEmail:    "L'email n'est pas valide",
         },
     },
     en: {
@@ -117,6 +119,8 @@ export const T = {
             emailZone:   "Direct message",
             linkedinZone:"Professional network",
             toast:       "Ready — your mail client is opening ✦",
+            errRequired: "This field is required",
+            errEmail:    "This email is not valid",
         },
     },
 } as const;
