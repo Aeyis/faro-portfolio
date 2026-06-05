@@ -206,6 +206,20 @@
 }
 
 /*---------------------------------------------------------
+HERO MOBILE — décalage vertical des calques
+---------------------------------------------------------*/
+@media (max-width: 768px) {
+  .hero-m-faro   { top: 14vh  !important; }
+  .hero-m-ground { top: 20vh  !important; }
+  .hero-m-sea    { top: 31vh  !important; }
+  .hero-m-cloud1 { top: -51vh !important; }
+  .hero-m-cloud2 { top: -25vh !important; }
+  .hero-m-cloud3 { top: -28vh !important; }
+  .hero-m-cloud4 { top: -36vh !important; }
+  .hero-m-trees  { top: 94vh  !important; }
+}
+
+/*---------------------------------------------------------
 ABOUT — responsive mobile
 ---------------------------------------------------------*/
 @media (max-width: 768px) {
@@ -273,12 +287,12 @@ ABOUT — responsive mobile
 
 /* ── Petits écrans courts (320×568, 320×640) ── */
 @media (max-width: 380px) and (max-height: 700px) {
-  .hero-m-faro   { top: 16vh  !important; }
-  .hero-m-ground { top: 22vh  !important; }
-  .hero-m-sea    { top: 33vh  !important; }
-  .hero-m-cloud1 { top: -49vh !important; }
-  .hero-m-cloud2 { top: -24vh !important; }
-  .hero-m-cloud3 { top: -28vh !important; }
+  .hero-m-faro   { top: 21vh  !important; }
+  .hero-m-ground { top: 27vh  !important; }
+  .hero-m-sea    { top: 37vh  !important; }
+  .hero-m-cloud1 { top: -46vh !important; }
+  .hero-m-cloud2 { top: -21vh !important; }
+  .hero-m-cloud3 { top: -26vh !important; }
   .hero-m-cloud4 { top: -34vh !important; }
   .hero-m-trees  { top: 98vh  !important; }
 

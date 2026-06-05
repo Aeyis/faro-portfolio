@@ -22,6 +22,12 @@
     "split-type": "^0.3.4",
     "three": "^0.184.0"
   },
+  "browserslist": [
+    "chrome >= 93",
+    "firefox >= 92",
+    "safari >= 15",
+    "edge >= 93"
+  ],
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

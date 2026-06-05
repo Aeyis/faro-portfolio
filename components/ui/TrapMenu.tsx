@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { navigateTo } from "@/lib/navigateTo";
 import { useLang } from "@/lib/LanguageContext";
 import { T } from "@/lib/translations";
-import "@/styles/trap-menu.css";
 
 const NAV_KEYS: { depth: string; key: keyof typeof T["fr"]["nav"]; href: string }[] = [
     { depth: "0 m",   key: "home",     href: "#hero"    },

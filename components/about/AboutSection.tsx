@@ -24,23 +24,30 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
         const sectionEl = sectionRef.current;
         if (!bio || !sectionEl) return;
 
-        const split = new SplitType(bio, { types: "chars,words" });
-        split.chars?.forEach(char => {
-            let el: HTMLElement | null = char.parentElement;
-            while (el && el !== bio) {
-                if (el.classList.contains("bio-roboto")) { char.classList.add("bio-roboto"); break; }
-                if (el.classList.contains("bio-meie"))   { char.classList.add("bio-meie");   break; }
-                el = el.parentElement;
-            }
-        });
-        const st = ScrollTrigger.create({
-            trigger: sectionEl,
-            start: window.innerWidth < 768 ? "top+=900 top" : "top+=420 top",
-            end: () => `+=${window.innerHeight * 3.5}`,
-            scrub: true,
-            animation: gsap.from(split.chars, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
-        });
-        return () => { st.kill(); split.revert(); };
+        let st: ReturnType<typeof ScrollTrigger.create> | undefined;
+        let split: SplitType | undefined;
+
+        /* Différé après le rendu initial pour ne pas bloquer le LCP */
+        const timer = setTimeout(() => {
+            split = new SplitType(bio, { types: "chars,words" });
+            split.chars?.forEach(char => {
+                let el: HTMLElement | null = char.parentElement;
+                while (el && el !== bio) {
+                    if (el.classList.contains("bio-roboto")) { char.classList.add("bio-roboto"); break; }
+                    if (el.classList.contains("bio-meie"))   { char.classList.add("bio-meie");   break; }
+                    el = el.parentElement;
+                }
+            });
+            st = ScrollTrigger.create({
+                trigger: sectionEl,
+                start: window.innerWidth < 768 ? "top+=900 top" : "top+=420 top",
+                end: () => `+=${window.innerHeight * 3.5}`,
+                scrub: true,
+                animation: gsap.from(split!.chars, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
+            });
+        }, 300);
+
+        return () => { clearTimeout(timer); st?.kill(); split?.revert(); };
     }, []);
 
     return (

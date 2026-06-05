@@ -20,19 +20,6 @@ const SECTION_FILTERS: Record<string, string> = {
     contact: "hue-rotate(10deg)  saturate(1.2) brightness(1.1)",
 };
 
-function getCurrentSection(): string {
-    if (window.scrollY < 100) return "hero";
-    const mid = window.innerHeight / 2;
-    const ids = ["contact", "projets", "stack", "about", "hero"];
-    for (const id of ids) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const r = el.getBoundingClientRect();
-        if (r.top <= mid && r.bottom >= 0) return id;
-    }
-    return "hero";
-}
-
 export default function MobileMenu() {
     const [open,      setOpen]      = useState(false);
     const [hamColor,  setHamColor]  = useState("#c43a08");
@@ -44,16 +31,26 @@ export default function MobileMenu() {
         return () => window.removeEventListener("menu-close", onClose);
     }, []);
 
-    /* Tracking de la section visible → couleur du hamburger */
+    /* Tracking de la section visible → IntersectionObserver, zéro reflow */
     useEffect(() => {
-        const update = () => {
-            const section = getCurrentSection();
-            setHamColor(SECTION_COLORS[section]  ?? "#c43a08");
-            setImgFilter(SECTION_FILTERS[section] ?? "none");
-        };
-        update();
-        window.addEventListener("scroll", update, { passive: true });
-        return () => window.removeEventListener("scroll", update);
+        const ids = ["hero", "about", "stack", "projets", "contact"];
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        setHamColor(SECTION_COLORS[id]  ?? "#c43a08");
+                        setImgFilter(SECTION_FILTERS[id] ?? "none");
+                    }
+                }
+            },
+            { rootMargin: "-50% 0px -50% 0px", threshold: 0 }
+        );
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+        return () => observer.disconnect();
     }, []);
 
     return (
@@ -82,7 +79,7 @@ export default function MobileMenu() {
             {/* Demi-cercle */}
             <div className="mobile-menu-demi" style={{
                 position:             "absolute",
-                bottom:               -40,
+                bottom:               -60,
                 left:                 0,
                 right:                0,
                 height:               "100%",
