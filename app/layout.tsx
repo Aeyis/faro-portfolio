@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import React from "react";
 import "./globals.css";
 import LenisProvider from "@/components/ui/LenisProvider";
@@ -22,6 +22,11 @@ const blacksword   = localFont({ src: "../public/assets/hero/Blacksword.otf", va
 export const metadata: Metadata = {
     title: "Faro — Rafael Solis Ramos",
     description: "Portfolio de Rafael Solis Ramos",
+};
+
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
 };
 export default function RootLayout(
     {children,}: Readonly<{

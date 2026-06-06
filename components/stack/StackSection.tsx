@@ -4,7 +4,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SECTION_HEIGHTS } from "@/lib/constants";
+import { SECTION_HEIGHTS, SECTION_HEIGHTS_MOBILE } from "@/lib/constants";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useLang } from "@/lib/LanguageContext";
 import { T } from "@/lib/translations";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
@@ -58,6 +59,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function StackSection() {
     const { lang } = useLang();
     const t = T[lang].stack;
+    const isMobile = useIsMobile();
     const sectionRef     = useRef<HTMLElement>(null);
     const titleRef       = useRef<HTMLHeadingElement>(null);
     const floatRef       = useRef<HTMLDivElement>(null);
@@ -78,31 +80,19 @@ export default function StackSection() {
         const el = titleRef.current;
         if (!el) return;
 
-        gsap.fromTo(el,
-            { "--gy": "60vh" },
-            {
-                "--gy": "-20vh",
-                ease: "none",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: 0.6,
-                },
-            }
-        );
 
         if (window.innerWidth < 768) gsap.set(el, { transformOrigin: "top center" });
+        const isMob = window.innerWidth < 768;
         gsap.to(el, {
-            scale: () => window.innerWidth < 768 ? 0.55 : 0.40,
+            scale: () => window.innerWidth < 768 ? 0.65 : 0.40,
             x: () => window.innerWidth < 768 ? 0 : 40 - el.offsetLeft,
             y: () => (window.innerWidth < 768 ? 40 : 28) - (floatRef.current?.offsetTop ?? 80),
             transformOrigin: window.innerWidth < 768 ? "top center" : "top left",
             ease: "none",
             scrollTrigger: {
                 trigger: sectionRef.current,
-                start: "top top",
-                end: "+=800",
+                start: isMob ? "top+=300 top" : "top top",
+                end:   isMob ? "+=800" : "+=800",
                 scrub: 0.4,
                 invalidateOnRefresh: true,
                 onLeave:     () => window.dispatchEvent(new Event("stack-stuck")),
@@ -171,7 +161,7 @@ export default function StackSection() {
         <section
             id="stack"
             ref={sectionRef}
-            style={{ height: SECTION_HEIGHTS.stack, position: "relative", backgroundColor: "#000703" }}
+            style={{ height: isMobile ? SECTION_HEIGHTS_MOBILE.stack : SECTION_HEIGHTS.stack, position: "relative", backgroundColor: "#000703" }}
         >
             <UnderwaterBackground variant="green" />
 
@@ -187,14 +177,7 @@ export default function StackSection() {
                             lineHeight: 0.9,
                             margin: 0,
                             userSelect: "none",
-                            "--gy": "50vh",
-                            backgroundImage: `radial-gradient(
-                                in oklch circle at 50% var(--gy),
-                                oklch(0.95 0.15 155)  0vh,
-                                oklch(0.75 0.28 155)  50vh,
-                                oklch(0.40 0.22 155)  90vh,
-                                oklch(0.15 0.08 155 / 0) 150vh
-                            )`,
+                            backgroundImage: "radial-gradient(in oklch circle at 50% 50%, oklch(0.95 0.15 155) 0%, oklch(0.75 0.28 155) 50%, oklch(0.40 0.22 155) 100%)",
                             backgroundClip: "text",
                             WebkitBackgroundClip: "text",
                             color: "transparent",

@@ -10,6 +10,8 @@ import SplitType from "split-type";
 import { useAboutParallax } from "@/hooks/useAboutParallax";
 import { SECTION_HEIGHTS } from "@/lib/constants";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import AboutSectionMobile from "./AboutSectionMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,7 +70,7 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
     );
 }
 
-export default function AboutSection() {
+function AboutSectionDesktop() {
     const { lang } = useLang();
     const t = T[lang].about;
     const { sectionRef } = useAboutParallax();
@@ -347,4 +349,9 @@ export default function AboutSection() {
             </svg>
         </section>
     );
+}
+
+export default function AboutSection() {
+    const isMobile = useIsMobile();
+    return isMobile ? <AboutSectionMobile /> : <AboutSectionDesktop />;
 }

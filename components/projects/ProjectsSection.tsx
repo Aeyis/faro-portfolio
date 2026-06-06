@@ -4,7 +4,8 @@ import React, { useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SECTION_HEIGHTS } from "@/lib/constants";
+import { SECTION_HEIGHTS, SECTION_HEIGHTS_MOBILE } from "@/lib/constants";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useLang } from "@/lib/LanguageContext";
 import { T } from "@/lib/translations";
 import UnderwaterBackground from "@/components/about/UnderwaterBackground";
@@ -20,6 +21,7 @@ const COMING_SOON_KEYS = [0] as const;
 export default function ProjectsSection() {
     const { lang } = useLang();
     const t = T[lang].projects;
+    const isMobile = useIsMobile();
     const sectionRef    = useRef<HTMLElement>(null);
     const titleRef      = useRef<HTMLHeadingElement>(null);
     const floatRef      = useRef<HTMLDivElement>(null);
@@ -161,7 +163,7 @@ export default function ProjectsSection() {
         <section
             id="projets"
             ref={sectionRef}
-            style={{ height: SECTION_HEIGHTS.projects, position: "relative", backgroundColor: BG }}
+            style={{ height: isMobile ? SECTION_HEIGHTS_MOBILE.projects : SECTION_HEIGHTS.projects, position: "relative", backgroundColor: BG }}
         >
             <UnderwaterBackground variant="violet" />
 

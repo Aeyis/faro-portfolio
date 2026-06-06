@@ -223,7 +223,7 @@ HERO MOBILE — décalage vertical des calques
 ABOUT — responsive mobile
 ---------------------------------------------------------*/
 @media (max-width: 768px) {
-  #about { height: 5800px !important; }
+  /* height contrôlée par AboutSectionMobile via inline style */
 
   .about-sticky {
     padding-top: 160px !important;

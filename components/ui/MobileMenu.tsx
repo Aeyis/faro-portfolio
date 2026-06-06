@@ -31,26 +31,32 @@ export default function MobileMenu() {
         return () => window.removeEventListener("menu-close", onClose);
     }, []);
 
-    /* Tracking de la section visible → IntersectionObserver, zéro reflow */
+    /* Tracking de la section visible — même logique que LogoIntro desktop */
     useEffect(() => {
-        const ids = ["hero", "about", "stack", "projets", "contact"];
-        const observer = new IntersectionObserver(
-            (entries) => {
-                for (const entry of entries) {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.id;
-                        setHamColor(SECTION_COLORS[id]  ?? "#c43a08");
-                        setImgFilter(SECTION_FILTERS[id] ?? "none");
-                    }
+        const SECTION_IDS = ["hero", "about", "stack", "projets", "contact"];
+
+        const updateSection = () => {
+            const mid = window.innerHeight / 2;
+            for (const id of SECTION_IDS) {
+                const el = document.getElementById(id);
+                if (!el) continue;
+                const rect = el.getBoundingClientRect();
+                if (rect.top <= mid && rect.bottom >= mid) {
+                    setHamColor(SECTION_COLORS[id]  ?? "#c43a08");
+                    setImgFilter(SECTION_FILTERS[id] ?? "none");
+                    return;
                 }
-            },
-            { rootMargin: "-50% 0px -50% 0px", threshold: 0 }
-        );
-        ids.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) observer.observe(el);
-        });
-        return () => observer.disconnect();
+            }
+        };
+
+        updateSection();
+        const onNavigate = () => setTimeout(updateSection, 1100);
+        window.addEventListener("scroll",           updateSection, { passive: true });
+        window.addEventListener("section-navigate", onNavigate);
+        return () => {
+            window.removeEventListener("scroll",           updateSection);
+            window.removeEventListener("section-navigate", onNavigate);
+        };
     }, []);
 
     return (

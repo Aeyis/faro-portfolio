@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { SECTION_HEIGHTS, PARALLAX_SPEEDS } from "@/lib/constants";
+import { SECTION_HEIGHTS, SECTION_HEIGHTS_MOBILE, PARALLAX_SPEEDS } from "@/lib/constants";
 import BubbleCanvas from "@/components/ui/BubbleCanvas";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -60,13 +60,13 @@ export default function HeroSectionMobile() {
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: 2,
         };
 
         const move = (ref: React.RefObject<HTMLDivElement | null>, speed: number) => {
             if (!ref.current) return;
             gsap.to(ref.current, {
-                y: -(SECTION_HEIGHTS.hero * speed * MULTIPLIER),
+                y: -(SECTION_HEIGHTS_MOBILE.hero * speed * MULTIPLIER),
                 ease: "none",
                 scrollTrigger: trigger,
             });
@@ -86,7 +86,7 @@ export default function HeroSectionMobile() {
         <section
             ref={sectionRef}
             id="hero"
-            style={{ height: SECTION_HEIGHTS.hero, position: "relative" }}
+            style={{ height: SECTION_HEIGHTS_MOBILE.hero, position: "relative" }}
         >
             <div className="sticky top-0 w-full overflow-hidden" style={{ height: "115vh", zIndex: 20, background: `
                 radial-gradient(ellipse 40% 80% at 0% 40%, rgba(10, 15, 30, 0.6) 0%, transparent 100%),

@@ -26,6 +26,16 @@ export const SECTION_HEIGHTS = {
     contact: 600,
 } as const;
 // --------------------------------------------------------- //
+// ---------------- HAUTEUR SECTIONS MOBILE-------------- //
+// --------------------------------------------------------- //
+export const SECTION_HEIGHTS_MOBILE = {
+    hero:     1500,
+    about:    3000,
+    stack:   2300,
+    projects: 2000,
+    contact:  600,
+} as const;
+// --------------------------------------------------------- //
 // ----- VITESSE PARALLAX (0=fixe, 1= vitesse scroll) ------- //
 // --------------------------------------------------------- //
 export const PARALLAX_SPEEDS = {

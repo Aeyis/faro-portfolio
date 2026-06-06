@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { SECTION_HEIGHTS } from "@/lib/constants";
+import { SECTION_HEIGHTS, SECTION_HEIGHTS_MOBILE } from "@/lib/constants";
 import { useLang } from "@/lib/LanguageContext";
 import { T } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -96,7 +96,7 @@ export default function ContactSection() {
         <section
             id="contact"
             className="contact-section"
-            style={{ height: SECTION_HEIGHTS.contact, position: "relative", backgroundColor: "oklch(0.05 0.045 48)", overflow: "clip" }}
+            style={{ height: isMobile ? SECTION_HEIGHTS_MOBILE.contact : SECTION_HEIGHTS.contact, position: "relative", backgroundColor: "oklch(0.05 0.045 48)", overflow: "clip" }}
         >
             {/* Décor */}
             <div style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none", overflow: "hidden",
