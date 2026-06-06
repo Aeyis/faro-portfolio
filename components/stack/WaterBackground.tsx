@@ -139,7 +139,7 @@ export default function WaterBackground({ width, height, tint = [0.2, 1.0, 0.5],
         };
 
         const render = () => {
-            if (!glCtx || !uTimeRef) return;
+            if (!glCtx || !uTimeRef || glCtx.isContextLost()) return;
             glCtx.uniform1f(uTimeRef, performance.now());
             glCtx.drawArrays(glCtx.TRIANGLE_STRIP, 0, 4);
             rafId = requestAnimationFrame(render);

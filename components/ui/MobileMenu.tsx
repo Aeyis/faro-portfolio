@@ -70,15 +70,16 @@ export default function MobileMenu() {
             style={{
                 position:       "fixed",
                 bottom:         16,
-                left:           0,
-                right:          0,
+                left:           "50%",
+                transform:      "translateX(-50%)",
+                width:          156,
                 zIndex:         99999,
                 border:         "none",
                 cursor:         "pointer",
                 background:     "transparent",
-                paddingTop:     0,
-                paddingBottom:  0,
+                padding:        0,
                 touchAction:    "manipulation",
+                display:        "flex",
                 justifyContent: "center",
             }}
         >
@@ -86,8 +87,9 @@ export default function MobileMenu() {
             <div className="mobile-menu-demi" style={{
                 position:             "absolute",
                 bottom:               -60,
-                left:                 0,
-                right:                0,
+                left:                 "50%",
+                transform:            "translateX(-50%)",
+                width:                "100vw",
                 height:               "100%",
                 backgroundImage:      "radial-gradient(ellipse 100% 100% at 50% 100%, rgba(4,10,18,0.90) 60%, transparent 100%)",
                 backdropFilter:       "blur(32px) saturate(1.5)",

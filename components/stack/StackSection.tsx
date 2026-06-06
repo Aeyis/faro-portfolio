@@ -240,7 +240,10 @@ export default function StackSection() {
                         zIndex:   2,
                     }}
                 >
-                    <div ref={el => { floatInnerRefs.current[i] = el; }}>
+                    <div
+                        ref={el => { floatInnerRefs.current[i] = el; }}
+                        style={isMobile ? { pointerEvents: "none" } : undefined}
+                    >
                         <BottlePhysics
                             bottleSrc={b.src}
                             items={b.items}
@@ -251,6 +254,21 @@ export default function StackSection() {
                             itemRadius={b.items.length <= 3 ? 30 : 20}
                         />
                     </div>
+
+                    {isMobile && (
+                        <div
+                            onClick={() => setFocusedBottle(i)}
+                            style={{
+                                position: "absolute",
+                                top:      b.bt - 100,
+                                left:     b.bl - 100,
+                                width:    (b.br - b.bl) + 200,
+                                height:   (b.bb - b.bt) + 300,
+                                zIndex:   10,
+                                cursor:   "pointer",
+                            }}
+                        />
+                    )}
                 </div>
             ))}
 

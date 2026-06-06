@@ -107,32 +107,28 @@ export default function BottleModal({ bottle, onClose }: {
     const pieceRefs    = useRef<(HTMLDivElement | null)[]>([]);
     const iconImgRefs  = useRef<(HTMLImageElement | null)[]>([]);
     const nameRefs     = useRef<(HTMLSpanElement | null)[]>([]);
-    const [isMobileModal, setIsMobileModal] = useState(false);
-    const [modalSize, setModalSize]         = useState({ w: MODAL_W, h: MODAL_H });
-    const [poured, setPoured] = useState(false);
+    const [isMobileModal] = useState(() => window.innerWidth < 768);
+    const [modalSize]     = useState(() =>
+        window.innerWidth < 768
+            ? { w: window.innerWidth, h: window.innerHeight }
+            : { w: MODAL_W, h: MODAL_H }
+    );
+    const [poured, setPoured] = useState(() => window.innerWidth < 768);
 
+    /* Force la position du bouton fermer sur mobile */
     useEffect(() => {
-        const mob = window.innerWidth < 768;
-        setIsMobileModal(mob);
-        if (mob) {
-            setPoured(true);
-            setModalSize({ w: window.innerWidth, h: window.innerHeight });
-        }
-
-        /* Force la position du bouton fermer sur mobile */
-        if (mob && closeRef.current) {
-            const btn = closeRef.current;
-            btn.style.setProperty('top',       'auto',              'important');
-            btn.style.setProperty('bottom',    '24px',              'important');
-            btn.style.setProperty('right',     '50%',               'important');
-            btn.style.setProperty('transform', 'translateX(50%)',   'important');
-            btn.style.setProperty('width',     '60px',              'important');
-            btn.style.setProperty('height',    '60px',              'important');
-            btn.style.setProperty('font-size', '26px',              'important');
-            btn.style.setProperty('background','oklch(0.22 0.12 155 / 0.98)', 'important');
-            btn.style.setProperty('border',    '2px solid oklch(0.60 0.20 155 / 0.8)', 'important');
-        }
-    }, []);
+        if (!isMobileModal || !closeRef.current) return;
+        const btn = closeRef.current;
+        btn.style.setProperty('top',       'auto',              'important');
+        btn.style.setProperty('bottom',    '24px',              'important');
+        btn.style.setProperty('right',     '50%',               'important');
+        btn.style.setProperty('transform', 'translateX(50%)',   'important');
+        btn.style.setProperty('width',     '60px',              'important');
+        btn.style.setProperty('height',    '60px',              'important');
+        btn.style.setProperty('font-size', '26px',              'important');
+        btn.style.setProperty('background','oklch(0.22 0.12 155 / 0.98)', 'important');
+        btn.style.setProperty('border',    '2px solid oklch(0.60 0.20 155 / 0.8)', 'important');
+    }, [isMobileModal]);
 
     /* animation d'entrée de la carte */
     useEffect(() => {
