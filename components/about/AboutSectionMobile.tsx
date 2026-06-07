@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -46,18 +46,14 @@ export default function AboutSectionMobile() {
     const s1Ref      = useRef<HTMLDivElement>(null);
     const s2Ref      = useRef<HTMLDivElement>(null);
     const s3Ref      = useRef<HTMLDivElement>(null);
-    const photo2Ref   = useRef<HTMLDivElement>(null);
-    const photoCardRef = useRef<HTMLDivElement>(null);
 
-    const ul1 = useRef<HTMLSpanElement>(null);  // technique
-    const ul2 = useRef<HTMLSpanElement>(null);  // visuelle
-    const ul3 = useRef<HTMLSpanElement>(null);  // interfaces
-    const ul4 = useRef<HTMLSpanElement>(null);  // quelque chose à dire
-    const ul5 = useRef<HTMLSpanElement>(null);  // curiosité / word5
-    const ul6 = useRef<HTMLSpanElement>(null);  // les détails / word6
-    const ul7 = useRef<HTMLSpanElement>(null);  // différence / word7
-
-    const [tapped, setTapped] = useState(false);
+    const ul1 = useRef<HTMLSpanElement>(null);
+    const ul2 = useRef<HTMLSpanElement>(null);
+    const ul3 = useRef<HTMLSpanElement>(null);
+    const ul4 = useRef<HTMLSpanElement>(null);
+    const ul5 = useRef<HTMLSpanElement>(null);
+    const ul6 = useRef<HTMLSpanElement>(null);
+    const ul7 = useRef<HTMLSpanElement>(null);
 
     useGSAP(() => {
         const el = sectionRef.current;
@@ -78,7 +74,7 @@ export default function AboutSectionMobile() {
             scrollTrigger: { trigger: el, start: "top top", end: `top+=${S * 0.4} top`, scrub },
         });
 
-        /* ── S1 : entrée + hold + sortie dans une seule timeline ── */
+        /* ── S1 : entrée + hold + sortie ── */
         gsap.timeline({ scrollTrigger: { trigger: el, start: `top+=${S * 0.35} top`, end: `top+=${S * 1.3} top`, scrub } })
             .fromTo(s1Ref.current,
                 { opacity: 0, y: 40, filter: "blur(12px)" },
@@ -87,7 +83,7 @@ export default function AboutSectionMobile() {
             .to(s1Ref.current, { opacity: 1, duration: 0.08 })
             .to(s1Ref.current, { opacity: 0, ease: "power2.in", duration: 0.64 });
 
-        /* ── S2 : entrée + hold (dérive vers le haut) + sortie ── */
+        /* ── S2 : entrée + hold + sortie ── */
         gsap.timeline({ scrollTrigger: { trigger: el, start: `top+=${S * 1.15} top`, end: `top+=${S * 1.85} top`, scrub } })
             .fromTo(s2Ref.current,
                 { opacity: 0, y: 30 },
@@ -96,7 +92,7 @@ export default function AboutSectionMobile() {
             .to(s2Ref.current, { opacity: 1, y: -18, ease: "none", duration: 0.44 })
             .to(s2Ref.current, { opacity: 0, ease: "power2.in", duration: 0.29 });
 
-        /* Underlines S2 (après entrée complète) */
+        /* Underlines S2 */
         ([ul1, ul2, ul3, ul4] as React.RefObject<HTMLSpanElement | null>[]).forEach((ref, i) => {
             gsap.to(ref.current, {
                 scaleX: 1, ease: "power2.out",
@@ -104,7 +100,7 @@ export default function AboutSectionMobile() {
             });
         });
 
-        /* ── S3 : entrée + drift — se termine exactement à la fin de la section ── */
+        /* ── S3 : entrée + drift ── */
         gsap.timeline({ scrollTrigger: { trigger: el, start: `top+=${S * 1.9} top`, end: `top+=${SECTION_H} top`, scrub } })
             .fromTo(s3Ref.current,
                 { opacity: 0, y: 30 },
@@ -112,7 +108,7 @@ export default function AboutSectionMobile() {
             )
             .to(s3Ref.current, { opacity: 1, y: -15, ease: "none", duration: 0.5 });
 
-        /* Underlines S3 — time-based, déclenché quand S3 est entièrement visible (scroll 2260+) */
+        /* Underlines S3 */
         ([ul5, ul6, ul7] as React.RefObject<HTMLSpanElement | null>[]).forEach((ref, i) => {
             gsap.fromTo(ref.current,
                 { scaleX: 0 },
@@ -128,13 +124,6 @@ export default function AboutSectionMobile() {
         });
 
     }, { scope: sectionRef });
-
-    const handleTap = () => {
-        if (tapped) return;
-        setTapped(true);
-        if (photo2Ref.current)
-            gsap.to(photo2Ref.current, { clipPath: "inset(0% 0 0% 0)", duration: 0.65, ease: "power3.inOut" });
-    };
 
     const textLine: React.CSSProperties = {
         margin: 0,
@@ -178,50 +167,31 @@ export default function AboutSectionMobile() {
                 <div ref={s1Ref} style={{
                     position: "absolute", inset: 0,
                     display: "flex", flexDirection: "column",
-                    paddingTop: 76, paddingBottom: 120,
+                    paddingTop: 76, paddingBottom: 170,
                 }}>
-                    {/* Photo pleine largeur, flex:1 remplit l'espace restant */}
-                    <div
-                        ref={photoCardRef}
-                        onClick={handleTap}
-                        style={{
-                            position: "relative",
-                            width: "100%",
-                            flex: 1,
-                            overflow: "hidden",
-                            cursor: "pointer",
-                            flexShrink: 0,
+                    <div style={{
+                        position: "relative",
+                        width: "100%",
+                        flex: 1,
+                        overflow: "hidden",
+                        flexShrink: 0,
+                    }}>
+                        <div style={{
+                            position: "absolute", inset: 0,
                             maskImage: "radial-gradient(ellipse 90% 85% at 50% 50%, black 40%, transparent 100%), linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)",
                             WebkitMaskImage: "radial-gradient(ellipse 80% 65% at 50% 30%, black 40%, transparent 100%), linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)",
                             maskComposite: "intersect",
                             WebkitMaskComposite: "source-in",
-                        }}
-                    >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/assets/about/moi.webp" alt="Rafael" style={{
-                            position: "absolute", inset: 0, width: "100%", height: "100%",
-                            objectFit: "cover", objectPosition: "center top",
-                        }} />
-                        <div ref={photo2Ref} style={{ position: "absolute", inset: 0, clipPath: "inset(100% 0 0% 0)", zIndex: 1 }}>
+                        }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/assets/about/moi2.webp" alt="Rafael plongée" style={{
-                                width: "100%", height: "100%",
-                                objectFit: "cover", objectPosition: "20% center",
+                            <img src="/assets/about/moi.webp" alt="Rafael" style={{
+                                position: "absolute", inset: 0, width: "100%", height: "100%",
+                                objectFit: "cover", objectPosition: "center top",
                             }} />
                         </div>
-                        {!tapped && (
-                            <span style={{
-                                position: "absolute", bottom: 10, right: 14, zIndex: 2,
-                                fontSize: 10, fontStyle: "italic",
-                                color: "rgba(255,255,255,0.45)",
-                                fontFamily: "var(--font-fraunces)",
-                            }}>
-                                tap →
-                            </span>
-                        )}
                     </div>
 
-                    {/* Nom + rôle sous la photo */}
+                    {/* Nom + rôle */}
                     <div style={{ textAlign: "center", padding: "10px 24px 0", flexShrink: 0 }}>
                         <p className="font-inter-tight" style={{
                             margin: 0, fontWeight: 900,
@@ -241,9 +211,9 @@ export default function AboutSectionMobile() {
                     </div>
                 </div>
 
-                {/* ── Écran 2 : ── */}
+                {/* ── Écran 2 ── */}
                 <div ref={s2Ref} style={{
-                    position: "absolute", inset: 0, opacity: 0,
+                    position: "absolute", inset: 0, opacity: 0, pointerEvents: "none",
                     display: "flex", flexDirection: "column",
                     alignItems: "flex-start", justifyContent: "flex-start",
                     padding: "180px 28px 32px", gap: 6,
@@ -251,13 +221,13 @@ export default function AboutSectionMobile() {
                     <p className="font-inter-tight" style={{...textLine, textAlign: "center", width: "85%" }}>
                         {t.line1}
                     </p>
-                    <p className="font-inter-tight" style={ {...textLine, paddingLeft: "1em" }}>
+                    <p className="font-inter-tight" style={{ ...textLine, paddingLeft: "1em" }}>
                         {t.line1b} <KW ulRef={ul1}>{t.word1}</KW>
                     </p>
-                    <p className="font-inter-tight" style={  {...textLine, paddingLeft: "0.25em" } }>
+                    <p className="font-inter-tight" style={{ ...textLine, paddingLeft: "0.25em" }}>
                         {t.line2} <KW ulRef={ul2}>{t.word2}</KW>
                     </p>
-                    <p className="font-inter-tight" style={{ ...textLine,  paddingLeft: "0.3em" } }>
+                    <p className="font-inter-tight" style={{ ...textLine, paddingLeft: "0.3em" }}>
                         {t.line3} <KW ulRef={ul3}>{t.word3}</KW>
                     </p>
                     <p className="font-inter-tight" style={{...textLine, textAlign: "center", width: "90%"}}>
@@ -268,9 +238,9 @@ export default function AboutSectionMobile() {
                     </p>
                 </div>
 
-                {/* ── Écran 3 : Mon moteur + curiosité + obsession ── */}
+                {/* ── Écran 3 ── */}
                 <div ref={s3Ref} style={{
-                    position: "absolute", inset: 0, opacity: 0,
+                    position: "absolute", inset: 0, opacity: 0, pointerEvents: "none",
                     display: "flex", flexDirection: "column",
                     alignItems: "flex-start", justifyContent: "flex-start",
                     padding: "230px 28px 32px", gap: 8,

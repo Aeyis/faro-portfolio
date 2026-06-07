@@ -28,7 +28,7 @@ export const T = {
         },
         aboutMobile: {
             title:    "À propos",
-            role:     "développeur web fullstack.",
+            role:     "développeur fullstack.",
             line1:    "Je fusionne",
             line1b:   "la logique",
             word1:    "technique",
@@ -112,7 +112,7 @@ export const T = {
         },
         aboutMobile: {
             title:    "About",
-            role:     "web fullstack developer.",
+            role:     "fullstack developer.",
             line1:    "I merge",
             line1b:   "the logic",
             word1:    "technical",

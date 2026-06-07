@@ -258,12 +258,6 @@ function AboutSectionDesktop() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/assets/about/moi2.webp" alt="Rafael" className="about-photo2" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "63% center" }} />
                     </div>
-                    {/* Hint */}
-                    <p className="font-fraunces" style={{
-                        position: "absolute", bottom: 14, right: 16, zIndex: 2,
-                        fontSize: 11, fontStyle: "italic", fontWeight: 300,
-                        color: "rgba(255,255,255,0.55)", margin: 0, pointerEvents: "none",
-                    }}>hover →</p>
                 </div>
                 <div ref={floatRef} style={{ position: "relative", zIndex: 1 }}>
                     <h2
