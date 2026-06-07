@@ -502,34 +502,35 @@ export default function BottleModal({ bottle, onClose }: {
                     ))}
                 </div>
 
-                {/* Bouton fermer — coin haut droit */}
-                <button
-                    onClick={onClose}
-                    style={{
-                        position:       "absolute",
-                        top:            12,
-                        right:          12,
-                        zIndex:         10,
-                        width:          32,
-                        height:         32,
-                        borderRadius:   "50%",
-                        background:     "rgba(255,255,255,0.09)",
-                        border:         "1px solid rgba(255,255,255,0.22)",
-                        color:          "white",
-                        fontSize:       18,
-                        lineHeight:     "1",
-                        cursor:         "pointer",
-                        display:        "flex",
-                        alignItems:     "center",
-                        justifyContent: "center",
-                        backdropFilter: "blur(8px)",
-                        transition:     "background 0.15s",
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.20)")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
-                >
-                    &times;
-                </button>
+                {/* Bouton fermer — mobile uniquement (le bouton vert .bottle-modal-close est caché sur mobile) */}
+                {isMobileModal && (
+                    <button
+                        onClick={onClose}
+                        style={{
+                            position:       "fixed",
+                            bottom:         168,
+                            left:           "50%",
+                            transform:      "translateX(-50%)",
+                            zIndex:         200,
+                            width:          48,
+                            height:         48,
+                            borderRadius:   "50%",
+                            background:     "rgba(255,255,255,0.09)",
+                            border:         "1px solid rgba(255,255,255,0.22)",
+                            color:          "white",
+                            fontSize:       26,
+                            lineHeight:     "1",
+                            cursor:         "pointer",
+                            display:        "flex",
+                            alignItems:     "center",
+                            justifyContent: "center",
+                            backdropFilter: "blur(8px)",
+                            transition:     "background 0.15s",
+                        }}
+                    >
+                        &times;
+                    </button>
+                )}
             </div>
         </>
     );

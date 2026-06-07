@@ -13,7 +13,8 @@
 
 /* ── Bouteilles Stack — responsive ── */
 @media (max-width: 767px) {
-  #stack { overflow-x: clip !important; }
+  #stack   { overflow-x: clip !important; }
+  #projets { overflow-x: clip !important; }
   .stack-shake-block { display: none !important; }
   .stack-touch-block { display: flex !important; }
 

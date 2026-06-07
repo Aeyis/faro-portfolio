@@ -91,19 +91,8 @@ export default function ProjectsSection() {
         const el = titleRef.current;
         if (!el) return;
 
-        gsap.fromTo(el,
-            { "--gy": "60vh" },
-            {
-                "--gy": "-20vh",
-                ease: "none",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top bottom", end: "bottom top", scrub: 0.6,
-                },
-            }
-        );
-
-        if (window.innerWidth < 768) gsap.set(el, { transformOrigin: "top center" });
+        const isMob = window.innerWidth < 768;
+        if (isMob) gsap.set(el, { transformOrigin: "top center" });
         gsap.to(el, {
             scale:           () => window.innerWidth < 768 ? 0.55 : 0.40,
             x: () => window.innerWidth < 768 ? 0 : 40 - el.offsetLeft,
@@ -111,8 +100,12 @@ export default function ProjectsSection() {
             transformOrigin: window.innerWidth < 768 ? "top center" : "top left",
             ease:            "none",
             scrollTrigger: {
-                trigger: sectionRef.current, start: "top top", end: "+=400",
+                trigger: sectionRef.current,
+                start:   isMob ? "top+=300 top" : "top top",
+                end:     isMob ? "+=800" : "+=400",
                 scrub: 0.4, invalidateOnRefresh: true,
+                onLeave:     () => window.dispatchEvent(new Event("projets-stuck")),
+                onEnterBack: () => window.dispatchEvent(new Event("projets-unstuck")),
             },
         });
 
@@ -212,20 +205,13 @@ export default function ProjectsSection() {
                 <div ref={floatRef} style={{ position: "absolute", top: "80px", left: "40px", right: "40px" }}>
                     <h2
                         ref={titleRef}
-                        className="font-inter-tight about-title"
+                        className="font-inter-tight about-title projects-title"
                         style={{
                             fontWeight: 900, letterSpacing: "-0.05em", lineHeight: 0.9,
-                            margin: 0, paddingBottom: "0.15em", userSelect: "none",
-                            "--gy": "50vh",
-                            backgroundImage: `radial-gradient(
-                                in oklch circle at 50% var(--gy),
-                                oklch(0.95 0.10 295)  0vh,
-                                oklch(0.75 0.24 285)  50vh,
-                                oklch(0.40 0.20 275)  90vh,
-                                oklch(0.15 0.08 270 / 0) 150vh
-                            )`,
+                            margin: 0, userSelect: "none",
+                            backgroundImage: "radial-gradient(in oklch circle at 50% 50%, oklch(0.95 0.12 295) 0%, oklch(0.75 0.26 285) 50%, oklch(0.40 0.20 278) 100%)",
                             backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent",
-                            filter: "drop-shadow(0 0 30px oklch(0.7 0.24 285 / 0.18))",
+                            filter: "drop-shadow(0 0 30px oklch(0.7 0.26 285 / 0.18))",
                         } as React.CSSProperties}
                     >
                         Projets

@@ -260,6 +260,16 @@ ABOUT — title size
   font-size: clamp(72px, 16vw, 260px);
 }
 
+/* Fallback gradient pour Firefox < 113 (pas de support oklch / in oklch) */
+.projects-title {
+  background-image: radial-gradient(circle at 50% 50%, #f0e0ff 0%, #9b5ff5 50%, #4a1e8a 100%);
+}
+@supports (color: oklch(0 0 0)) {
+  .projects-title {
+    background-image: radial-gradient(circle at 50% 50%, oklch(0.95 0.12 295) 0%, oklch(0.75 0.26 285) 50%, oklch(0.40 0.20 278) 100%);
+  }
+}
+
 .sky-gradient > div,
 .sky-gradient img {
   will-change: transform;
