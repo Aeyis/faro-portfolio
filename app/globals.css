@@ -107,9 +107,11 @@ VARIABLES
 /* ── Menu mobile ── */
 .mobile-menu-btn { display: flex !important; flex-direction: column; align-items: center; gap: 4px; }
 @media (min-width: 768px) { .mobile-menu-btn { display: none !important; } }
+@media (min-width: 768px) { .mobile-menu-demi { display: none !important; } }
 
 /* Cache le bouton menu pendant le loading screen */
 body.is-loading .mobile-menu-btn { display: none !important; }
+body.is-loading .mobile-menu-demi { display: none !important; }
 
 
 :root {

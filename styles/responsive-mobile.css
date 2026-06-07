@@ -329,7 +329,7 @@ ABOUT — responsive mobile
 
   /* Demi-cercle réduit */
   .mobile-menu-demi {
-    height: 72% !important;
+    height: 100px !important;
   }
 
   /* Contact — contenu depuis le haut */
