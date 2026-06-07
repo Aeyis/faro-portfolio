@@ -34,16 +34,15 @@ export default function LoadingScreen() {
         const overlay = overlayRef.current;
         if (!overlay) return;
         const isMob = window.innerWidth < 768;
-        gsap.to(overlay, {
-            yPercent: isMob ? 100 : -100,
-            duration: 0.5,
-            ease: "power3.inOut",
-            onComplete: () => {
-                document.body.classList.remove("is-loading");
-                window.scrollTo(0, 0);
-                setGone(true);
-            },
-        });
+        /* Transition CSS au lieu de GSAP — tourne sur le compositor thread
+           même si le main thread JS est encore bloqué (TBT élevé). */
+        overlay.style.transition = "transform 0.5s cubic-bezier(0.76, 0, 0.24, 1)";
+        overlay.style.transform  = isMob ? "translateY(100%)" : "translateY(-100%)";
+        setTimeout(() => {
+            document.body.classList.remove("is-loading");
+            window.scrollTo(0, 0);
+            setGone(true);
+        }, 520);
     };
 
     useEffect(() => {
@@ -63,6 +62,11 @@ export default function LoadingScreen() {
                 transformOrigin: "left center",
             });
         }
+
+        /* Fallback : si GSAP est bloqué par le JS initial (TBT élevé), on force
+           la sortie après 2.5s pour ne pas bloquer le LCP indéfiniment. */
+        const fallback = setTimeout(exit, 2500);
+        return () => clearTimeout(fallback);
     }, []);
 
     if (gone) return null;

@@ -60,78 +60,82 @@ export default function MobileMenu() {
     }, []);
 
     return (
-        <button
-            aria-label="Menu"
-            className="mobile-menu-btn"
-            onClick={() => {
-                setOpen(o => !o);
-                window.dispatchEvent(new Event("menu-toggle"));
-            }}
-            style={{
-                position:       "fixed",
-                bottom:         16,
-                left:           "50%",
-                transform:      "translateX(-50%)",
-                width:          156,
-                zIndex:         99999,
-                border:         "none",
-                cursor:         "pointer",
-                background:     "transparent",
-                padding:        0,
-                touchAction:    "manipulation",
-                display:        "flex",
-                justifyContent: "center",
-            }}
-        >
-            {/* Demi-cercle */}
+        <>
+            {/* Demi-cercle décoratif — hors du bouton pour ne pas étendre la zone de hit */}
             <div className="mobile-menu-demi" style={{
-                position:             "absolute",
-                bottom:               -60,
+                position:             "fixed",
+                bottom:               -44,
                 left:                 "50%",
                 transform:            "translateX(-50%)",
                 width:                "100vw",
-                height:               "100%",
+                height:               140,
                 backgroundImage:      "radial-gradient(ellipse 100% 100% at 50% 100%, rgba(4,10,18,0.90) 60%, transparent 100%)",
                 backdropFilter:       "blur(32px) saturate(1.5)",
                 WebkitBackdropFilter: "blur(32px) saturate(1.5)",
                 borderRadius:         "50% 50% 0 0 / 40% 40% 0 0",
-                zIndex:               -1,
+                zIndex:               99998,
                 pointerEvents:        "none",
                 opacity:              open ? 0 : 1,
                 transition:           "opacity 0.3s ease",
             }} />
 
-            <div className="mobile-menu-logo" style={{ position: "relative", width: 140, height: 140 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                    src="/assets/hero/LOGO_Faro_hamburger.svg"
-                    alt=""
-                    width={140}
-                    height={140}
-                    style={{ objectFit: "contain", display: "block", filter: imgFilter, transition: "filter 0.4s ease" }}
-                />
+            <button
+                aria-label="Menu"
+                className="mobile-menu-btn"
+                onClick={() => {
+                    setOpen(o => !o);
+                    window.dispatchEvent(new Event("menu-toggle"));
+                }}
+                style={{
+                    position:       "fixed",
+                    bottom:         16,
+                    left:           "50%",
+                    transform:      "translateX(-50%)",
+                    width:          140,
+                    height:         140,
+                    zIndex:         99999,
+                    border:         "none",
+                    cursor:         "pointer",
+                    background:     "transparent",
+                    padding:        0,
+                    touchAction:    "manipulation",
+                    display:        "flex",
+                    justifyContent: "center",
+                    alignItems:     "center",
+                }}
+            >
+                <div className="mobile-menu-logo" style={{ position: "relative", width: 140, height: 140 }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/assets/hero/LOGO_Faro_hamburger.svg"
+                        alt=""
+                        width={140}
+                        height={140}
+                        style={{ objectFit: "contain", display: "block", filter: imgFilter, transition: "filter 0.4s ease" }}
+                    />
 
-                <svg
-                    className={`ham-btn ham4${open ? " active" : ""}`}
-                    viewBox="0 0 100 100"
-                    width={42}
-                    height={42}
-                    style={{
-                        position:  "absolute",
-                        top:       "50%",
-                        left:      "50%",
-                        transform: open
-                            ? "translate(-50%, calc(-50% + 25px)) rotate(45deg)"
-                            : "translate(-50%, calc(-50% + 25px))",
-                        "--ham-color": hamColor,
-                        transition: "all 0.4s ease",
-                    } as React.CSSProperties}
-                >
-                    <path className="line top"    d="m 70,33 h -40 c 0,0 -8.5,-0.149796 -8.5,8.5 0,8.649796 8.5,8.5 8.5,8.5 h 20 v -20" />
-                    <path className="line middle" d="m 70,50 h -40" />
-                    <path className="line bottom" d="m 30,67 h 40 c 0,0 8.5,0.149796 8.5,-8.5 0,-8.649796 -8.5,-8.5 -8.5,-8.5 h -20 v 20" />
-                </svg>
-            </div>
-        </button>
+                    <svg
+                        className={`ham-btn ham4${open ? " active" : ""}`}
+                        viewBox="0 0 100 100"
+                        width={42}
+                        height={42}
+                        style={{
+                            position:  "absolute",
+                            top:       "50%",
+                            left:      "50%",
+                            transform: open
+                                ? "translate(-50%, calc(-50% + 25px)) rotate(45deg)"
+                                : "translate(-50%, calc(-50% + 25px))",
+                            "--ham-color": hamColor,
+                            transition: "all 0.4s ease",
+                        } as React.CSSProperties}
+                    >
+                        <path className="line top"    d="m 70,33 h -40 c 0,0 -8.5,-0.149796 -8.5,8.5 0,8.649796 8.5,8.5 8.5,8.5 h 20 v -20" />
+                        <path className="line middle" d="m 70,50 h -40" />
+                        <path className="line bottom" d="m 30,67 h 40 c 0,0 8.5,0.149796 8.5,-8.5 0,-8.649796 -8.5,-8.5 -8.5,-8.5 h -20 v 20" />
+                    </svg>
+                </div>
+            </button>
+        </>
     );
 }

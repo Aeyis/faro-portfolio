@@ -66,6 +66,8 @@ export default function StackSection() {
     const bottleRefs     = useRef<(HTMLDivElement | null)[]>([]);
     const floatInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [focusedBottle, setFocusedBottle] = useState<number | null>(null);
+    const [physicsReady,  setPhysicsReady]  = useState(false);
+    const [gsapReady,     setGsapReady]     = useState(false);
 
     useEffect(() => {
         if (focusedBottle !== null) {
@@ -76,7 +78,26 @@ export default function StackSection() {
         return () => document.body.classList.remove("bottle-modal-open");
     }, [focusedBottle]);
 
+    /* Observer unique — déclenche GSAP et Matter.js quand la section
+       est à 800px du viewport (assez tôt pour être prêts avant le scroll). */
+    useEffect(() => {
+        if (!sectionRef.current) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setPhysicsReady(true);
+                    setGsapReady(true);
+                    obs.disconnect();
+                }
+            },
+            { rootMargin: "800px" }
+        );
+        obs.observe(sectionRef.current);
+        return () => obs.disconnect();
+    }, []);
+
     useGSAP(() => {
+        if (!gsapReady) return;
         const el = titleRef.current;
         if (!el) return;
 
@@ -155,7 +176,7 @@ export default function StackSection() {
             });
         });
 
-    }, { scope: sectionRef });
+    }, { scope: sectionRef, dependencies: [gsapReady] });
 
     return (
         <section
@@ -242,33 +263,39 @@ export default function StackSection() {
                 >
                     <div
                         ref={el => { floatInnerRefs.current[i] = el; }}
-                        style={isMobile ? { pointerEvents: "none" } : undefined}
+                        style={{ position: "relative" }}
                     >
-                        <BottlePhysics
-                            bottleSrc={b.src}
-                            items={b.items}
-                            bl={b.bl} br={b.br}
-                            bt={b.bt} bb={b.bb}
-                            onShake={() => setFocusedBottle(i)}
-                            sticker={"sticker" in b ? b.sticker : undefined}
-                            itemRadius={b.items.length <= 3 ? 30 : 20}
-                        />
-                    </div>
+                        {/* pointer-events: none sur mobile seulement sur BottlePhysics */}
+                        <div style={isMobile ? { pointerEvents: "none" } : undefined}>
+                            {physicsReady && (
+                                <BottlePhysics
+                                    bottleSrc={b.src}
+                                    items={b.items}
+                                    bl={b.bl} br={b.br}
+                                    bt={b.bt} bb={b.bb}
+                                    onShake={() => setFocusedBottle(i)}
+                                    sticker={"sticker" in b ? b.sticker : undefined}
+                                    itemRadius={b.items.length <= 3 ? 30 : 20}
+                                />
+                            )}
+                        </div>
 
-                    {isMobile && (
-                        <div
-                            onClick={() => setFocusedBottle(i)}
-                            style={{
-                                position: "absolute",
-                                top:      b.bt - 100,
-                                left:     b.bl - 100,
-                                width:    (b.br - b.bl) + 200,
-                                height:   (b.bb - b.bt) + 300,
-                                zIndex:   10,
-                                cursor:   "pointer",
-                            }}
-                        />
-                    )}
+                        {/* Overlay dans floatInnerRefs → suit l'animation float */}
+                        {isMobile && (
+                            <div
+                                onClick={() => setFocusedBottle(i)}
+                                style={{
+                                    position: "absolute",
+                                    top:      b.bt,
+                                    left:     b.bl,
+                                    width:    b.br - b.bl,
+                                    height:   b.bb - b.bt,
+                                    zIndex:   10,
+                                    cursor:   "pointer",
+                                }}
+                            />
+                        )}
+                    </div>
                 </div>
             ))}
 

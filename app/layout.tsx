@@ -42,9 +42,15 @@ export default function RootLayout(
             {/* LCP desktop */}
             <link rel="preload" as="image" href="/assets/hero/faro.webp" type="image/webp" fetchPriority="high" />
             <link rel="preload" as="image" href="/assets/hero/ground_1.webp" type="image/webp" fetchPriority="high" />
-            {/* LCP mobile */}
-            <link rel="preload" as="image" href="/assets/hero/sea.webp" type="image/webp" fetchPriority="high" />
-            <link rel="preload" as="image" href="/assets/hero/cloud_1.webp" type="image/webp" fetchPriority="high" />
+            {/* LCP mobile — imagesrcset doit correspondre exactement au srcset généré par Next.js Image */}
+            <link
+                rel="preload"
+                as="image"
+                media="(max-width: 767px)"
+                imageSrcSet="/_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=640&q=75 640w, /_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=750&q=75 750w, /_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=828&q=75 828w, /_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=1080&q=75 1080w, /_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=1200&q=75 1200w, /_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=1920&q=75 1920w, /_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=2048&q=75 2048w, /_next/image?url=%2Fassets%2Fhero%2Fsea.webp&w=3840&q=75 3840w"
+                imageSizes="200vw"
+                fetchPriority="high"
+            />
             {/* Force scroll=0 avant tout rendu — empêche la restauration du navigateur */}
             <script dangerouslySetInnerHTML={{ __html: `
                 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';

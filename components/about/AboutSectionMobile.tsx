@@ -112,12 +112,19 @@ export default function AboutSectionMobile() {
             )
             .to(s3Ref.current, { opacity: 1, y: -15, ease: "none", duration: 0.5 });
 
-        /* Underlines S3 — se terminent exactement à la fin de la section */
+        /* Underlines S3 — time-based, déclenché quand S3 est entièrement visible (scroll 2260+) */
         ([ul5, ul6, ul7] as React.RefObject<HTMLSpanElement | null>[]).forEach((ref, i) => {
-            gsap.to(ref.current, {
-                scaleX: 1, ease: "power2.out",
-                scrollTrigger: { trigger: el, start: `top+=${SECTION_H - 108 + i * 36} top`, end: `top+=${SECTION_H - 72 + i * 36} top`, scrub: true },
-            });
+            gsap.fromTo(ref.current,
+                { scaleX: 0 },
+                {
+                    scaleX: 1, ease: "power2.out", duration: 0.7, delay: i * 0.18,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: `top+=${S * 2.85} top`,
+                        toggleActions: "play none none none",
+                    },
+                }
+            );
         });
 
     }, { scope: sectionRef });

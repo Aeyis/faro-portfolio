@@ -28,9 +28,8 @@ export default function HeroSectionMobile() {
         let target = 0;
         let current = 0;
         let raf: number;
-        const onTilt = (e: DeviceOrientationEvent) => {
-            target = -(e.gamma ?? 0);
-        };
+        let running = false;
+
         const tick = () => {
             current += (target - current) * 0.05;
             const settled = Math.abs(target - current) < 0.05;
@@ -46,8 +45,13 @@ export default function HeroSectionMobile() {
             }
             raf = requestAnimationFrame(tick);
         };
+
+        const onTilt = (e: DeviceOrientationEvent) => {
+            target = -(e.gamma ?? 0);
+            if (!running) { running = true; raf = requestAnimationFrame(tick); }
+        };
+
         window.addEventListener("deviceorientation", onTilt);
-        raf = requestAnimationFrame(tick);
         return () => {
             window.removeEventListener("deviceorientation", onTilt);
             cancelAnimationFrame(raf);

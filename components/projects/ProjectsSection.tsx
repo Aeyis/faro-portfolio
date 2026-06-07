@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -30,6 +30,18 @@ export default function ProjectsSection() {
     const screenshotRef = useRef<HTMLDivElement>(null);
     const glowRef       = useRef<HTMLDivElement>(null);
     const comingRefs    = useRef<(HTMLDivElement | null)[]>([]);
+    const [gsapReady, setGsapReady] = useState(false);
+
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) { setGsapReady(true); obs.disconnect(); } },
+            { rootMargin: "800px" }
+        );
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, []);
 
     /* ── 3D tilt au hover ── */
     useEffect(() => {
@@ -75,6 +87,7 @@ export default function ProjectsSection() {
     }, []);
 
     useGSAP(() => {
+        if (!gsapReady) return;
         const el = titleRef.current;
         if (!el) return;
 
@@ -107,23 +120,54 @@ export default function ProjectsSection() {
             y: -14, duration: 2.8, ease: "sine.inOut", repeat: -1, yoyo: true,
         });
 
-        /* reveal de la carte */
-        if (cardRef.current) {
-            gsap.fromTo(cardRef.current,
-                { y: 60, opacity: 0 },
-                {
-                    y: 0, opacity: 1,
-                    scrollTrigger: {
-                        trigger: cardRef.current,
-                        start:   "top 88%",
-                        end:     "top 52%",
-                        scrub:   0.7,
-                    },
-                }
-            );
-        }
+        const mm = gsap.matchMedia();
 
-        /* parallax screenshot — zoom out au scroll */
+        mm.add("(min-width: 768px)", () => {
+            /* reveal de la carte — desktop uniquement */
+            if (cardRef.current) {
+                gsap.fromTo(cardRef.current,
+                    { y: 60, opacity: 0 },
+                    {
+                        y: 0, opacity: 1,
+                        scrollTrigger: {
+                            trigger: cardRef.current,
+                            start:   "top 88%",
+                            end:     "top 52%",
+                            scrub:   0.7,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            }
+
+            /* À venir — clip-path reveal décalé — desktop uniquement */
+            comingRefs.current.forEach((card, i) => {
+                if (!card) return;
+                gsap.fromTo(card,
+                    { clipPath: "inset(0 0 100% 0 round 16px)" },
+                    {
+                        clipPath: "inset(0 0 0% 0 round 16px)",
+                        scrollTrigger: {
+                            trigger: card,
+                            start:   `top 92%`,
+                            end:     `top ${62 - i * 4}%`,
+                            scrub:   0.5,
+                            invalidateOnRefresh: true,
+                        },
+                    }
+                );
+            });
+        });
+
+        mm.add("(max-width: 767px)", () => {
+            /* Mobile — cartes visibles immédiatement, sans scroll-reveal */
+            if (cardRef.current) gsap.set(cardRef.current, { opacity: 1, y: 0 });
+            comingRefs.current.forEach(card => {
+                if (card) gsap.set(card, { clipPath: "none" });
+            });
+        });
+
+        /* parallax screenshot — toutes tailles */
         if (screenshotRef.current) {
             gsap.fromTo(screenshotRef.current,
                 { y: -20 },
@@ -140,24 +184,7 @@ export default function ProjectsSection() {
             );
         }
 
-        /* À venir — clip-path reveal décalé */
-        comingRefs.current.forEach((card, i) => {
-            if (!card) return;
-            gsap.fromTo(card,
-                { clipPath: "inset(0 0 100% 0 round 16px)" },
-                {
-                    clipPath: "inset(0 0 0% 0 round 16px)",
-                    scrollTrigger: {
-                        trigger: card,
-                        start:   `top 92%`,
-                        end:     `top ${62 - i * 4}%`,
-                        scrub:   0.5,
-                    },
-                }
-            );
-        });
-
-    }, { scope: sectionRef });
+    }, { scope: sectionRef, dependencies: [gsapReady] });
 
     return (
         <section
