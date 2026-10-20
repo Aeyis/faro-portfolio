@@ -272,11 +272,11 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
                                 {title}
                                 {description}
                             </div>
-                            {tags}
                             <div className="project-cta" style={{ display: "flex", alignItems: "center", gap: 18 }}>
                                 {seeSpan}
                                 {githubBtn}
                             </div>
+                            {tags}
                         </div>
                     </>
                 ) : (
