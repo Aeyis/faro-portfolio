@@ -30,9 +30,9 @@ export const SECTION_HEIGHTS = {
 // --------------------------------------------------------- //
 export const SECTION_HEIGHTS_MOBILE = {
     hero:     1500,
-    about:    3000,
+    about:    3300,
     stack:   2300,
-    projects: 2900,
+    projects: 2500,
     contact:  600,
 } as const;
 // --------------------------------------------------------- //

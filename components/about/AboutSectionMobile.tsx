@@ -83,44 +83,36 @@ export default function AboutSectionMobile() {
             .to(s1Ref.current, { opacity: 1, duration: 0.08 })
             .to(s1Ref.current, { opacity: 0, ease: "power2.in", duration: 0.64 });
 
-        /* ── S2 : entrée + hold + sortie ── */
-        gsap.timeline({ scrollTrigger: { trigger: el, start: `top+=${S * 1.15} top`, end: `top+=${S * 1.85} top`, scrub } })
-            .fromTo(s2Ref.current,
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, ease: "power2.out", duration: 0.27 }
-            )
-            .to(s2Ref.current, { opacity: 1, y: -18, ease: "none", duration: 0.44 })
-            .to(s2Ref.current, { opacity: 0, ease: "power2.in", duration: 0.29 });
+        /* Repères (px de scroll depuis le haut de la section) — tout doit finir avant la fin du sticky
+           (SECTION_H - hauteur écran, soit ~2370px sur un écran de 932px) */
 
-        /* Underlines S2 */
+        /* ── S2 : entrée douce (~250px) + hold + sortie douce (~250px) ── */
+        gsap.set(s2Ref.current, { filter: "blur(6px)" });
+        gsap.timeline({ scrollTrigger: { trigger: el, start: `top+=${S * 1.25} top`, end: `top+=${S * 2.2} top`, scrub } })
+            .to(s2Ref.current, { opacity: 1, y: 0, filter: "blur(0px)", ease: "sine.out", duration: 0.33 })
+            .to(s2Ref.current, { y: -12, ease: "none", duration: 0.34 })
+            .to(s2Ref.current, { opacity: 0, y: -36, filter: "blur(6px)", ease: "sine.in", duration: 0.33 });
+
+        /* Underlines S2 — pendant le hold de S2 */
         ([ul1, ul2, ul3, ul4] as React.RefObject<HTMLSpanElement | null>[]).forEach((ref, i) => {
             gsap.to(ref.current, {
                 scaleX: 1, ease: "power2.out",
-                scrollTrigger: { trigger: el, start: `top+=${S * 1.38 + i * 48} top`, end: `top+=${S * 1.47 + i * 48} top`, scrub: 0.5 },
+                scrollTrigger: { trigger: el, start: `top+=${S * 1.45 + i * 60} top`, end: `top+=${S * 1.45 + i * 60 + 100} top`, scrub: 0.5 },
             });
         });
 
-        /* ── S3 : entrée + drift ── */
-        gsap.timeline({ scrollTrigger: { trigger: el, start: `top+=${S * 1.9} top`, end: `top+=${SECTION_H} top`, scrub } })
-            .fromTo(s3Ref.current,
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, ease: "power2.out", duration: 0.5 }
-            )
-            .to(s3Ref.current, { opacity: 1, y: -15, ease: "none", duration: 0.5 });
+        /* ── S3 : entrée douce (~250px) + drift ── */
+        gsap.set(s3Ref.current, { filter: "blur(6px)" });
+        gsap.timeline({ scrollTrigger: { trigger: el, start: `top+=${S * 2.1} top`, end: `top+=${S * 3.0} top`, scrub } })
+            .to(s3Ref.current, { opacity: 1, y: 0, filter: "blur(0px)", ease: "sine.out", duration: 0.35 })
+            .to(s3Ref.current, { y: -15, ease: "none", duration: 0.65 });
 
-        /* Underlines S3 */
+        /* Underlines S3 — une fois S3 bien visible, avant la fin du sticky */
         ([ul5, ul6, ul7] as React.RefObject<HTMLSpanElement | null>[]).forEach((ref, i) => {
-            gsap.fromTo(ref.current,
-                { scaleX: 0 },
-                {
-                    scaleX: 1, ease: "power2.out", duration: 0.7, delay: i * 0.18,
-                    scrollTrigger: {
-                        trigger: el,
-                        start: `top+=${S * 2.85} top`,
-                        toggleActions: "play none none none",
-                    },
-                }
-            );
+            gsap.to(ref.current, {
+                scaleX: 1, ease: "power2.out",
+                scrollTrigger: { trigger: el, start: `top+=${S * 2.45 + i * 60} top`, end: `top+=${S * 2.45 + i * 60 + 100} top`, scrub: 0.5 },
+            });
         });
 
     }, { scope: sectionRef });

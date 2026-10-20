@@ -138,7 +138,8 @@ export default function ProjectsSection() {
                         className="font-inter-tight about-title projects-title"
                         style={{
                             fontWeight: 900, letterSpacing: "-0.05em", lineHeight: 0.9,
-                            margin: 0, userSelect: "none",
+                            /* espace sous la ligne pour que le gradient (background-clip: text) couvre le jambage du j */
+                            margin: 0, paddingBottom: "0.15em", userSelect: "none",
                             backgroundImage: "radial-gradient(in oklch circle at 50% 50%, oklch(0.95 0.12 295) 0%, oklch(0.75 0.26 285) 50%, oklch(0.40 0.20 278) 100%)",
                             backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent",
                             filter: "drop-shadow(0 0 30px oklch(0.7 0.26 285 / 0.18))",

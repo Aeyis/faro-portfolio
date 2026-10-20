@@ -18,6 +18,11 @@ gsap.registerPlugin(ScrollTrigger);
 const HN  = "bio-roboto";
 const DID = "bio-meie";
 
+/* Reveal du texte : démarre à BIO_START et doit finir avant la fin du sticky
+   (SECTION_HEIGHTS.about - hauteur écran) — sinon sur grand écran la section stack arrive avant la fin du texte */
+const BIO_START = 420;
+const bioRange  = () => Math.max(600, SECTION_HEIGHTS.about - BIO_START - window.innerHeight);
+
 function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T["en"]["about"]; sectionRef: React.RefObject<HTMLElement | null> }) {
     const bioRef = useRef<HTMLParagraphElement>(null);
 
@@ -42,9 +47,10 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
             });
             st = ScrollTrigger.create({
                 trigger: sectionEl,
-                start: window.innerWidth < 768 ? "top+=900 top" : "top+=420 top",
-                end: () => `+=${window.innerHeight * 3.5}`,
+                start: window.innerWidth < 768 ? "top+=900 top" : `top+=${BIO_START} top`,
+                end: () => `+=${bioRange() * 0.8}`,
                 scrub: true,
+                invalidateOnRefresh: true,
                 animation: gsap.from(split!.chars, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
             });
         }, 300);
@@ -196,9 +202,10 @@ function AboutSectionDesktop() {
                     ease: "power2.out",
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: () => `top+=${420 + window.innerHeight * 3.0}`,
-                        end:   () => `top+=${420 + window.innerHeight * 3.5}`,
+                        start: () => `top+=${BIO_START + bioRange() * 0.75} top`,
+                        end:   () => `top+=${BIO_START + bioRange() * 0.9} top`,
                         scrub: true,
+                        invalidateOnRefresh: true,
                     },
                 }
             );
