@@ -50,7 +50,6 @@ function BioParagraph({ t, sectionRef }: { t: typeof T["fr"]["about"] | typeof T
                 start: window.innerWidth < 768 ? "top+=900 top" : `top+=${BIO_START} top`,
                 end: () => `+=${bioRange() * 0.8}`,
                 scrub: true,
-                invalidateOnRefresh: true,
                 animation: gsap.from(split!.chars, { opacity: 0, filter: "blur(12px)", ease: "power2.out", stagger: 0.015, paused: true }),
             });
         }, 300);
@@ -205,7 +204,6 @@ function AboutSectionDesktop() {
                         start: () => `top+=${BIO_START + bioRange() * 0.75} top`,
                         end:   () => `top+=${BIO_START + bioRange() * 0.9} top`,
                         scrub: true,
-                        invalidateOnRefresh: true,
                     },
                 }
             );
