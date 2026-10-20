@@ -58,6 +58,7 @@ export const T = {
             comingSoon: "À venir",
             items: ["API REST"],
             checkmateDesc: "Gestion de tournois d'échecs — inscription, matchs, classements",
+            kokoonDesc: "L'application de vie scolaire tout-en-un — présences, journal de classe, bulletins, agenda et messagerie réunis en un seul endroit",
             seeProject: "Voir le projet →",
         },
         contact: {
@@ -142,6 +143,7 @@ export const T = {
             comingSoon: "Coming soon",
             items: ["REST API"],
             checkmateDesc: "Chess tournament manager — registration, matches, rankings",
+            kokoonDesc: "The all-in-one school life app — attendance, class journal, report cards, calendar and messaging in one place",
             seeProject: "View project →",
         },
         contact: {

@@ -18,61 +18,77 @@
   .stack-shake-block { display: none !important; }
   .stack-touch-block { display: flex !important; }
 
-  /* ── Carte Checkmate ── */
-  .checkmate-wrap {
+  /* ── Cartes projets ── */
+  .projects-list {
     top:   650px !important;
     width: 92vw  !important;
+    gap:   64px  !important;
   }
-  /* Fenêtre avec video */
-  .checkmate-video {
+  /* Fenêtre avec video (bandeau) */
+  .project-video {
     height: clamp(280px, 72vw, 400px) !important;
   }
-  .checkmate-video-inner video {
+  .project-video-inner video {
     object-fit: contain !important;
     transform:  scale(1.1) !important;
   }
-  .checkmate-info {
+  .project-info {
     padding: 18px 18px 22px !important;
   }
-  .checkmate-header {
+  .project-header {
     flex-direction: column !important;
     gap:            14px    !important;
     align-items:    flex-start !important;
   }
-  .checkmate-header h3 {
+  .project-info h3 {
     font-size: 24px !important;
   }
-  .checkmate-header p {
+  .project-info p {
     font-size: 18px !important;
   }
-  .checkmate-tags span {
+  .project-tags span {
     font-size: 14px !important;
     padding:   6px 16px !important;
   }
 
+  /* Carte vidéo verticale : vidéo au-dessus des infos */
+  .project-portrait {
+    grid-template-columns: 1fr !important;
+  }
+  .project-portrait-video {
+    width:  min(240px, 72%) !important;
+    margin: 18px auto 0     !important;
+    border-radius: 14px     !important;
+    overflow: hidden        !important;
+  }
+  .project-portrait-fade {
+    display: none !important;
+  }
+  .project-portrait-info {
+    gap: 20px !important;
+  }
+
   /* "Voir le projet" + bouton GitHub */
-  .checkmate-cta {
+  .project-cta {
     flex-direction: row !important;
     align-items:    center !important;
     gap:            12px   !important;
   }
-  .checkmate-see {
+  .project-see {
     font-size: 14px !important;
   }
-  .checkmate-github {
+  .project-github {
     padding:   12px 22px !important;
     font-size: 15px      !important;
     border-radius: 12px  !important;
   }
-  .checkmate-github svg {
+  .project-github svg {
     width:  18px !important;
     height: 18px !important;
   }
 
-  .checkmate-coming {
-    top:                   1380px !important;
-    width:                 92vw   !important;
-    grid-template-columns: 1fr    !important;
+  .projects-coming {
+    grid-template-columns: 1fr !important;
   }
 
   /* ── Contact — plein écran responsive ── */

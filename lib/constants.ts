@@ -22,7 +22,7 @@ export const SECTION_HEIGHTS = {
     transition: 200,
     about: 4500,
     stack: 2350,
-    projects: 2000,
+    projects: 2700,
     contact: 600,
 } as const;
 // --------------------------------------------------------- //
@@ -32,7 +32,7 @@ export const SECTION_HEIGHTS_MOBILE = {
     hero:     1500,
     about:    3000,
     stack:   2300,
-    projects: 2000,
+    projects: 2900,
     contact:  600,
 } as const;
 // --------------------------------------------------------- //
