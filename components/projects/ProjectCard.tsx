@@ -145,8 +145,8 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
                 }
             }}
         >
-            <source src={`/assets/projects/${video}.webm`} type="video/webm" />
             <source src={`/assets/projects/${video}.mp4`}  type="video/mp4" />
+            <source src={`/assets/projects/${video}.webm`} type="video/webm" />
         </video>
     );
 
