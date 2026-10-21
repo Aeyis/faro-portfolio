@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -33,6 +33,23 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
     const cardRef       = useRef<HTMLDivElement>(null);
     const screenshotRef = useRef<HTMLDivElement>(null);
     const glowRef       = useRef<HTMLDivElement>(null);
+    const videoRef      = useRef<HTMLVideoElement | null>(null);
+
+    /* autoplay bloqué (iPhone en mode économie d'énergie…) → bouton play */
+    const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+
+    useEffect(() => {
+        const v = videoRef.current;
+        if (!v) return;
+
+        const onPlaying = () => setAutoplayBlocked(false);
+        v.addEventListener("playing", onPlaying);
+
+        v.muted = true;
+        v.play().catch(() => setAutoplayBlocked(true));
+
+        return () => v.removeEventListener("playing", onPlaying);
+    }, []);
 
     /* ── 3D tilt au hover ── */
     useEffect(() => {
@@ -127,6 +144,7 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
     const videoEl = (
         <video
             autoPlay muted loop playsInline
+            poster={`/assets/projects/${video}.webp`}
             disablePictureInPicture
             disableRemotePlayback
             controlsList="nodownload nofullscreen noremoteplayback"
@@ -135,6 +153,7 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
                 objectFit: isPortrait ? "contain" : "cover",
             }}
             ref={el => {
+                videoRef.current = el;
                 if (el && 'mediaSession' in navigator) {
                     try {
                         navigator.mediaSession.metadata = null;
@@ -148,6 +167,29 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
             <source src={`/assets/projects/${video}.mp4`}  type="video/mp4" />
             <source src={`/assets/projects/${video}.webm`} type="video/webm" />
         </video>
+    );
+
+    const playBtn = autoplayBlocked && (
+        <button
+            type="button"
+            aria-label={`Lire la vidéo ${name}`}
+            onClick={() => videoRef.current?.play().catch(() => {})}
+            style={{
+                position: "absolute", top: "50%", left: "50%", zIndex: 11,
+                transform: "translate(-50%, -50%)",
+                width: 64, height: 64, borderRadius: "50%",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                border: "1px solid oklch(0.58 0.22 285 / 0.65)",
+                background: "oklch(0.16 0.10 280 / 0.85)",
+                color: "oklch(0.88 0.18 285)",
+                boxShadow: "0 0 40px oklch(0.4 0.18 285 / 0.45)",
+                cursor: "pointer",
+            }}
+        >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 3 }}>
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+        </button>
     );
 
     const githubBtn = (
@@ -261,6 +303,7 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
                                 background: `linear-gradient(to right, transparent, ${CARD_BG})`,
                                 pointerEvents: "none",
                             }} />
+                            {playBtn}
                         </div>
 
                         {/* Infos */}
@@ -298,6 +341,7 @@ export default function ProjectCard({ project, seeLabel, gsapReady }: Props) {
                                 background: `linear-gradient(to bottom, transparent, ${CARD_BG})`,
                                 pointerEvents: "none",
                             }} />
+                            {playBtn}
                         </div>
 
                         {/* Infos */}
